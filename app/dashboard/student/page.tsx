@@ -136,11 +136,6 @@ export default function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-black">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-96 h-96 bg-[#FFA266]/20 rounded-full blur-3xl animate-pulse-color"></div>
-        <div className="absolute bottom-40 left-20 w-80 h-80 bg-[#FFA266]/20 rounded-full blur-3xl animate-pulse-color" style={{ animationDelay: "2s" }}></div>
-      </div>
-
       <nav className="relative z-10 border-b border-white/10 backdrop-blur-xl bg-black/80">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">

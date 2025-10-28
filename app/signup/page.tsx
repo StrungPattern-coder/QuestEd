@@ -60,11 +60,6 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#FFA266]/30 rounded-full blur-3xl animate-pulse-color"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#FFA266]/20 rounded-full blur-3xl animate-pulse-color" style={{ animationDelay: "1s" }}></div>
-      </div>
-
       <Link href="/" className="absolute top-8 left-8 z-20">
         <Button variant="ghost" className="text-[#F5F5F5] hover:bg-white/10 group">
           <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />

@@ -22,13 +22,6 @@ export default function Home() {
         />
       </div>
 
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden z-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#FFA266]/20 rounded-full blur-3xl animate-pulse-color"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#FFA266]/10 rounded-full blur-3xl animate-pulse-color" style={{ animationDelay: "1s" }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#FFA266]/10 rounded-full blur-3xl animate-pulse-color" style={{ animationDelay: "2s" }}></div>
-      </div>
-
       {/* Navigation */}
       <nav className="relative z-10 container mx-auto px-6 py-6">
         <div className="flex justify-between items-center">

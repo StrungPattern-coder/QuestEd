@@ -172,10 +172,6 @@ export default function AllTestsPage() {
 
   return (
     <div className="min-h-screen bg-black pb-20">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-96 h-96 bg-[#FFA266]/20 rounded-full blur-3xl animate-pulse-color"></div>
-      </div>
-
       <div className="relative z-10 container mx-auto px-6 py-8">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">

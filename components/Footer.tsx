@@ -30,7 +30,7 @@ export default function Footer() {
           {/* Links */}
           <div className="flex items-center gap-4">
             <a
-              href="https://github.com"
+              href="https://github.com/StrungPattern-coder"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#F5F5F5]/60 hover:text-[#FFA266] transition-colors"
