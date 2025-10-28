@@ -38,7 +38,11 @@ interface Test {
   joinCode: string;
   isActive: boolean;
   questions: any[];
-  classroom: {
+  classroomId?: {
+    _id: string;
+    name: string;
+  };
+  classroom?: {
     name: string;
   };
 }
@@ -167,7 +171,9 @@ export default function LiveTestControlPage() {
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-[#F5F5F5]">{test.title}</h1>
-                  <p className="text-sm text-[#F5F5F5]/60">{test.classroom.name}</p>
+                  <p className="text-sm text-[#F5F5F5]/60">
+                    {test.classroomId?.name || test.classroom?.name || 'No classroom'}
+                  </p>
                 </div>
               </div>
             </div>

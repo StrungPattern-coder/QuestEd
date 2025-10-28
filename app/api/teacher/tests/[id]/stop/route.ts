@@ -33,7 +33,11 @@ export async function POST(
     test.isActive = false;
     await test.save();
 
-    return NextResponse.json({ message: 'Live test stopped', test });
+    const populatedTest = await Test.findById(test._id)
+      .populate('questions')
+      .populate('classroomId', 'name');
+
+    return NextResponse.json({ message: 'Live test stopped', test: populatedTest });
   } catch (error: any) {
     console.error('Stop live test error:', error);
     return NextResponse.json({ error: error.message || 'Failed to stop live test' }, { status: 500 });

@@ -37,7 +37,9 @@ export async function POST(
     }
     await test.save();
 
-    const populatedTest = await Test.findById(test._id).populate('questions');
+    const populatedTest = await Test.findById(test._id)
+      .populate('questions')
+      .populate('classroomId', 'name');
 
     return NextResponse.json({
       message: 'Live test started',
