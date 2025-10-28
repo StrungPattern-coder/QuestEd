@@ -77,6 +77,7 @@ const TestSchema: Schema<ITest> = new Schema(
       type: String,
       sparse: true,
       unique: true,
+      index: true,
     },
   },
   {
@@ -87,7 +88,6 @@ const TestSchema: Schema<ITest> = new Schema(
 // Indexes for efficient queries
 TestSchema.index({ classroomId: 1 });
 TestSchema.index({ teacherId: 1 });
-TestSchema.index({ joinCode: 1 });
 TestSchema.index({ startTime: 1, endTime: 1 });
 
 const Test: Model<ITest> = mongoose.models.Test || mongoose.model<ITest>('Test', TestSchema);

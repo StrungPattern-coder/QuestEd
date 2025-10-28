@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 import connectDB from '@/backend/utils/db';
 import User from '@/backend/models/User';
 import bcrypt from 'bcryptjs';

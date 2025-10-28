@@ -3,6 +3,8 @@ import connectDB from '@/backend/utils/db';
 import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     await connectDB();

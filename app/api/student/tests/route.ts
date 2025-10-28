@@ -4,6 +4,8 @@ import Test from '@/backend/models/Test';
 import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     await connectDB();

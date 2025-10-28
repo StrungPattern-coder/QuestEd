@@ -6,6 +6,8 @@ import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
 import { generateJoinCode } from '@/backend/utils/helpers';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     await connectDB();

@@ -3,6 +3,8 @@ import connectDB from '@/backend/utils/db';
 import User from '@/backend/models/User';
 import { verifyToken } from '@/backend/middleware/auth';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     await connectDB();
