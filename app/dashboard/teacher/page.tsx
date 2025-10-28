@@ -328,8 +328,7 @@ export default function TeacherDashboard() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                        className="p-4 rounded-xl bg-white/50 border border-[#FFA266]/10 hover:border-[#FFA266]/30 transition-all duration-200 hover:shadow-md cursor-pointer group"
-                        onClick={() => router.push(`/dashboard/teacher/tests/${test._id}`)}
+                        className="p-4 rounded-xl bg-white/50 border border-[#FFA266]/10 hover:border-[#FFA266]/30 transition-all duration-200 hover:shadow-md group"
                       >
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1">
@@ -342,16 +341,30 @@ export default function TeacherDashboard() {
                             <p className="text-xs text-black/60">{test.classroomId?.name || 'No classroom'}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4 text-xs text-black/70">
-                          <div className="flex items-center gap-1">
-                            <FileText className="h-3 w-3" />
-                            {test.questions?.length || 0} questions
-                          </div>
-                          {test.isActive && (
-                            <div className="flex items-center gap-1 text-green-600">
-                              <Clock className="h-3 w-3" />
-                              Active
+                        <div className="flex items-center justify-between gap-4 text-xs text-black/70">
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-1">
+                              <FileText className="h-3 w-3" />
+                              {test.questions?.length || 0} questions
                             </div>
+                            {test.isActive && (
+                              <div className="flex items-center gap-1 text-green-600">
+                                <Clock className="h-3 w-3" />
+                                Active
+                              </div>
+                            )}
+                          </div>
+                          {test.mode === 'live' && (
+                            <Button
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                router.push(`/dashboard/teacher/tests/${test._id}/live`);
+                              }}
+                              className="bg-green-500 hover:bg-green-600 text-white text-xs h-7 px-3"
+                            >
+                              Go Live
+                            </Button>
                           )}
                         </div>
                       </motion.div>

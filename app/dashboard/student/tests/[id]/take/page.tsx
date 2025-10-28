@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { studentApi } from "@/lib/api";
+import { publishLeaderboardUpdate } from "@/lib/ably";
 import { Brain, Clock, CheckCircle, XCircle, Loader2, ArrowRight, Trophy } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -21,6 +22,7 @@ interface Test {
   _id: string;
   title: string;
   description: string;
+  mode?: string;
   classroom: {
     name: string;
   };
@@ -122,6 +124,27 @@ export default function TakeTestPage() {
     const response = await studentApi.submitTest(testId, formattedAnswers);
     
     if (response.data) {
+      // Calculate score for live leaderboard
+      const score = answers.reduce((total, answer, idx) => {
+        return total + (answer === test.questions[idx].correctAnswer ? 1 : 0);
+      }, 0);
+
+      // Publish to live leaderboard if it's a live test
+      if (test.mode === 'live') {
+        const userId = localStorage.getItem('userId');
+        const userName = localStorage.getItem('userName') || 'Anonymous';
+        
+        // Note: In production, you'd fetch the current leaderboard and update it
+        // For now, we'll just publish this user's score
+        publishLeaderboardUpdate(testId, [{
+          studentId: userId || '',
+          studentName: userName,
+          score: score,
+          position: 1,
+          answeredQuestions: answers.filter(a => a !== -1).length,
+        }]);
+      }
+
       setTestComplete(true);
       confetti({
         particleCount: 200,

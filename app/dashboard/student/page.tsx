@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useAuthStore } from "@/lib/store";
-import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar } from "lucide-react";
+import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap } from "lucide-react";
 import { studentApi } from "@/lib/api";
 
 interface Test {
@@ -138,6 +138,13 @@ export default function StudentDashboard() {
             </div>
 
             <div className="flex items-center gap-4">
+              <Button 
+                onClick={() => router.push("/dashboard/student/live")}
+                className="bg-green-500 hover:bg-green-600 text-white font-semibold"
+              >
+                <Zap className="h-4 w-4 mr-2" />
+                Join Live Quiz
+              </Button>
               <div className="text-right">
                 <p className="text-sm font-medium text-[#F5F5F5]">{user?.name}</p>
                 <p className="text-xs text-[#F5F5F5]/60">{user?.email}</p>
