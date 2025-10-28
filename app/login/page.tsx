@@ -11,10 +11,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
 import { Brain, Mail, Lock, ArrowLeft, Sparkles } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuthStore();
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -60,9 +63,13 @@ export default function LoginPage() {
       <Link href="/" className="absolute top-8 left-8 z-20">
         <Button variant="ghost" className="text-[#F5F5F5] hover:bg-white/10 group">
           <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-          Back to Home
+          {t.auth.backToHome}
         </Button>
       </Link>
+      
+      <div className="absolute top-8 right-8 z-20">
+        <LanguageSwitcher />
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -76,10 +83,10 @@ export default function LoginPage() {
               <Brain className="h-8 w-8 text-black" />
             </div>
             <CardTitle className="text-4xl font-bold text-black">
-              Welcome Back!
+              {t.auth.loginTitle}
             </CardTitle>
             <CardDescription className="text-base text-black/70">
-              Sign in to continue your learning journey
+              {t.auth.loginDescription}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -98,31 +105,28 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-semibold text-black flex items-center gap-2">
                   <Mail className="h-4 w-4" />
-                  Email Address
+                  {t.auth.email}
                 </Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="name@pict.edu or enrollment@ms.pict.edu"
+                  placeholder={t.auth.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
                   required
                 />
-                <p className="text-xs text-black/60 mt-1">
-                  Use @pict.edu for teachers or @ms.pict.edu for students
-                </p>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-semibold text-black flex items-center gap-2">
                   <Lock className="h-4 w-4" />
-                  Password
+                  {t.auth.password}
                 </Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t.auth.passwordPlaceholder}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
@@ -138,11 +142,11 @@ export default function LoginPage() {
                 {loading ? (
                   <>
                     <div className="h-4 w-4 border-2 border-[#32374A]/30 border-t-[#32374A] rounded-full animate-spin mr-2"></div>
-                    Signing in...
+                    {t.common.loading}
                   </>
                 ) : (
                   <>
-                    Sign In
+                    {t.auth.loginButton}
                     <Sparkles className="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform" />
                   </>
                 )}
@@ -154,21 +158,17 @@ export default function LoginPage() {
                 <div className="w-full border-t border-gray-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-[#F5F5F5] text-black/60">New to QuestEd?</span>
+                <span className="px-4 bg-[#F5F5F5] text-black/60">{t.auth.noAccount}</span>
               </div>
             </div>
 
             <div className="mt-6 text-center">
               <Link href="/signup">
                 <Button variant="outline" className="w-full h-12 border-2 border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-black font-semibold">
-                  Create an Account
+                  {t.auth.signupButton}
                 </Button>
               </Link>
             </div>
-
-            <p className="mt-6 text-center text-xs text-black/50">
-              By signing in, you agree to our Terms of Service and Privacy Policy
-            </p>
           </CardContent>
         </Card>
       </motion.div>

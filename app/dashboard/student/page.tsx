@@ -9,6 +9,8 @@ import { Progress } from "@/components/ui/progress";
 import { useAuthStore } from "@/lib/store";
 import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap } from "lucide-react";
 import { studentApi } from "@/lib/api";
+import { useLanguage } from "@/lib/i18n";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 interface Test {
   _id: string;
@@ -42,6 +44,7 @@ interface Submission {
 export default function StudentDashboard() {
   const router = useRouter();
   const { user, logout } = useAuthStore();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [availableTests, setAvailableTests] = useState<Test[]>([]);
   const [completedSubmissions, setCompletedSubmissions] = useState<Submission[]>([]);
@@ -132,18 +135,19 @@ export default function StudentDashboard() {
                 <Brain className="h-6 w-6 text-black" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-[#F5F5F5]">QuestEd</h1>
-                <p className="text-xs text-[#F5F5F5]/60">Student Portal</p>
+                <h1 className="text-xl font-bold text-[#F5F5F5]">{t.brandName}</h1>
+                <p className="text-xs text-[#F5F5F5]/60">{t.student.portal}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
+              <LanguageSwitcher />
               <Button 
                 onClick={() => router.push("/dashboard/student/live")}
                 className="bg-green-500 hover:bg-green-600 text-white font-semibold"
               >
                 <Zap className="h-4 w-4 mr-2" />
-                Join Live Quiz
+                {t.student.joinLive}
               </Button>
               <div className="text-right">
                 <p className="text-sm font-medium text-[#F5F5F5]">{user?.name}</p>
@@ -155,7 +159,7 @@ export default function StudentDashboard() {
                 className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5]"
               >
                 <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                {t.logout}
               </Button>
             </div>
           </div>
@@ -169,15 +173,15 @@ export default function StudentDashboard() {
           transition={{ duration: 0.5 }}
         >
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-[#F5F5F5] mb-2">Welcome back, {user?.name?.split(" ")[0]}! 🚀</h2>
-            <p className="text-[#F5F5F5]/70">Ready to take on some challenges today?</p>
+            <h2 className="text-3xl font-bold text-[#F5F5F5] mb-2">{t.student.welcome}, {user?.name?.split(" ")[0]}! 🚀</h2>
+            <p className="text-[#F5F5F5]/70">{t.student.welcomeMessage}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {[
-              { label: "Tests Completed", value: stats.testsCompleted, icon: CheckCircle, color: "#FFA266" },
-              { label: "Average Score", value: `${stats.averageScore}%`, icon: Target, color: "#FFA266" },
-              { label: "Total Points", value: stats.totalPoints, icon: TrendingUp, color: "#FFA266" },
+              { label: t.student.stats.testsCompleted, value: stats.testsCompleted, icon: CheckCircle, color: "#FFA266" },
+              { label: t.student.stats.avgScore, value: `${stats.averageScore}%`, icon: Target, color: "#FFA266" },
+              { label: t.student.stats.streak, value: stats.totalPoints, icon: TrendingUp, color: "#FFA266" },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -210,8 +214,8 @@ export default function StudentDashboard() {
             >
               <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-black">Available Tests</CardTitle>
-                  <CardDescription className="text-black/60">Ready to boost your knowledge?</CardDescription>
+                  <CardTitle className="text-2xl text-black">{t.student.availableTests}</CardTitle>
+                  <CardDescription className="text-black/60">{t.student.welcomeMessage}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {availableTests.length === 0 ? (

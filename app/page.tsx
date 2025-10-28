@@ -4,8 +4,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Zap, Trophy, Users, Brain, TrendingUp, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function Home() {
+  const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-black relative overflow-hidden">
       {/* Animated Background Elements */}
@@ -27,7 +30,7 @@ export default function Home() {
               <Brain className="h-6 w-6 text-black" />
             </div>
             <span className="text-2xl font-bold text-[#F5F5F5]">
-              QuestEd
+              {t.brandName}
             </span>
           </motion.div>
 
@@ -36,14 +39,15 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             className="flex gap-3"
           >
+            <LanguageSwitcher />
             <Link href="/login">
               <Button variant="ghost" className="text-[#F5F5F5] hover:bg-white/10">
-                Login
+                {t.login}
               </Button>
             </Link>
             <Link href="/signup">
               <Button className="bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg shadow-[#FFA266]/50">
-                Get Started
+                {t.getStarted}
               </Button>
             </Link>
           </motion.div>
@@ -60,7 +64,7 @@ export default function Home() {
             className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-[#FFA266]/30"
           >
             <Sparkles className="h-4 w-4 text-[#FFA266]" />
-            <span className="text-sm text-[#F5F5F5]">PICT College German Testing Platform</span>
+            <span className="text-sm text-[#F5F5F5]">{t.home.tagline}</span>
           </motion.div>
 
           <motion.h1
@@ -69,8 +73,8 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-[#F5F5F5] leading-tight max-w-5xl"
           >
-            Master German with
-            <span className="text-[#FFA266]"> Interactive Quizzes</span>
+            {t.home.heroTitle}
+            <span className="text-[#FFA266]">{t.home.heroHighlight}</span>
           </motion.h1>
 
           <motion.p
@@ -79,8 +83,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-[#F5F5F5]/80 max-w-3xl leading-relaxed"
           >
-            Experience the perfect blend of Kahoot's excitement and Duolingo's effectiveness. 
-            Live quizzes, instant feedback, and competitive learning.
+            {t.home.heroDescription}
           </motion.p>
 
           <motion.div
@@ -91,13 +94,13 @@ export default function Home() {
           >
             <Link href="/signup">
               <Button size="lg" className="text-lg px-10 py-7 bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold shadow-2xl shadow-[#FFA266]/50 group">
-                Start Learning Now
+                {t.home.startLearning}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <Link href="/login">
               <Button size="lg" variant="outline" className="text-lg px-10 py-7 bg-white/10 hover:bg-white/20 text-[#F5F5F5] border-[#FFA266]/30 backdrop-blur-sm">
-                Sign In
+                {t.signIn}
               </Button>
             </Link>
           </motion.div>
@@ -111,15 +114,15 @@ export default function Home() {
           >
             <div className="text-center">
               <div className="text-4xl font-bold text-[#FFA266] mb-1">500+</div>
-              <div className="text-sm text-[#F5F5F5]/70">Active Students</div>
+              <div className="text-sm text-[#F5F5F5]/70">{t.home.stats.students}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-[#FFA266] mb-1">50+</div>
-              <div className="text-sm text-[#F5F5F5]/70">Teachers</div>
+              <div className="text-sm text-[#F5F5F5]/70">{t.home.stats.teachers}</div>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-[#FFA266] mb-1">10K+</div>
-              <div className="text-sm text-[#F5F5F5]/70">Tests Completed</div>
+              <div className="text-sm text-[#F5F5F5]/70">{t.home.stats.tests}</div>
             </div>
           </motion.div>
         </div>
@@ -135,10 +138,10 @@ export default function Home() {
           className="text-center mb-16"
         >
           <h2 className="text-5xl font-bold text-[#F5F5F5] mb-4">
-            Why Choose QuestEd?
+            {t.home.whyTitle}
           </h2>
           <p className="text-xl text-[#F5F5F5]/70">
-            Powerful features designed for modern language learning
+            {t.home.whySubtitle}
           </p>
         </motion.div>
 
@@ -146,38 +149,38 @@ export default function Home() {
           {[
             {
               icon: Zap,
-              title: "Live Quizzes",
-              description: "Real-time interactive tests with instant feedback and live leaderboards. Feel the adrenaline!",
+              title: t.home.features.liveQuizzes.title,
+              description: t.home.features.liveQuizzes.description,
               delay: 0
             },
             {
               icon: Users,
-              title: "Classroom Management",
-              description: "Effortlessly organize students, assign tests, and track progress all in one place.",
+              title: t.home.features.classroom.title,
+              description: t.home.features.classroom.description,
               delay: 0.1
             },
             {
               icon: Trophy,
-              title: "Gamified Learning",
-              description: "Earn points, climb leaderboards, and compete with classmates to stay motivated.",
+              title: t.home.features.gamified.title,
+              description: t.home.features.gamified.description,
               delay: 0.2
             },
             {
               icon: TrendingUp,
-              title: "Detailed Analytics",
-              description: "Comprehensive insights into performance, progress, and areas for improvement.",
+              title: t.home.features.analytics.title,
+              description: t.home.features.analytics.description,
               delay: 0.3
             },
             {
               icon: Brain,
-              title: "Adaptive Testing",
-              description: "Smart question selection that adapts to your skill level for optimal learning.",
+              title: t.home.features.adaptive.title,
+              description: t.home.features.adaptive.description,
               delay: 0.4
             },
             {
               icon: Sparkles,
-              title: "Instant Feedback",
-              description: "Get immediate results and explanations to reinforce learning in real-time.",
+              title: t.home.features.feedback.title,
+              description: t.home.features.feedback.description,
               delay: 0.5
             }
           ].map((feature, index) => (
@@ -218,14 +221,14 @@ export default function Home() {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSA2LTYgNi02LTIuNjktNi02IDIuNjktNiA2LTZ6TTI0IDZjMy4zMSAwIDYgMi42OSA2IDZzLTIuNjkgNi02IDYtNi0yLjY5LTYtNiAyLjY5LTYgNi02eiIgZmlsbD0iIzMyMzc0QSIgZmlsbC1vcGFjaXR5PSIuMSIvPjwvZz48L3N2Zz4=')] opacity-20"></div>
           <div className="relative z-10">
             <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
-              Ready to Transform Your German Learning?
+              {t.home.ctaTitle}
             </h2>
             <p className="text-xl text-black/80 mb-8 max-w-2xl mx-auto">
-              Join hundreds of PICT students already mastering German through interactive quizzes
+              {t.home.ctaDescription}
             </p>
             <Link href="/signup">
               <Button size="lg" className="text-lg px-12 py-7 bg-black text-[#F5F5F5] hover:bg-black/90 shadow-2xl group">
-                Create Free Account
+                {t.home.ctaButton}
                 <Sparkles className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
               </Button>
             </Link>

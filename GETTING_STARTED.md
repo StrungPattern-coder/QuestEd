@@ -203,16 +203,16 @@ GET    /api/student/tests/:id/result
 
 ### 1. Create Teacher Account
 ```
-Email: john.doe@pict.edu
-Name: John Doe
+Email: sriram.kommalapudi@pict.edu
+Name: Sriram Kommalapudi
 Password: password123
 ```
 
 ### 2. Create Student Account
 ```
-Email: 12345678@ms.pict.edu
+Email: C2K231265@ms.pict.edu
 Name: Jane Smith
-Enrollment: 12345678
+Enrollment: C2K231365
 Password: password123
 ```
 

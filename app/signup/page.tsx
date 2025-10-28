@@ -111,7 +111,7 @@ export default function SignupPage() {
                 <Input
                   id="name"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Sriram Kommalapudi"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
@@ -127,7 +127,7 @@ export default function SignupPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="name@pict.edu or enrollment@ms.pict.edu"
+                  placeholder="name@pict.edu or enrollmentNumber@ms.pict.edu"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
@@ -168,7 +168,7 @@ export default function SignupPage() {
                     <Input
                       id="enrollmentNumber"
                       type="text"
-                      placeholder="e.g., 12345678"
+                      placeholder="e.g., C2K231265"
                       value={formData.enrollmentNumber}
                       onChange={(e) => setFormData({ ...formData, enrollmentNumber: e.target.value })}
                       className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
@@ -183,7 +183,7 @@ export default function SignupPage() {
                     <Input
                       id="rollNumber"
                       type="text"
-                      placeholder="e.g., 101"
+                      placeholder="e.g., 31281"
                       value={formData.rollNumber}
                       onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
                       className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"

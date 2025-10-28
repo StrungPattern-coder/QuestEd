@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Audiowide } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 
 const audiowide = Audiowide({ 
   weight: "400",
@@ -20,7 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={audiowide.className}>{children}</body>
+      <body className={audiowide.className}>
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
+      </body>
     </html>
   );
 }
