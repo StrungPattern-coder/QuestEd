@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL 
+  ? `${process.env.NEXT_PUBLIC_APP_URL}/api`
+  : '/api';
 
 export interface ApiResponse<T = any> {
   data?: T;
