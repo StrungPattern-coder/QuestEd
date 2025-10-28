@@ -3,6 +3,7 @@ import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
 import Question from '@/backend/models/Question';
 import Classroom from '@/backend/models/Classroom';
+import User from '@/backend/models/User';
 import jwt from 'jsonwebtoken';
 import { generateJoinCode } from '@/backend/utils/helpers';
 
