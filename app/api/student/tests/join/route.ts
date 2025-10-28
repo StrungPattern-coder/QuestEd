@@ -48,9 +48,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Transform questions to convert correctAnswer from text to index
+    // Filter out any null/undefined questions
+    const validQuestions = (test.questions || []).filter((q: any) => q && q._id);
+    
     const transformedTest = {
       ...test.toObject(),
-      questions: test.questions.map((q: any) => ({
+      questions: validQuestions.map((q: any) => ({
         _id: q._id,
         questionText: q.questionText,
         options: q.options,
