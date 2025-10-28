@@ -20,6 +20,7 @@ interface Question {
 export default function CreateTestPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [loadingClassrooms, setLoadingClassrooms] = useState(true);
   const [classrooms, setClassrooms] = useState<any[]>([]);
   const [error, setError] = useState("");
   const [step, setStep] = useState(1);
@@ -47,9 +48,28 @@ export default function CreateTestPage() {
   }, []);
 
   const fetchClassrooms = async () => {
-    const response = await teacherApi.getClassrooms();
-    if (response.data) {
-      setClassrooms((response.data as any).classrooms || []);
+    setLoadingClassrooms(true);
+    try {
+      const response = await teacherApi.getClassrooms();
+      console.log('Classrooms response:', response);
+      
+      if (response.error) {
+        console.error('Error fetching classrooms:', response.error);
+        setError(response.error);
+        setLoadingClassrooms(false);
+        return;
+      }
+      
+      if (response.data) {
+        const classroomsList = (response.data as any).classrooms || [];
+        console.log('Classrooms list:', classroomsList);
+        setClassrooms(classroomsList);
+      }
+    } catch (err) {
+      console.error('Failed to fetch classrooms:', err);
+      setError('Failed to load classrooms');
+    } finally {
+      setLoadingClassrooms(false);
     }
   };
 
@@ -174,20 +194,31 @@ export default function CreateTestPage() {
                       <Label htmlFor="classroomId" className="text-base font-semibold text-black">
                         Classroom *
                       </Label>
-                      <select
-                        id="classroomId"
-                        value={formData.classroomId}
-                        onChange={(e) => setFormData({ ...formData, classroomId: e.target.value })}
-                        className="w-full h-12 px-3 border border-gray-300 rounded-md focus:border-[#FFA266] focus:ring-[#FFA266] focus:ring-1"
-                        required
-                      >
-                        <option value="">Select a classroom</option>
-                        {classrooms.map((classroom) => (
-                          <option key={classroom._id} value={classroom._id}>
-                            {classroom.name}
-                          </option>
-                        ))}
-                      </select>
+                      {loadingClassrooms ? (
+                        <div className="w-full h-12 px-3 border border-gray-300 rounded-md flex items-center text-black/50">
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Loading classrooms...
+                        </div>
+                      ) : classrooms.length === 0 ? (
+                        <div className="w-full p-4 border border-yellow-300 bg-yellow-50 rounded-md text-sm text-yellow-800">
+                          No classrooms found. Please create a classroom first.
+                        </div>
+                      ) : (
+                        <select
+                          id="classroomId"
+                          value={formData.classroomId}
+                          onChange={(e) => setFormData({ ...formData, classroomId: e.target.value })}
+                          className="w-full h-12 px-3 border border-gray-300 rounded-md focus:border-[#FFA266] focus:ring-[#FFA266] focus:ring-1"
+                          required
+                        >
+                          <option value="">Select a classroom</option>
+                          {classrooms.map((classroom) => (
+                            <option key={classroom._id} value={classroom._id}>
+                              {classroom.name}
+                            </option>
+                          ))}
+                        </select>
+                      )}
                     </div>
 
                     <div className="space-y-2">

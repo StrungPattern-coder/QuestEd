@@ -15,6 +15,8 @@ async function fetchApi<T>(
   try {
     const token = localStorage.getItem('token');
     
+    console.log(`Fetching ${endpoint}, token exists:`, !!token);
+    
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(options.headers as Record<string, string>),
@@ -29,12 +31,16 @@ async function fetchApi<T>(
       headers,
     });
 
+    console.log(`Response for ${endpoint}:`, response.status, response.statusText);
+
     const data = await response.json();
 
     if (!response.ok) {
+      console.error(`Error response for ${endpoint}:`, data);
       return { error: data.error || 'An error occurred' };
     }
 
+    console.log(`Success response for ${endpoint}:`, data);
     return { data };
   } catch (error) {
     console.error('API Error:', error);
