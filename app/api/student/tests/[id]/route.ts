@@ -37,10 +37,27 @@ export async function GET(
       return NextResponse.json({ error: 'Test not found' }, { status: 404 });
     }
 
+    // Ensure questions is an array and filter out null/undefined
+    const questionsArray = Array.isArray(test.questions) ? test.questions : [];
+    const validQuestions = questionsArray.filter((q: any) => {
+      if (!q) {
+        console.warn('Null/undefined question found in test:', test._id);
+        return false;
+      }
+      if (!q._id || !q.questionText || !q.options) {
+        console.warn('Invalid question structure:', q);
+        return false;
+      }
+      return true;
+    });
+
+    if (validQuestions.length === 0) {
+      return NextResponse.json({ 
+        error: 'This test has no valid questions. Please contact the teacher.' 
+      }, { status: 400 });
+    }
+
     // Transform questions to convert correctAnswer from text to index
-    // Filter out any null/undefined questions
-    const validQuestions = (test.questions || []).filter((q: any) => q && q._id);
-    
     const transformedTest = {
       ...test.toObject(),
       questions: validQuestions.map((q: any) => ({
