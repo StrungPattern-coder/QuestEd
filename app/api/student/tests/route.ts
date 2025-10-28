@@ -3,6 +3,7 @@ import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
 import Classroom from '@/backend/models/Classroom';
 import User from '@/backend/models/User';
+import Question from '@/backend/models/Question';
 import Submission from '@/backend/models/Submission';
 import jwt from 'jsonwebtoken';
 

@@ -5,6 +5,7 @@ import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
 import Submission from '@/backend/models/Submission';
 import Question from '@/backend/models/Question';
+import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
 
 export async function GET(

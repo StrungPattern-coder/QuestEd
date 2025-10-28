@@ -5,6 +5,7 @@ import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
 import User from '@/backend/models/User';
 import Classroom from '@/backend/models/Classroom';
+import Question from '@/backend/models/Question';
 import jwt from 'jsonwebtoken';
 
 export async function PATCH(
