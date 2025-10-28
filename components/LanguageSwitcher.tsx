@@ -16,10 +16,10 @@ export function LanguageSwitcher() {
       onClick={toggleLanguage}
       variant="outline"
       size="sm"
-      className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5] gap-2"
+      className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5] gap-2 bg-transparent hover:text-[#FFA266] transition-all"
     >
-      <Languages className="h-4 w-4" />
-      <span className="font-semibold">{language === "en" ? "DE" : "EN"}</span>
+      <Languages className="h-4 w-4 text-[#F5F5F5]" />
+      <span className="font-semibold text-[#F5F5F5]">{language === "en" ? "DE" : "EN"}</span>
     </Button>
   );
 }

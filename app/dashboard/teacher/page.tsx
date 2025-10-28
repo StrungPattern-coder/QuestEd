@@ -114,25 +114,25 @@ export default function TeacherDashboard() {
   if (classrooms.length === 0 && tests.length === 0) {
     return (
       <div className="min-h-screen bg-black">
-        <nav className="relative z-10 border-b border-white/10 backdrop-blur-xl bg-black/80">
-          <div className="container mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="bg-[#FFA266] p-2 rounded-xl">
-                  <Brain className="h-6 w-6 text-black" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-[#F5F5F5]">QuestEd</h1>
-                  <p className="text-xs text-[#F5F5F5]/60">Teacher Portal</p>
-                </div>
+        <nav className="relative z-10 flex justify-center pt-6 pb-6">
+          <div className="bg-white/10 backdrop-blur-xl border border-[#FFA266]/30 rounded-full px-8 py-4 shadow-2xl">
+            <div className="flex items-center gap-8">
+              {/* Brand */}
+              <div>
+                <h1 className="text-xl font-bold text-[#F5F5F5]">QuestEd</h1>
+                <p className="text-xs text-[#F5F5F5]/60">Teacher Portal</p>
               </div>
 
+              {/* Divider */}
+              <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
+
+              {/* Navigation Items */}
               <div className="flex items-center gap-4">
                 <div className="text-right">
                   <p className="text-sm font-medium text-[#F5F5F5]">{user?.name}</p>
                   <p className="text-xs text-[#F5F5F5]/60">{user?.email}</p>
                 </div>
-                <Button onClick={handleLogout} variant="outline" className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5]">
+                <Button onClick={handleLogout} variant="outline" className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5] rounded-full">
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout
                 </Button>
@@ -188,25 +188,25 @@ export default function TeacherDashboard() {
 
   return (
     <div className="min-h-screen bg-black">
-      <nav className="relative z-10 border-b border-white/10 backdrop-blur-xl bg-black/80">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="bg-[#FFA266] p-2 rounded-xl">
-                <Brain className="h-6 w-6 text-black" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-[#F5F5F5]">QuestEd</h1>
-                <p className="text-xs text-[#F5F5F5]/60">Teacher Portal</p>
-              </div>
+      <nav className="relative z-10 flex justify-center pt-6 pb-6">
+        <div className="bg-white/10 backdrop-blur-xl border border-[#FFA266]/30 rounded-full px-8 py-4 shadow-2xl">
+          <div className="flex items-center gap-8">
+            {/* Brand */}
+            <div>
+              <h1 className="text-xl font-bold text-[#F5F5F5]">QuestEd</h1>
+              <p className="text-xs text-[#F5F5F5]/60">Teacher Portal</p>
             </div>
 
+            {/* Divider */}
+            <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
+
+            {/* Navigation Items */}
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm font-medium text-[#F5F5F5]">{user?.name}</p>
                 <p className="text-xs text-[#F5F5F5]/60">{user?.email}</p>
               </div>
-              <Button onClick={handleLogout} variant="outline" className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5]">
+              <Button onClick={handleLogout} variant="outline" className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5] rounded-full">
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </Button>

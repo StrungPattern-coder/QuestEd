@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -136,24 +137,26 @@ export default function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-black">
-      <nav className="relative z-10 border-b border-white/10 backdrop-blur-xl bg-black/80">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="bg-[#FFA266] p-2 rounded-xl">
-                <Brain className="h-6 w-6 text-black" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-[#F5F5F5]">{t.brandName}</h1>
+      <nav className="relative z-10 flex justify-center pt-6 pb-6">
+        <div className="bg-white/10 backdrop-blur-xl border border-[#FFA266]/30 rounded-full px-8 py-4 shadow-2xl">
+          <div className="flex items-center gap-8">
+            {/* Brand */}
+            <Link href="/dashboard/student">
+              <div className="cursor-pointer">
+                <h1 className="text-xl font-bold text-[#F5F5F5] hover:text-[#FFA266] transition-colors">{t.brandName}</h1>
                 <p className="text-xs text-[#F5F5F5]/60">{t.student.portal}</p>
               </div>
-            </div>
+            </Link>
 
+            {/* Divider */}
+            <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
+
+            {/* Navigation Items */}
             <div className="flex items-center gap-4">
               <LanguageSwitcher />
               <Button 
                 onClick={() => router.push("/dashboard/student/live")}
-                className="bg-green-500 hover:bg-green-600 text-white font-semibold"
+                className="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full"
               >
                 <Zap className="h-4 w-4 mr-2" />
                 {t.student.joinLive}
@@ -165,7 +168,7 @@ export default function StudentDashboard() {
               <Button 
                 onClick={handleLogout}
                 variant="outline" 
-                className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5]"
+                className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5] rounded-full"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 {t.logout}

@@ -23,54 +23,44 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 container mx-auto px-6 py-6">
-        <div className="flex justify-between items-center">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2"
-          >
-            <div className="bg-[#FFA266] p-2 rounded-xl">
-              <Brain className="h-6 w-6 text-black" />
-            </div>
-            <span className="text-2xl font-bold text-[#F5F5F5]">
-              {t.brandName}
-            </span>
-          </motion.div>
+      <nav className="relative z-10 flex justify-center pt-6 pb-6">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white/10 backdrop-blur-xl border border-[#FFA266]/30 rounded-full px-8 py-4 shadow-2xl"
+        >
+          <div className="flex items-center gap-8">
+            {/* Brand */}
+            <Link href="/">
+              <span className="text-2xl font-bold text-[#F5F5F5] hover:text-[#FFA266] transition-colors cursor-pointer">
+                {t.brandName}
+              </span>
+            </Link>
 
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex gap-3"
-          >
-            <LanguageSwitcher />
-            <Link href="/login">
-              <Button variant="ghost" className="text-[#F5F5F5] hover:bg-white/10">
-                {t.login}
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button className="bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg shadow-[#FFA266]/50">
-                {t.getStarted}
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
+            {/* Divider */}
+            <div className="h-8 w-px bg-[#F5F5F5]/20"></div>
+
+            {/* Navigation Items */}
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              <Link href="/login">
+                <Button variant="ghost" className="text-[#F5F5F5] hover:bg-white/10 rounded-full">
+                  {t.login}
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button className="bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg shadow-[#FFA266]/50 rounded-full">
+                  {t.getStarted}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
       </nav>
 
       {/* Hero Section */}
       <div className="relative z-10 container mx-auto px-6 pt-20 pb-32">
         <div className="flex flex-col items-center text-center space-y-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-[#FFA266]/30"
-          >
-            <Sparkles className="h-4 w-4 text-[#FFA266]" />
-            <span className="text-sm text-[#F5F5F5]">{t.home.tagline}</span>
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

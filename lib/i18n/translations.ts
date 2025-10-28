@@ -11,7 +11,6 @@ export const translations = {
     
     // Home Page
     home: {
-      tagline: "PICT College German Testing Platform",
       heroTitle: "Master German with",
       heroHighlight: " Interactive Quizzes",
       heroDescription: "Experience the perfect blend of Kahoot's excitement and Duolingo's effectiveness. Live quizzes, instant feedback, and competitive learning.",
