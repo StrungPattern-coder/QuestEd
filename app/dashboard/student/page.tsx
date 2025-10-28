@@ -16,7 +16,7 @@ interface Test {
   _id: string;
   title: string;
   description: string;
-  classroom: {
+  classroomId: {
     _id: string;
     name: string;
   };
@@ -32,7 +32,7 @@ interface Submission {
   test: {
     _id: string;
     title: string;
-    classroom: {
+    classroomId: {
       name: string;
     };
   };
@@ -246,7 +246,7 @@ export default function StudentDashboard() {
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-black/60 mb-2">{test.classroom.name}</p>
+                            <p className="text-xs text-black/60 mb-2">{test.classroomId?.name || 'Unknown Classroom'}</p>
                             <div className="flex items-center gap-4 text-xs text-black/70">
                               <div className="flex items-center gap-1">
                                 <Target className="h-3 w-3" />
@@ -315,7 +315,7 @@ export default function StudentDashboard() {
                               <div className="flex-1">
                                 <h4 className="font-semibold text-black group-hover:text-[#FFA266] transition-colors mb-1">{submission.test.title}</h4>
                                 <p className="text-xs text-black/60">
-                                  {submission.test.classroom.name} • {new Date(submission.submittedAt).toLocaleDateString()}
+                                  {submission.test.classroomId?.name || 'Unknown Classroom'} • {new Date(submission.submittedAt).toLocaleDateString()}
                                 </p>
                               </div>
                               <div className="text-right">

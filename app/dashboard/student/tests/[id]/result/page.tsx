@@ -24,7 +24,7 @@ interface Result {
   percentage: number;
   test: {
     title: string;
-    classroom: {
+    classroomId: {
       name: string;
     };
   };

@@ -23,7 +23,7 @@ interface Test {
   title: string;
   description: string;
   mode?: string;
-  classroom: {
+  classroomId: {
     name: string;
   };
   questions: Question[];
@@ -217,7 +217,7 @@ export default function TakeTestPage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-2xl font-bold text-[#F5F5F5]">{test.title}</h1>
-              <p className="text-sm text-[#F5F5F5]/60">{test.classroom.name}</p>
+              <p className="text-sm text-[#F5F5F5]/60">{test.classroomId?.name || 'Unknown Classroom'}</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
