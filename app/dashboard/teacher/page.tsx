@@ -382,10 +382,11 @@ export default function TeacherDashboard() {
                 <CardDescription className="text-black/60">Common tasks and shortcuts</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   {[
                     { label: "Create New Classroom", icon: Users, description: "Set up a new class", onClick: handleCreateClassroom },
                     { label: "Create New Test", icon: FileText, description: "Design a new quiz", onClick: handleCreateTest },
+                    { label: "View All Tests", icon: TrendingUp, description: "See all tests & results", onClick: () => router.push("/dashboard/teacher/tests/all") },
                     { label: "View Analytics", icon: TrendingUp, description: "Check performance", onClick: () => router.push("/dashboard/teacher/analytics") },
                   ].map((action, index) => (
                     <motion.button

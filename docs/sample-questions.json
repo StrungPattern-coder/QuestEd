@@ -1,0 +1,27 @@
+[
+  {
+    "questionText": "Was ist das auf Deutsch? (apple)",
+    "options": ["der Apfel", "die Banane", "das Auto", "der Hund"],
+    "correctAnswer": "der Apfel"
+  },
+  {
+    "questionText": "Wie heißt du?",
+    "options": ["Ich heiße...", "Du heißt...", "Er heißt...", "Sie heißt..."],
+    "correctAnswer": "Ich heiße..."
+  },
+  {
+    "questionText": "Was bedeutet \"Guten Morgen\"?",
+    "options": ["Good Morning", "Good Evening", "Good Night", "Goodbye"],
+    "correctAnswer": "Good Morning"
+  },
+  {
+    "questionText": "Welche Farbe ist der Himmel?",
+    "options": ["Blau", "Rot", "Grün", "Gelb"],
+    "correctAnswer": "Blau"
+  },
+  {
+    "questionText": "Wo wohnst du?",
+    "options": ["Ich wohne in...", "Du wohnst in...", "Er wohnt in...", "Sie wohnen in..."],
+    "correctAnswer": "Ich wohne in..."
+  }
+]

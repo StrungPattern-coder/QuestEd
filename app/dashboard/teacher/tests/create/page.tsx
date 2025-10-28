@@ -103,6 +103,57 @@ export default function CreateTestPage() {
     ]);
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const fileType = file.name.split('.').pop()?.toLowerCase();
+    
+    try {
+      const text = await file.text();
+      let parsedQuestions: Question[] = [];
+
+      if (fileType === 'json') {
+        // Parse JSON format
+        const data = JSON.parse(text);
+        parsedQuestions = data.map((q: any) => ({
+          questionText: q.questionText || q.question || '',
+          options: q.options || [],
+          correctAnswer: q.options?.indexOf(q.correctAnswer) || 0,
+        }));
+      } else if (fileType === 'csv') {
+        // Parse CSV format
+        const lines = text.split('\n').filter(line => line.trim());
+        // Skip header row
+        for (let i = 1; i < lines.length; i++) {
+          const parts = lines[i].split(',').map(p => p.trim().replace(/^"|"$/g, ''));
+          if (parts.length >= 6) {
+            const [questionText, correctAnswer, opt1, opt2, opt3, opt4] = parts;
+            const options = [opt1, opt2, opt3, opt4];
+            parsedQuestions.push({
+              questionText,
+              options,
+              correctAnswer: options.indexOf(correctAnswer),
+            });
+          }
+        }
+      }
+
+      if (parsedQuestions.length > 0) {
+        setQuestions(parsedQuestions);
+        setError('');
+      } else {
+        setError('No valid questions found in the file');
+      }
+    } catch (err) {
+      console.error('Error parsing file:', err);
+      setError('Failed to parse file. Please check the format.');
+    }
+
+    // Reset file input
+    e.target.value = '';
+  };
+
   const removeQuestion = (index: number) => {
     if (questions.length > 1) {
       setQuestions(questions.filter((_, i) => i !== index));
@@ -401,6 +452,43 @@ export default function CreateTestPage() {
       <div className="text-center mb-6">
         <h3 className="text-2xl font-bold text-black mb-2">Add Your Questions</h3>
         <p className="text-black/60">Create engaging multiple-choice questions</p>
+      </div>
+
+      {/* Upload Question Bank */}
+      <div className="mb-6 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+        <h4 className="text-lg font-semibold text-black mb-2 flex items-center gap-2">
+          <FileText className="h-5 w-5 text-blue-600" />
+          Upload Question Bank
+        </h4>
+        <p className="text-sm text-black/70 mb-4">
+          Upload a CSV or JSON file with your questions. This will replace all current questions.
+        </p>
+        <div className="flex items-center gap-4">
+          <input
+            type="file"
+            accept=".csv,.json"
+            onChange={handleFileUpload}
+            className="hidden"
+            id="question-file-upload"
+          />
+          <label htmlFor="question-file-upload">
+            <Button
+              type="button"
+              onClick={() => document.getElementById('question-file-upload')?.click()}
+              variant="outline"
+              className="border-2 border-blue-300 hover:bg-blue-100 text-black cursor-pointer"
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Choose File (CSV/JSON)
+            </Button>
+          </label>
+          <div className="text-xs text-black/60">
+            <p className="font-semibold mb-1">CSV Format:</p>
+            <code className="bg-white px-2 py-1 rounded text-xs">Question Text,Correct Answer,Option 1,Option 2,Option 3,Option 4</code>
+            <p className="font-semibold mt-2 mb-1">JSON Format:</p>
+            <code className="bg-white px-2 py-1 rounded text-xs">{'[{"questionText":"...", "options":["A","B","C","D"], "correctAnswer":"A"}]'}</code>
+          </div>
+        </div>
       </div>
 
       <div className="flex items-center justify-between mb-4">
