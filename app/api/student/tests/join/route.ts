@@ -5,6 +5,7 @@ import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
 import Classroom from '@/backend/models/Classroom';
 import User from '@/backend/models/User';
+import Question from '@/backend/models/Question';
 import jwt from 'jsonwebtoken';
 
 export async function POST(request: NextRequest) {
@@ -34,18 +35,30 @@ export async function POST(request: NextRequest) {
     const test = await Test.findOne({ 
       joinCode: joinCode.toUpperCase(), 
       mode: 'live',
-      isActive: true 
+      isActive: true,
+      isCompleted: false
     })
       .populate('classroomId', 'name')
       .populate('questions');
 
     if (!test) {
-      return NextResponse.json({ error: 'Invalid or inactive join code' }, { status: 404 });
+      return NextResponse.json({ error: 'Invalid, inactive, or completed join code' }, { status: 404 });
     }
+
+    // Transform questions to convert correctAnswer from text to index
+    const transformedTest = {
+      ...test.toObject(),
+      questions: test.questions.map((q: any) => ({
+        _id: q._id,
+        questionText: q.questionText,
+        options: q.options,
+        correctAnswer: q.options.indexOf(q.correctAnswer), // Convert text to index
+      })),
+    };
 
     return NextResponse.json({
       message: 'Joined live test successfully',
-      test,
+      test: transformedTest,
     });
   } catch (error: any) {
     console.error('Join live test error:', error);

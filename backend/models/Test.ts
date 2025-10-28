@@ -11,6 +11,7 @@ export interface ITest extends Document {
   endTime: Date;
   timeLimitPerQuestion: number;
   isActive: boolean;
+  isCompleted: boolean;
   joinCode?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -70,6 +71,10 @@ const TestSchema: Schema<ITest> = new Schema(
       max: [300, 'Time limit cannot exceed 300 seconds'],
     },
     isActive: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
       type: Boolean,
       default: false,
     },

@@ -37,6 +37,7 @@ interface Test {
   description: string;
   joinCode: string;
   isActive: boolean;
+  isCompleted: boolean;
   questions: any[];
   classroomId?: {
     _id: string;
@@ -104,13 +105,33 @@ export default function LiveTestControlPage() {
         origin: { y: 0.6 },
         colors: ["#FFA266", "#FF8F4D", "#FFB280"],
       });
+    } else if (response.error) {
+      alert(response.error);
     }
   };
 
   const handleStopTest = async () => {
+    const confirmed = confirm(
+      "Are you sure you want to end this live test?\n\n" +
+      "⚠️ This action is PERMANENT:\n" +
+      "- The test will be marked as completed\n" +
+      "- Students can no longer join or submit answers\n" +
+      "- Final results will be locked\n" +
+      "- You CANNOT restart this test\n\n" +
+      "Click OK to end the test permanently."
+    );
+
+    if (!confirmed) return;
+
     const response = await teacherApi.stopLiveTest(testId);
     if (response.data) {
       setIsLive(false);
+      setTest((response.data as any).test);
+      alert("Test ended successfully! Final results are now available.");
+      // Optionally refresh to show final state
+      await fetchTest();
+    } else if (response.error) {
+      alert(response.error);
     }
   };
 
@@ -178,7 +199,16 @@ export default function LiveTestControlPage() {
               </div>
             </div>
             
-            {!isLive ? (
+            {test.isCompleted ? (
+              <div className="bg-gray-500/20 border-2 border-gray-500 rounded-lg px-8 py-4">
+                <p className="text-[#F5F5F5] font-bold text-center">
+                  ✅ Test Completed
+                </p>
+                <p className="text-[#F5F5F5]/60 text-sm text-center mt-1">
+                  Final results locked
+                </p>
+              </div>
+            ) : !isLive ? (
               <Button
                 onClick={handleStartTest}
                 className="bg-green-500 hover:bg-green-600 text-white font-bold h-14 px-8 shadow-xl"
@@ -192,23 +222,35 @@ export default function LiveTestControlPage() {
                 className="bg-red-500 hover:bg-red-600 text-white font-bold h-14 px-8 shadow-xl"
               >
                 <Square className="h-5 w-5 mr-2" />
-                Stop Session
+                End Test (Permanent)
               </Button>
             )}
           </div>
 
           {/* Status Indicator */}
           <Card className={`backdrop-blur-xl border-2 ${
-            isLive ? "bg-green-500/20 border-green-500" : "bg-gray-500/20 border-gray-500"
+            test.isCompleted 
+              ? "bg-gray-500/20 border-gray-500"
+              : isLive 
+                ? "bg-green-500/20 border-green-500" 
+                : "bg-gray-500/20 border-gray-500"
           }`}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className={`h-4 w-4 rounded-full ${
-                    isLive ? "bg-green-500 animate-pulse" : "bg-gray-500"
+                    test.isCompleted
+                      ? "bg-gray-500"
+                      : isLive 
+                        ? "bg-green-500 animate-pulse" 
+                        : "bg-gray-500"
                   }`}></div>
                   <span className="text-xl font-bold text-[#F5F5F5]">
-                    {isLive ? "🔴 LIVE NOW" : "⚫ Not Started"}
+                    {test.isCompleted 
+                      ? "✅ COMPLETED" 
+                      : isLive 
+                        ? "🔴 LIVE NOW" 
+                        : "⚫ Not Started"}
                   </span>
                 </div>
                 {isLive && test.joinCode && (
@@ -248,7 +290,12 @@ export default function LiveTestControlPage() {
           {[
             { label: "Participants", value: participants, icon: Users, color: "#FFA266" },
             { label: "Questions", value: test.questions.length, icon: Target, color: "#FFA266" },
-            { label: "Status", value: isLive ? "Active" : "Idle", icon: Clock, color: isLive ? "#10B981" : "#6B7280" },
+            { 
+              label: "Status", 
+              value: test.isCompleted ? "Completed" : isLive ? "Active" : "Idle", 
+              icon: Clock, 
+              color: test.isCompleted ? "#6B7280" : isLive ? "#10B981" : "#6B7280" 
+            },
             { label: "Join Code", value: test.joinCode || "N/A", icon: Brain, color: "#FFA266" },
           ].map((stat, index) => (
             <motion.div

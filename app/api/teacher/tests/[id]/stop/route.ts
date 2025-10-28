@@ -32,14 +32,20 @@ export async function POST(
       return NextResponse.json({ error: 'Live test not found' }, { status: 404 });
     }
 
+    if (test.isCompleted) {
+      return NextResponse.json({ error: 'This test has already been completed and cannot be modified' }, { status: 400 });
+    }
+
+    // Mark test as inactive and completed (cannot be restarted)
     test.isActive = false;
+    test.isCompleted = true;
     await test.save();
 
     const populatedTest = await Test.findById(test._id)
       .populate('questions')
       .populate('classroomId', 'name');
 
-    return NextResponse.json({ message: 'Live test stopped', test: populatedTest });
+    return NextResponse.json({ message: 'Live test ended successfully. Final results are now available.', test: populatedTest });
   } catch (error: any) {
     console.error('Stop live test error:', error);
     return NextResponse.json({ error: error.message || 'Failed to stop live test' }, { status: 500 });

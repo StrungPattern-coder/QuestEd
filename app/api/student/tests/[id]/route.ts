@@ -5,6 +5,7 @@ import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
 import Classroom from '@/backend/models/Classroom';
 import User from '@/backend/models/User';
+import Question from '@/backend/models/Question';
 import jwt from 'jsonwebtoken';
 
 export async function GET(
@@ -35,7 +36,18 @@ export async function GET(
       return NextResponse.json({ error: 'Test not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ test });
+    // Transform questions to convert correctAnswer from text to index
+    const transformedTest = {
+      ...test.toObject(),
+      questions: test.questions.map((q: any) => ({
+        _id: q._id,
+        questionText: q.questionText,
+        options: q.options,
+        correctAnswer: q.options.indexOf(q.correctAnswer), // Convert text to index
+      })),
+    };
+
+    return NextResponse.json({ test: transformedTest });
   } catch (error: any) {
     console.error('Get test details error:', error);
     return NextResponse.json({ error: error.message || 'Failed to get test details' }, { status: 500 });

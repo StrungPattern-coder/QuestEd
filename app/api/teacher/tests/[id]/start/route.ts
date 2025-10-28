@@ -33,6 +33,12 @@ export async function POST(
       return NextResponse.json({ error: 'Live test not found' }, { status: 404 });
     }
 
+    if (test.isCompleted) {
+      return NextResponse.json({ 
+        error: 'This test has been completed and cannot be restarted. Please create a new test.' 
+      }, { status: 400 });
+    }
+
     test.isActive = true;
     if (!test.joinCode) {
       test.joinCode = generateJoinCode();
