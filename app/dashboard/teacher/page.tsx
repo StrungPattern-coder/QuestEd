@@ -56,7 +56,7 @@ export default function TeacherDashboard() {
       // Fetch classrooms
       const classroomsRes = await teacherApi.getClassrooms();
       if (classroomsRes.data) {
-        const classroomsData = classroomsRes.data.classrooms || [];
+        const classroomsData = (classroomsRes.data as any).classrooms || [];
         setClassrooms(classroomsData);
         
         // Calculate stats
@@ -74,7 +74,7 @@ export default function TeacherDashboard() {
       // Fetch tests
       const testsRes = await teacherApi.getTests();
       if (testsRes.data) {
-        const testsData = testsRes.data.tests || [];
+        const testsData = (testsRes.data as any).tests || [];
         setTests(testsData);
         setStats(prev => ({
           ...prev,
