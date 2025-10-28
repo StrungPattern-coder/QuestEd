@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useAuthStore } from "@/lib/store";
-import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap } from "lucide-react";
+import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap, XCircle, Award } from "lucide-react";
 import { studentApi } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -25,6 +25,17 @@ interface Test {
   endTime?: string;
   questions: any[];
   timeLimitPerQuestion: number;
+  status?: 'active' | 'upcoming' | 'missed' | 'submitted' | 'not-started';
+  isAvailable?: boolean;
+  isExpired?: boolean;
+  hasSubmitted?: boolean;
+  timeRemaining?: number;
+  submission?: {
+    _id: string;
+    score: number;
+    submittedAt: string;
+    submittedLate: boolean;
+  };
 }
 
 interface Submission {
@@ -68,17 +79,20 @@ export default function StudentDashboard() {
       // Fetch available tests
       const testsResponse = await studentApi.getTests();
       if (testsResponse.data) {
-        setAvailableTests((testsResponse.data as any).tests || []);
+        const tests = (testsResponse.data as any).tests || [];
+        setAvailableTests(tests);
+        
+        // Calculate stats based on test data
+        const completedTests = tests.filter((t: Test) => t.hasSubmitted);
+        const totalScore = completedTests.reduce((sum: number, t: Test) => sum + (t.submission?.score || 0), 0);
+        const maxPossibleScore = completedTests.reduce((sum: number, t: Test) => sum + (t.questions?.length || 0), 0);
+        
+        setStats({
+          testsCompleted: completedTests.length,
+          averageScore: maxPossibleScore > 0 ? Math.round((totalScore / maxPossibleScore) * 100) : 0,
+          totalPoints: totalScore,
+        });
       }
-
-      // Note: We'll need to add a getSubmissions endpoint to the API
-      // For now, we'll use test results to determine completed tests
-      // Calculate stats based on available data
-      setStats({
-        testsCompleted: 0,
-        averageScore: 0,
-        totalPoints: 0,
-      });
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
     }
@@ -214,10 +228,10 @@ export default function StudentDashboard() {
             >
               <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20">
                 <CardHeader>
-                  <CardTitle className="text-2xl text-black">{t.student.availableTests}</CardTitle>
-                  <CardDescription className="text-black/60">{t.student.welcomeMessage}</CardDescription>
+                  <CardTitle className="text-2xl text-black">My Tests</CardTitle>
+                  <CardDescription className="text-black/60">View all your tests organized by status</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-6">
                   {availableTests.length === 0 ? (
                     <div className="text-center py-12">
                       <BookOpen className="h-16 w-16 text-black/20 mx-auto mb-4" />
@@ -227,121 +241,220 @@ export default function StudentDashboard() {
                       </p>
                     </div>
                   ) : (
-                    availableTests.map((test, index) => (
-                      <motion.div
-                        key={test._id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                        className="p-4 rounded-xl bg-white/50 border border-[#FFA266]/10 hover:border-[#FFA266]/30 transition-all duration-200 hover:shadow-md group"
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <h4 className="font-semibold text-black group-hover:text-[#FFA266] transition-colors">{test.title}</h4>
-                              {test.mode === "live" && (
-                                <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-medium rounded-full flex items-center gap-1">
-                                  <AlertCircle className="h-3 w-3" />
-                                  Live
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs text-black/60 mb-2">{test.classroomId?.name || 'Unknown Classroom'}</p>
-                            <div className="flex items-center gap-4 text-xs text-black/70">
-                              <div className="flex items-center gap-1">
-                                <Target className="h-3 w-3" />
-                                {test.questions.length} questions
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {test.timeLimitPerQuestion}s per question
-                              </div>
-                              {test.mode === "deadline" && test.endTime && (
-                                <div className="flex items-center gap-1 text-red-600">
-                                  <Calendar className="h-3 w-3" />
-                                  {getTimeRemaining(test.endTime)}
-                                </div>
-                              )}
-                            </div>
+                    <>
+                      {/* Active Tests - Need to Submit */}
+                      {availableTests.filter(t => t.status === 'active').length > 0 && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <AlertCircle className="h-5 w-5 text-red-600" />
+                            <h3 className="text-lg font-semibold text-black">Active - Need to Submit</h3>
+                            <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs font-medium rounded-full">
+                              {availableTests.filter(t => t.status === 'active').length}
+                            </span>
                           </div>
-                          <Button 
-                            size="sm" 
-                            onClick={() => handleStartTest(test._id)}
-                            className="bg-[#FFA266] hover:bg-[#FF8F4D] text-black shadow-lg shadow-[#FFA266]/30"
-                          >
-                            <Play className="h-4 w-4 mr-1" />
-                            Start
-                          </Button>
+                          <div className="space-y-3">
+                            {availableTests.filter(t => t.status === 'active').map((test, index) => (
+                              <motion.div
+                                key={test._id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                                className="p-4 rounded-xl bg-red-50 border-2 border-red-200 hover:border-red-300 transition-all duration-200 hover:shadow-md group"
+                              >
+                                <div className="flex items-start justify-between mb-3">
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <h4 className="font-semibold text-black group-hover:text-red-600 transition-colors">{test.title}</h4>
+                                      {test.mode === "live" && (
+                                        <span className="px-2 py-0.5 bg-red-500 text-white text-xs font-medium rounded-full flex items-center gap-1 animate-pulse">
+                                          <AlertCircle className="h-3 w-3" />
+                                          LIVE NOW
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-xs text-black/60 mb-2">{test.classroomId?.name || 'Unknown Classroom'}</p>
+                                    <div className="flex items-center gap-4 text-xs text-black/70">
+                                      <div className="flex items-center gap-1">
+                                        <Target className="h-3 w-3" />
+                                        {test.questions.length} questions
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                        <Clock className="h-3 w-3" />
+                                        {test.timeLimitPerQuestion}s per question
+                                      </div>
+                                      {test.mode === "deadline" && test.endTime && (
+                                        <div className="flex items-center gap-1 text-red-600 font-semibold">
+                                          <Calendar className="h-3 w-3" />
+                                          {getTimeRemaining(test.endTime)}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <Button 
+                                    size="sm" 
+                                    onClick={() => handleStartTest(test._id)}
+                                    className="bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-600/30"
+                                  >
+                                    <Play className="h-4 w-4 mr-1" />
+                                    Start Now
+                                  </Button>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
                         </div>
-                      </motion.div>
-                    ))
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
+                      )}
 
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-black">Recent Submissions</CardTitle>
-                  <CardDescription className="text-black/60">Your test performance history</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {completedSubmissions.length === 0 ? (
-                    <div className="text-center py-12">
-                      <Trophy className="h-16 w-16 text-black/20 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-black mb-2">No Submissions Yet</h3>
-                      <p className="text-sm text-black/60">
-                        Complete your first test to see your results here!
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {completedSubmissions.slice(0, 5).map((submission, index) => {
-                        const percentage = Math.round((submission.score / submission.maxScore) * 100);
-                        return (
-                          <motion.div
-                            key={submission._id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3, delay: 0.9 + index * 0.1 }}
-                            className="p-4 rounded-xl bg-white/50 border border-[#FFA266]/10 hover:border-[#FFA266]/30 transition-all duration-200 hover:shadow-md cursor-pointer group"
-                          >
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="flex-1">
-                                <h4 className="font-semibold text-black group-hover:text-[#FFA266] transition-colors mb-1">{submission.test.title}</h4>
-                                <p className="text-xs text-black/60">
-                                  {submission.test.classroomId?.name || 'Unknown Classroom'} • {new Date(submission.submittedAt).toLocaleDateString()}
-                                </p>
-                              </div>
-                              <div className="text-right">
-                                <div className="text-2xl font-bold text-[#FFA266]">{submission.score}</div>
-                                <div className="text-xs text-black/60">/ {submission.maxScore}</div>
-                              </div>
-                            </div>
-                            <div className="space-y-2">
-                              <Progress 
-                                value={percentage} 
-                                className="h-2 bg-black/10"
-                              />
-                              <div className="flex items-center justify-between text-xs">
-                                <span className="text-black/60">Score percentage</span>
-                                <span className={`font-semibold ${
-                                  percentage >= 80 ? "text-[#FFA266]" : 
-                                  percentage >= 60 ? "text-yellow-600" : "text-red-600"
-                                }`}>
-                                  {percentage}%
-                                </span>
-                              </div>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
+                      {/* Upcoming Tests */}
+                      {availableTests.filter(t => t.status === 'upcoming').length > 0 && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <Clock className="h-5 w-5 text-blue-600" />
+                            <h3 className="text-lg font-semibold text-black">Upcoming Tests</h3>
+                            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                              {availableTests.filter(t => t.status === 'upcoming').length}
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            {availableTests.filter(t => t.status === 'upcoming').map((test, index) => (
+                              <motion.div
+                                key={test._id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                                className="p-4 rounded-xl bg-blue-50 border border-blue-200 hover:border-blue-300 transition-all duration-200 hover:shadow-md group"
+                              >
+                                <div className="flex items-start justify-between mb-3">
+                                  <div className="flex-1">
+                                    <h4 className="font-semibold text-black mb-2">{test.title}</h4>
+                                    <p className="text-xs text-black/60 mb-2">{test.classroomId?.name || 'Unknown Classroom'}</p>
+                                    <div className="flex items-center gap-4 text-xs text-black/70">
+                                      <div className="flex items-center gap-1">
+                                        <Target className="h-3 w-3" />
+                                        {test.questions.length} questions
+                                      </div>
+                                      {test.startTime && (
+                                        <div className="flex items-center gap-1 text-blue-600 font-semibold">
+                                          <Calendar className="h-3 w-3" />
+                                          Starts: {new Date(test.startTime).toLocaleString()}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                                    Coming Soon
+                                  </span>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Submitted Tests */}
+                      {availableTests.filter(t => t.status === 'submitted').length > 0 && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <CheckCircle className="h-5 w-5 text-green-600" />
+                            <h3 className="text-lg font-semibold text-black">Submitted</h3>
+                            <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                              {availableTests.filter(t => t.status === 'submitted').length}
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            {availableTests.filter(t => t.status === 'submitted').map((test, index) => (
+                              <motion.div
+                                key={test._id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                                className="p-4 rounded-xl bg-green-50 border border-green-200 hover:border-green-300 transition-all duration-200 hover:shadow-md group cursor-pointer"
+                                onClick={() => router.push(`/dashboard/student/tests/${test._id}/result`)}
+                              >
+                                <div className="flex items-start justify-between mb-3">
+                                  <div className="flex-1">
+                                    <h4 className="font-semibold text-black mb-2">{test.title}</h4>
+                                    <p className="text-xs text-black/60 mb-2">{test.classroomId?.name || 'Unknown Classroom'}</p>
+                                    <div className="flex items-center gap-4 text-xs text-black/70">
+                                      {test.submission && (
+                                        <>
+                                          <div className="flex items-center gap-1 text-green-600 font-semibold">
+                                            <Award className="h-3 w-3" />
+                                            Score: {test.submission.score}/{test.questions.length}
+                                          </div>
+                                          <div className="flex items-center gap-1">
+                                            <Clock className="h-3 w-3" />
+                                            {new Date(test.submission.submittedAt).toLocaleDateString()}
+                                          </div>
+                                          {test.submission.submittedLate && (
+                                            <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
+                                              Late
+                                            </span>
+                                          )}
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <Button 
+                                    size="sm" 
+                                    variant="outline"
+                                    className="border-green-600 text-green-600 hover:bg-green-50"
+                                  >
+                                    View Result
+                                  </Button>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Missed Tests */}
+                      {availableTests.filter(t => t.status === 'missed').length > 0 && (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <XCircle className="h-5 w-5 text-gray-600" />
+                            <h3 className="text-lg font-semibold text-black">Missed</h3>
+                            <span className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
+                              {availableTests.filter(t => t.status === 'missed').length}
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            {availableTests.filter(t => t.status === 'missed').map((test, index) => (
+                              <motion.div
+                                key={test._id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                                className="p-4 rounded-xl bg-gray-50 border border-gray-200 transition-all duration-200"
+                              >
+                                <div className="flex items-start justify-between mb-3">
+                                  <div className="flex-1">
+                                    <h4 className="font-semibold text-gray-600 mb-2">{test.title}</h4>
+                                    <p className="text-xs text-black/60 mb-2">{test.classroomId?.name || 'Unknown Classroom'}</p>
+                                    <div className="flex items-center gap-4 text-xs text-gray-600">
+                                      <div className="flex items-center gap-1">
+                                        <Target className="h-3 w-3" />
+                                        {test.questions.length} questions
+                                      </div>
+                                      {test.endTime && (
+                                        <div className="flex items-center gap-1">
+                                          <Calendar className="h-3 w-3" />
+                                          Ended: {new Date(test.endTime).toLocaleDateString()}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <span className="px-3 py-1 bg-gray-200 text-gray-700 text-xs font-medium rounded-full">
+                                    Expired
+                                  </span>
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
                   )}
                 </CardContent>
               </Card>

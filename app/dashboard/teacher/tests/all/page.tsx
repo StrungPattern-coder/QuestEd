@@ -19,7 +19,8 @@ import {
   Target,
   Loader2,
   Plus,
-  ArrowLeft
+  ArrowLeft,
+  Trash2
 } from "lucide-react";
 import Link from "next/link";
 import { teacherApi } from "@/lib/api";
@@ -56,6 +57,9 @@ export default function AllTestsPage() {
   const [loading, setLoading] = useState(true);
   const [tests, setTests] = useState<TestWithStats[]>([]);
   const [filter, setFilter] = useState<'all' | 'live' | 'deadline'>('all');
+  const [extendingTestId, setExtendingTestId] = useState<string | null>(null);
+  const [newDeadline, setNewDeadline] = useState('');
+  const [deletingTestId, setDeletingTestId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTests();
@@ -78,6 +82,52 @@ export default function AllTestsPage() {
       console.error('Failed to fetch tests:', error);
     }
     setLoading(false);
+  };
+
+  const handleExtendDeadline = async (testId: string) => {
+    if (!newDeadline) {
+      alert('Please select a new deadline');
+      return;
+    }
+
+    try {
+      const response = await teacherApi.extendDeadline(testId, newDeadline);
+      if (response.error) {
+        alert(response.error);
+      } else {
+        alert('Deadline extended successfully!');
+        setExtendingTestId(null);
+        setNewDeadline('');
+        fetchTests(); // Refresh the list
+      }
+    } catch (error) {
+      console.error('Failed to extend deadline:', error);
+      alert('Failed to extend deadline. Please try again.');
+    }
+  };
+
+  const handleDeleteTest = async (testId: string, testTitle: string) => {
+    const confirmed = confirm(
+      `Are you sure you want to delete "${testTitle}"?\n\nThis will permanently delete:\n- The test\n- All questions\n- All student submissions\n\nThis action cannot be undone!`
+    );
+
+    if (!confirmed) return;
+
+    setDeletingTestId(testId);
+    try {
+      const response = await teacherApi.deleteTest(testId);
+      if (response.error) {
+        alert(response.error);
+      } else {
+        alert('Test deleted successfully!');
+        fetchTests(); // Refresh the list
+      }
+    } catch (error) {
+      console.error('Failed to delete test:', error);
+      alert('Failed to delete test. Please try again.');
+    } finally {
+      setDeletingTestId(null);
+    }
   };
 
   const downloadResults = (testId: string, testTitle: string) => {
@@ -280,6 +330,25 @@ export default function AllTestsPage() {
                         </CardDescription>
                       </div>
                       <div className="flex gap-2">
+                        {test.mode === 'deadline' && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setExtendingTestId(test._id);
+                              // Set default to current end time
+                              if (test.endTime) {
+                                const date = new Date(test.endTime);
+                                date.setHours(date.getHours() + 24); // Add 24 hours as default
+                                setNewDeadline(date.toISOString().slice(0, 16));
+                              }
+                            }}
+                            className="border-amber-500/50 hover:border-amber-500 text-amber-700 hover:bg-amber-50"
+                          >
+                            <Clock className="h-4 w-4 mr-1" />
+                            Extend
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="outline"
@@ -299,6 +368,20 @@ export default function AllTestsPage() {
                             Live View
                           </Button>
                         )}
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleDeleteTest(test._id, test.title)}
+                          disabled={deletingTestId === test._id}
+                          className="border-red-300 hover:border-red-500 text-red-600 hover:bg-red-50"
+                        >
+                          {deletingTestId === test._id ? (
+                            <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4 mr-1" />
+                          )}
+                          Delete
+                        </Button>
                       </div>
                     </div>
                   </CardHeader>
@@ -377,6 +460,59 @@ export default function AllTestsPage() {
                             ))}
                         </div>
                       </div>
+                    )}
+
+                    {/* Extend Deadline Modal */}
+                    {extendingTestId === test._id && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mt-4 p-4 bg-amber-50 rounded-lg border-2 border-amber-300"
+                      >
+                        <h4 className="text-sm font-semibold text-black mb-3 flex items-center gap-2">
+                          <Clock className="h-4 w-4 text-amber-600" />
+                          Extend Deadline
+                        </h4>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-xs text-black/70 mb-1 block">Current Deadline</label>
+                            <p className="text-sm font-medium text-black">
+                              {test.endTime ? new Date(test.endTime).toLocaleString() : 'No deadline set'}
+                            </p>
+                          </div>
+                          <div>
+                            <label className="text-xs text-black/70 mb-1 block">New Deadline</label>
+                            <input
+                              type="datetime-local"
+                              value={newDeadline}
+                              onChange={(e) => setNewDeadline(e.target.value)}
+                              min={new Date().toISOString().slice(0, 16)}
+                              className="w-full px-3 py-2 border border-amber-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                            />
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              onClick={() => handleExtendDeadline(test._id)}
+                              className="bg-amber-600 hover:bg-amber-700 text-white"
+                            >
+                              Confirm Extension
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                setExtendingTestId(null);
+                                setNewDeadline('');
+                              }}
+                              className="border-gray-300"
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                      </motion.div>
                     )}
                   </CardContent>
                 </Card>

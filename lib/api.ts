@@ -139,6 +139,19 @@ export const teacherApi = {
 
   getLeaderboard: (classroomId: string) =>
     fetchApi(`/teacher/leaderboard/${classroomId}`),
+
+  getAllTests: () => fetchApi('/teacher/tests/all'),
+
+  extendDeadline: (testId: string, newEndTime: string) =>
+    fetchApi(`/teacher/tests/${testId}/extend`, {
+      method: 'PATCH',
+      body: JSON.stringify({ newEndTime }),
+    }),
+
+  deleteTest: (testId: string) =>
+    fetchApi(`/teacher/tests/${testId}/delete`, {
+      method: 'DELETE',
+    }),
 };
 
 // Student API
