@@ -5,6 +5,7 @@ import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
 import Classroom from '@/backend/models/Classroom';
 import User from '@/backend/models/User';
+import Question from '@/backend/models/Question';
 import jwt from 'jsonwebtoken';
 import { generateJoinCode } from '@/backend/utils/helpers';
 
