@@ -112,18 +112,6 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="grid grid-cols-3 gap-8 mt-16 pt-8 border-t border-[#FFA266]/20"
           >
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#FFA266] mb-1">500+</div>
-              <div className="text-sm text-[#F5F5F5]/70">{t.home.stats.students}</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#FFA266] mb-1">50+</div>
-              <div className="text-sm text-[#F5F5F5]/70">{t.home.stats.teachers}</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-[#FFA266] mb-1">10K+</div>
-              <div className="text-sm text-[#F5F5F5]/70">{t.home.stats.tests}</div>
-            </div>
           </motion.div>
         </div>
       </div>
