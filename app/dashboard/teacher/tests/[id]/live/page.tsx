@@ -19,7 +19,8 @@ import {
   CheckCircle,
   TrendingUp,
   Target,
-  Zap
+  Zap,
+  ArrowLeft
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -178,6 +179,22 @@ export default function LiveTestControlPage() {
       </div>
 
       <div className="relative z-10 container mx-auto px-6 py-8">
+        {/* Back to Dashboard Button */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="mb-6"
+        >
+          <Button
+            onClick={() => router.push("/dashboard/teacher")}
+            variant="outline"
+            className="border-[#FFA266] text-[#FFA266] hover:bg-[#FFA266] hover:text-black"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+        </motion.div>
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
