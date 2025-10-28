@@ -6,16 +6,27 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Zap, Trophy, Users, Brain, TrendingUp, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import Aurora from "@/components/Aurora";
 
 export default function Home() {
   const { t } = useLanguage();
   return (
     <main className="min-h-screen bg-black relative overflow-hidden">
+      {/* Aurora Background */}
+      <div className="absolute inset-0 z-0">
+        <Aurora
+          colorStops={["#FFA266", "#FF8F4D", "#FFA266"]}
+          blend={0.5}
+          amplitude={1.0}
+          speed={0.5}
+        />
+      </div>
+
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#FFA266]/30 rounded-full blur-3xl animate-pulse-color"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#FFA266]/20 rounded-full blur-3xl animate-pulse-color" style={{ animationDelay: "1s" }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#FFA266]/20 rounded-full blur-3xl animate-pulse-color" style={{ animationDelay: "2s" }}></div>
+      <div className="absolute inset-0 overflow-hidden z-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#FFA266]/20 rounded-full blur-3xl animate-pulse-color"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#FFA266]/10 rounded-full blur-3xl animate-pulse-color" style={{ animationDelay: "1s" }}></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#FFA266]/10 rounded-full blur-3xl animate-pulse-color" style={{ animationDelay: "2s" }}></div>
       </div>
 
       {/* Navigation */}

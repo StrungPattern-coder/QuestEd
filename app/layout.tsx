@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Audiowide } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
+import Footer from "@/components/Footer";
 
 const audiowide = Audiowide({ 
   weight: "400",
@@ -21,9 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={audiowide.className}>
+      <body className={`${audiowide.className} flex flex-col min-h-screen`}>
         <LanguageProvider>
-          {children}
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
         </LanguageProvider>
       </body>
     </html>

@@ -40,16 +40,23 @@ export async function GET(request: NextRequest) {
 
         const totalStudents = (test.classroomId as any)?.students?.length || 0;
         const submittedCount = submissions.length;
-        const averageScore = submissions.length > 0
-          ? submissions.reduce((sum, sub) => sum + sub.score, 0) / submissions.length
+        const totalQuestions = test.questions.length || 1; // Prevent division by zero
+        
+        // Calculate percentage scores (score out of total questions)
+        const percentageScores = submissions.map(sub => 
+          (sub.score / totalQuestions) * 100
+        );
+        
+        const averageScore = percentageScores.length > 0
+          ? percentageScores.reduce((sum, score) => sum + score, 0) / percentageScores.length
           : 0;
         
-        const highestScore = submissions.length > 0
-          ? Math.max(...submissions.map(sub => sub.score))
+        const highestScore = percentageScores.length > 0
+          ? Math.max(...percentageScores)
           : 0;
 
-        const lowestScore = submissions.length > 0
-          ? Math.min(...submissions.map(sub => sub.score))
+        const lowestScore = percentageScores.length > 0
+          ? Math.min(...percentageScores)
           : 0;
 
         return {
@@ -59,8 +66,8 @@ export async function GET(request: NextRequest) {
             submittedCount,
             notSubmittedCount: totalStudents - submittedCount,
             averageScore: Math.round(averageScore * 100) / 100,
-            highestScore,
-            lowestScore,
+            highestScore: Math.round(highestScore * 100) / 100,
+            lowestScore: Math.round(lowestScore * 100) / 100,
             submissionRate: totalStudents > 0 
               ? Math.round((submittedCount / totalStudents) * 100) 
               : 0,
@@ -68,7 +75,9 @@ export async function GET(request: NextRequest) {
           submissions: submissions.map(sub => ({
             _id: sub._id,
             student: sub.studentId,
-            score: sub.score,
+            score: Math.round((sub.score / totalQuestions) * 100), // Convert to percentage
+            rawScore: sub.score,
+            maxScore: totalQuestions,
             submittedAt: sub.submittedAt,
             submittedLate: sub.submittedLate,
           })),
