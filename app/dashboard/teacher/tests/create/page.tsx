@@ -229,10 +229,35 @@ export default function CreateTestPage() {
         correctAnswer: q.options[q.correctAnswer],
       }));
 
-      const response = await teacherApi.createTest({
-        ...formData,
+      // Prepare test data with proper date conversion
+      const testData: any = {
+        classroomId: formData.classroomId,
+        title: formData.title,
+        description: formData.description,
+        mode: formData.mode,
+        timeLimitPerQuestion: formData.timeLimitPerQuestion,
         questions: formattedQuestions,
-      });
+      };
+
+      // Convert datetime-local values to ISO strings properly
+      // datetime-local gives us "2025-10-29T03:00" which is in local time
+      // We need to convert it to ISO string maintaining the local time as-is
+      if (formData.mode === 'deadline') {
+        if (formData.startTime) {
+          // Create date from local datetime string and convert to ISO
+          testData.startTime = new Date(formData.startTime).toISOString();
+        }
+        if (formData.endTime) {
+          testData.endTime = new Date(formData.endTime).toISOString();
+        }
+      } else {
+        // For live mode, set default times
+        const now = new Date();
+        testData.startTime = now.toISOString();
+        testData.endTime = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString(); // 24 hours later
+      }
+
+      const response = await teacherApi.createTest(testData);
 
       if (response.error) {
         setError(response.error);

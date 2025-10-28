@@ -91,7 +91,10 @@ export default function AllTestsPage() {
     }
 
     try {
-      const response = await teacherApi.extendDeadline(testId, newDeadline);
+      // Convert datetime-local value to ISO string properly
+      const isoDeadline = new Date(newDeadline).toISOString();
+      
+      const response = await teacherApi.extendDeadline(testId, isoDeadline);
       if (response.error) {
         alert(response.error);
       } else {
