@@ -290,7 +290,20 @@ This project was built for PICT College. For contributions:
 
 MIT License - See LICENSE file for details
 
-## 👥 Support
+## � Documentation
+
+Comprehensive documentation is available in the [`/docs`](./docs) folder:
+
+### Quick Links
+- **[Getting Started](./docs/GETTING_STARTED.md)** - Quick start guide
+- **[Email Setup (5 min)](./docs/EMAIL_QUICKSTART.md)** - Configure email invitations
+- **[Classroom Management](./docs/CLASSROOM_INVITATION.md)** - Student invitation system
+- **[i18n Guide](./docs/I18N_GUIDE.md)** - Multiple language support
+- **[Project Summary](./docs/PROJECT_SUMMARY.md)** - Complete architecture overview
+
+**[View All Documentation →](./docs/README.md)**
+
+## �👥 Support
 
 For issues or questions:
 - Open an issue on GitHub

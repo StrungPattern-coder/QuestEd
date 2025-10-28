@@ -103,6 +103,12 @@ export const teacherApi = {
       method: 'DELETE',
     }),
 
+  inviteStudent: (classroomId: string, studentEmail: string) =>
+    fetchApi(`/teacher/classrooms/${classroomId}/invite`, {
+      method: 'POST',
+      body: JSON.stringify({ studentEmail }),
+    }),
+
   // Tests
   createTest: (testData: any) =>
     fetchApi('/teacher/tests', {
