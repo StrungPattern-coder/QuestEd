@@ -123,9 +123,18 @@ export default function CreateTestPage() {
     }
 
     try {
+      // Convert correctAnswer from index to actual text
+      const formattedQuestions = questions.map(q => ({
+        questionText: q.questionText,
+        options: q.options,
+        correctAnswer: q.options[q.correctAnswer], // Convert index to actual text
+      }));
+
+      console.log('Submitting test with questions:', formattedQuestions);
+
       const response = await teacherApi.createTest({
         ...formData,
-        questions,
+        questions: formattedQuestions,
       });
 
       if (response.error) {
