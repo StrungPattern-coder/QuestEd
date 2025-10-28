@@ -8,6 +8,7 @@ import User from '@/backend/models/User';
 import Question from '@/backend/models/Question';
 import jwt from 'jsonwebtoken';
 
+// Join live test with proper model imports for populate
 export async function POST(request: NextRequest) {
   try {
     await connectDB();
