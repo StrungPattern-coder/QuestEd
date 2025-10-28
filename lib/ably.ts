@@ -6,7 +6,7 @@ export const getAblyClient = () => {
   if (!ablyClient) {
     // In production, you'd want to use token authentication
     // For now, using API key (should be in env variables)
-    const ablyKey = process.env.NEXT_PUBLIC_ABLY_KEY || 'demo-key';
+    const ablyKey = process.env.NEXT_PUBLIC_ABLY_CLIENT_KEY || process.env.NEXT_PUBLIC_ABLY_KEY || 'demo-key';
     
     ablyClient = new Ably.Realtime({
       key: ablyKey,
