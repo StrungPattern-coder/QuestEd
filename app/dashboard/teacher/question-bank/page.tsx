@@ -47,6 +47,14 @@ export default function QuestionBankPage() {
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
+  // CSV Import State
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [importPreview, setImportPreview] = useState<any[]>([]);
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState("");
+  const [importSuccess, setImportSuccess] = useState("");
+
   // Filters
   const [subjects, setSubjects] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
@@ -247,6 +255,126 @@ export default function QuestionBankPage() {
     setOptions(newOptions);
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImportFile(file);
+    setImportError("");
+    setImportSuccess("");
+    
+    // Preview the file
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string;
+        let parsed: any[] = [];
+
+        if (file.name.endsWith('.csv')) {
+          // Parse CSV
+          const lines = content.split('\n').filter(line => line.trim());
+          const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+          
+          parsed = lines.slice(1).map((line, index) => {
+            // Handle CSV with quotes
+            const values: string[] = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim());
+
+            return {
+              index: index + 1,
+              question: values[0]?.replace(/"/g, '') || '',
+              options: [
+                values[1]?.replace(/"/g, '') || '',
+                values[2]?.replace(/"/g, '') || '',
+                values[3]?.replace(/"/g, '') || '',
+                values[4]?.replace(/"/g, '') || '',
+              ],
+              correctAnswer: values[5] || '',
+              difficulty: values[6] || 'medium',
+              subject: values[7] || '',
+              topic: values[8] || '',
+              tags: values[9] ? values[9].split(';').filter(Boolean) : [],
+              explanation: values[10]?.replace(/"/g, '') || '',
+            };
+          });
+        } else if (file.name.endsWith('.json')) {
+          // Parse JSON
+          parsed = JSON.parse(content).map((q: any, index: number) => ({
+            index: index + 1,
+            ...q,
+          }));
+        }
+
+        if (parsed.length === 0) {
+          setImportError('No valid questions found in file');
+        } else {
+          setImportPreview(parsed);
+          setShowImportModal(true);
+        }
+      } catch (error) {
+        console.error('Parse error:', error);
+        setImportError('Failed to parse file. Please check the format.');
+      }
+    };
+    
+    reader.readAsText(file);
+  };
+
+  const handleImport = async () => {
+    if (!importFile || importPreview.length === 0) return;
+
+    setImporting(true);
+    setImportError("");
+    setImportSuccess("");
+
+    try {
+      const formData = new FormData();
+      formData.append('file', importFile);
+
+      const response = await fetch('/api/teacher/question-bank/import', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      
+      if (data.imported) {
+        setImportSuccess(`Successfully imported ${data.imported} questions!`);
+        await fetchQuestions();
+        setTimeout(() => {
+          setShowImportModal(false);
+          setImportFile(null);
+          setImportPreview([]);
+          setImportSuccess("");
+        }, 2000);
+      } else {
+        setImportError(data.error || 'Failed to import questions');
+      }
+    } catch (error) {
+      console.error('Import error:', error);
+      setImportError('Failed to import questions');
+    } finally {
+      setImporting(false);
+    }
+  };
+
   const handleExportCSV = () => {
     const csv = [
       ['Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Correct Answer', 'Difficulty', 'Subject', 'Topic', 'Tags', 'Explanation'].join(','),
@@ -308,9 +436,31 @@ export default function QuestionBankPage() {
             </Link>
             <h1 className="text-2xl font-bold text-[#F5F5F5]">Question Bank</h1>
             <div className="flex gap-2">
+              <input
+                type="file"
+                accept=".csv,.json"
+                onChange={handleFileSelect}
+                className="hidden"
+                id="csv-import-input"
+              />
+              <label htmlFor="csv-import-input">
+                <Button
+                  type="button"
+                  onClick={() => document.getElementById('csv-import-input')?.click()}
+                  variant="ghost"
+                  className="text-[#F5F5F5] hover:bg-[#FF991C]/10 cursor-pointer"
+                  asChild
+                >
+                  <span>
+                    <Upload className="mr-2 h-4 w-4" />
+                    Import CSV/JSON
+                  </span>
+                </Button>
+              </label>
               <Button
                 onClick={handleExportCSV}
-                variant="ghost" className="text-[#F5F5F5] hover:bg-[#FF991C]/10"
+                variant="ghost"
+                className="text-[#F5F5F5] hover:bg-[#FF991C]/10"
               >
                 <Download className="mr-2 h-4 w-4" />
                 Export CSV
@@ -713,6 +863,175 @@ export default function QuestionBankPage() {
           </div>
         </motion.div>
       </div>
+
+      {/* Import Modal */}
+      {showImportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+          >
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-[#FF991C] to-[#FF8F4D] p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Upload className="h-6 w-6" />
+                  <h3 className="text-2xl font-bold">Import Questions Preview</h3>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowImportModal(false);
+                    setImportFile(null);
+                    setImportPreview([]);
+                    setImportError("");
+                    setImportSuccess("");
+                  }}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              {importError && (
+                <div className="mt-4 p-3 bg-red-100 border border-red-200 rounded-lg flex items-center gap-2">
+                  <AlertCircle className="h-5 w-5 text-red-600" />
+                  <span className="text-red-700 font-semibold">{importError}</span>
+                </div>
+              )}
+              
+              {importSuccess && (
+                <div className="mt-4 p-3 bg-green-100 border border-green-200 rounded-lg flex items-center gap-2">
+                  <Check className="h-5 w-5 text-green-600" />
+                  <span className="text-green-700 font-semibold">{importSuccess}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Body - Preview */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="mb-4">
+                <p className="text-gray-700 font-semibold">
+                  Found {importPreview.length} question(s) in {importFile?.name}
+                </p>
+                <p className="text-sm text-gray-500">
+                  Review the questions below before importing
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {importPreview.slice(0, 10).map((q, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 border-2 border-gray-200 rounded-lg bg-gray-50"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <p className="font-semibold text-black flex-1">
+                        {idx + 1}. {q.question}
+                      </p>
+                      <div className="flex gap-2">
+                        {q.difficulty && (
+                          <span className={`px-2 py-1 text-xs rounded-full ${
+                            q.difficulty === 'easy' ? 'bg-green-100 text-green-700' :
+                            q.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-red-100 text-red-700'
+                          }`}>
+                            {q.difficulty}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 mb-2">
+                      {q.options?.map((opt: string, optIdx: number) => (
+                        <div
+                          key={optIdx}
+                          className={`px-3 py-2 rounded text-sm ${
+                            optIdx.toString() === q.correctAnswer || 
+                            q.options[q.correctAnswer] === opt ||
+                            optIdx === parseInt(q.correctAnswer)
+                              ? 'bg-green-100 border border-green-300 font-semibold'
+                              : 'bg-white border border-gray-200'
+                          }`}
+                        >
+                          {String.fromCharCode(65 + optIdx)}. {opt}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="flex gap-2 text-xs text-gray-600">
+                      {q.subject && <span className="bg-blue-100 px-2 py-1 rounded">📚 {q.subject}</span>}
+                      {q.topic && <span className="bg-purple-100 px-2 py-1 rounded">📖 {q.topic}</span>}
+                      {q.tags?.length > 0 && (
+                        <span className="bg-orange-100 px-2 py-1 rounded">
+                          🏷️ {q.tags.join(', ')}
+                        </span>
+                      )}
+                    </div>
+                    
+                    {q.explanation && (
+                      <p className="mt-2 text-sm text-gray-600 italic">
+                        💡 {q.explanation}
+                      </p>
+                    )}
+                  </div>
+                ))}
+                
+                {importPreview.length > 10 && (
+                  <div className="text-center py-4 text-gray-500">
+                    ... and {importPreview.length - 10} more question(s)
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="border-t border-gray-200 p-6 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-600">
+                  <p className="font-semibold">Ready to import {importPreview.length} questions?</p>
+                  <p className="text-xs">This will add these questions to your question bank.</p>
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setShowImportModal(false);
+                      setImportFile(null);
+                      setImportPreview([]);
+                      setImportError("");
+                      setImportSuccess("");
+                    }}
+                    className="border-2 border-gray-300 hover:bg-gray-100 text-black"
+                    disabled={importing}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleImport}
+                    disabled={importing || importPreview.length === 0}
+                    className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold"
+                  >
+                    {importing ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Importing...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        Import {importPreview.length} Questions
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

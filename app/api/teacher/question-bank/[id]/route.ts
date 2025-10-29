@@ -32,6 +32,15 @@ export async function PUT(
 
     const updateData = await request.json();
 
+    // Handle incrementing timesUsed
+    if (updateData.incrementTimesUsed) {
+      await QuestionBank.findByIdAndUpdate(
+        params.id,
+        { $inc: { timesUsed: 1 } }
+      );
+      return NextResponse.json({ message: 'Usage count updated' });
+    }
+
     const updatedQuestion = await QuestionBank.findByIdAndUpdate(
       params.id,
       updateData,

@@ -20,7 +20,10 @@ import {
   Check,
   Settings,
   ListChecks,
-  Sparkles
+  Sparkles,
+  Database,
+  Search,
+  X
 } from "lucide-react";
 import Link from "next/link";
 
@@ -62,6 +65,18 @@ export default function CreateTestPage() {
     },
   ]);
 
+  // Question Bank Modal State
+  const [showQuestionBankModal, setShowQuestionBankModal] = useState(false);
+  const [questionBankQuestions, setQuestionBankQuestions] = useState<any[]>([]);
+  const [selectedQuestionIds, setSelectedQuestionIds] = useState<Set<string>>(new Set());
+  const [loadingQuestionBank, setLoadingQuestionBank] = useState(false);
+  const [questionBankSearch, setQuestionBankSearch] = useState("");
+  const [questionBankFilters, setQuestionBankFilters] = useState({
+    subject: "",
+    difficulty: "",
+    tag: "",
+  });
+
   useEffect(() => {
     fetchClassrooms();
   }, []);
@@ -101,6 +116,80 @@ export default function CreateTestPage() {
         correctAnswer: 0,
       },
     ]);
+  };
+
+  const fetchQuestionBank = async () => {
+    setLoadingQuestionBank(true);
+    try {
+      const queryParams = new URLSearchParams();
+      if (questionBankSearch) queryParams.append('search', questionBankSearch);
+      if (questionBankFilters.subject) queryParams.append('subject', questionBankFilters.subject);
+      if (questionBankFilters.difficulty) queryParams.append('difficulty', questionBankFilters.difficulty);
+      if (questionBankFilters.tag) queryParams.append('tag', questionBankFilters.tag);
+
+      const response = await fetch(`/api/teacher/question-bank?${queryParams.toString()}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setQuestionBankQuestions(data.questions || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch question bank:', error);
+    } finally {
+      setLoadingQuestionBank(false);
+    }
+  };
+
+  const toggleQuestionSelection = (questionId: string) => {
+    const newSelected = new Set(selectedQuestionIds);
+    if (newSelected.has(questionId)) {
+      newSelected.delete(questionId);
+    } else {
+      newSelected.add(questionId);
+    }
+    setSelectedQuestionIds(newSelected);
+  };
+
+  const importSelectedQuestions = async () => {
+    const selectedQuestions = questionBankQuestions.filter(q => 
+      selectedQuestionIds.has(q._id)
+    );
+
+    // Convert question bank format to test question format
+    const convertedQuestions: Question[] = selectedQuestions.map(q => ({
+      questionText: q.question,
+      options: q.options,
+      correctAnswer: q.correctAnswer, // Already an index from question bank
+    }));
+
+    // Add to existing questions
+    setQuestions([...questions, ...convertedQuestions]);
+
+    // Update timesUsed counter for selected questions
+    try {
+      await Promise.all(
+        Array.from(selectedQuestionIds).map(async (questionId) => {
+          await fetch(`/api/teacher/question-bank/${questionId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({ incrementTimesUsed: true }),
+          });
+        })
+      );
+    } catch (error) {
+      console.error('Failed to update timesUsed:', error);
+    }
+
+    // Reset and close modal
+    setSelectedQuestionIds(new Set());
+    setShowQuestionBankModal(false);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -516,6 +605,28 @@ export default function CreateTestPage() {
         </div>
       </div>
 
+      {/* Import from Question Bank */}
+      <div className="mb-6 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-2 border-green-200">
+        <h4 className="text-lg font-semibold text-black mb-2 flex items-center gap-2">
+          <Database className="h-5 w-5 text-green-600" />
+          Import from Question Bank
+        </h4>
+        <p className="text-sm text-black/70 mb-4">
+          Select questions from your existing question bank and add them to this test.
+        </p>
+        <Button
+          type="button"
+          onClick={() => {
+            setShowQuestionBankModal(true);
+            fetchQuestionBank();
+          }}
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold"
+        >
+          <Database className="h-4 w-4 mr-2" />
+          Browse Question Bank
+        </Button>
+      </div>
+
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="bg-[#FF991C]/20 p-2 rounded-lg">
@@ -861,6 +972,192 @@ export default function CreateTestPage() {
           </Card>
         </motion.div>
       </div>
+
+      {/* Question Bank Modal */}
+      {showQuestionBankModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+          >
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Database className="h-6 w-6" />
+                  <h3 className="text-2xl font-bold">Import from Question Bank</h3>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowQuestionBankModal(false);
+                    setSelectedQuestionIds(new Set());
+                    setQuestionBankSearch('');
+                    setQuestionBankFilters({ subject: '', difficulty: '', tag: '' });
+                  }}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              {/* Search and Filters */}
+              <div className="mt-4 flex flex-wrap gap-3">
+                <div className="flex-1 min-w-[200px]">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                    <input
+                      type="text"
+                      placeholder="Search questions..."
+                      value={questionBankSearch}
+                      onChange={(e) => {
+                        setQuestionBankSearch(e.target.value);
+                        fetchQuestionBank();
+                      }}
+                      className="w-full pl-10 pr-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    />
+                  </div>
+                </div>
+                
+                <select
+                  value={questionBankFilters.difficulty}
+                  onChange={(e) => {
+                    setQuestionBankFilters({ ...questionBankFilters, difficulty: e.target.value });
+                    fetchQuestionBank();
+                  }}
+                  className="px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
+                >
+                  <option value="" className="text-black">All Difficulties</option>
+                  <option value="easy" className="text-black">Easy</option>
+                  <option value="medium" className="text-black">Medium</option>
+                  <option value="hard" className="text-black">Hard</option>
+                </select>
+                
+                <input
+                  type="text"
+                  placeholder="Subject"
+                  value={questionBankFilters.subject}
+                  onChange={(e) => {
+                    setQuestionBankFilters({ ...questionBankFilters, subject: e.target.value });
+                    fetchQuestionBank();
+                  }}
+                  className="px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 w-32"
+                />
+                
+                <input
+                  type="text"
+                  placeholder="Tag"
+                  value={questionBankFilters.tag}
+                  onChange={(e) => {
+                    setQuestionBankFilters({ ...questionBankFilters, tag: e.target.value });
+                    fetchQuestionBank();
+                  }}
+                  className="px-4 py-2 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/70 focus:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 w-32"
+                />
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {loadingQuestionBank ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+                  <span className="ml-3 text-gray-600">Loading questions...</span>
+                </div>
+              ) : questionBankQuestions.length === 0 ? (
+                <div className="text-center py-12">
+                  <Database className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600 font-semibold">No questions found</p>
+                  <p className="text-gray-500 text-sm">Try adjusting your filters</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {questionBankQuestions.map((question) => (
+                    <div
+                      key={question._id}
+                      className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                        selectedQuestionIds.has(question._id)
+                          ? 'border-green-500 bg-green-50'
+                          : 'border-gray-200 hover:border-green-300 bg-white'
+                      }`}
+                      onClick={() => toggleQuestionSelection(question._id)}
+                    >
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedQuestionIds.has(question._id)}
+                          onChange={() => toggleQuestionSelection(question._id)}
+                          className="mt-1 h-5 w-5 text-green-600 rounded focus:ring-green-500"
+                        />
+                        <div className="flex-1">
+                          <p className="font-semibold text-black mb-2">{question.question}</p>
+                          <div className="flex flex-wrap gap-2 text-xs">
+                            {question.subject && (
+                              <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                                {question.subject}
+                              </span>
+                            )}
+                            {question.difficulty && (
+                              <span className={`px-2 py-1 rounded-full ${
+                                question.difficulty === 'easy' ? 'bg-green-100 text-green-700' :
+                                question.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-red-100 text-red-700'
+                              }`}>
+                                {question.difficulty}
+                              </span>
+                            )}
+                            {question.tags?.map((tag: string, i: number) => (
+                              <span key={i} className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full">
+                                {tag}
+                              </span>
+                            ))}
+                            <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full">
+                              Used {question.timesUsed || 0} times
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="border-t border-gray-200 p-6 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-600">
+                  <span className="font-semibold text-green-600">{selectedQuestionIds.size}</span> question(s) selected
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setShowQuestionBankModal(false);
+                      setSelectedQuestionIds(new Set());
+                      setQuestionBankSearch('');
+                      setQuestionBankFilters({ subject: '', difficulty: '', tag: '' });
+                    }}
+                    className="border-2 border-gray-300 hover:bg-gray-100 text-black"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={importSelectedQuestions}
+                    disabled={selectedQuestionIds.size === 0}
+                    className="bg-green-600 hover:bg-green-700 text-white font-semibold"
+                  >
+                    <Database className="h-4 w-4 mr-2" />
+                    Import {selectedQuestionIds.size > 0 && `(${selectedQuestionIds.size})`}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
