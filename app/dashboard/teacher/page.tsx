@@ -276,7 +276,9 @@ export default function TeacherDashboard() {
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle className="text-2xl text-black">My Classrooms</CardTitle>
-                      <CardDescription className="text-black/60">Manage your active classes</CardDescription>
+                      <CardDescription className="text-black/60">
+                        {classrooms.length > 0 ? `${classrooms.length} classroom${classrooms.length !== 1 ? 's' : ''} total` : 'Manage your active classes'}
+                      </CardDescription>
                     </div>
                     <Button onClick={handleCreateClassroom} className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black shadow-lg shadow-[#FF991C]/30">
                       <Plus className="h-4 w-4 mr-2" />
@@ -284,35 +286,37 @@ export default function TeacherDashboard() {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent>
                   {classrooms.length === 0 ? (
                     <div className="text-center py-8 text-black/60">
                       <BookOpen className="h-12 w-12 mx-auto mb-4 text-[#FF991C]/50" />
                       <p>No classrooms yet. Create your first one!</p>
                     </div>
                   ) : (
-                    classrooms.slice(0, 3).map((classroom, index) => (
-                      <motion.div
-                        key={classroom._id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                        className="p-4 rounded-xl bg-white/50 border border-[#FF991C]/10 hover:border-[#FF991C]/30 transition-all duration-200 hover:shadow-md cursor-pointer group"
-                        onClick={() => router.push(`/dashboard/teacher/classrooms/${classroom._id}`)}
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-3">
-                            <div className="bg-[#FF991C]/20 p-2 rounded-lg group-hover:bg-[#FF991C]/30 transition-colors">
-                              <BookOpen className="h-5 w-5 text-[#FF991C]" />
-                            </div>
-                            <div>
-                              <h4 className="font-semibold text-black group-hover:text-[#FF991C] transition-colors">{classroom.name}</h4>
-                              <p className="text-xs text-black/60">{classroom.students?.length || 0} students enrolled</p>
+                    <div className="max-h-[400px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
+                      {classrooms.map((classroom, index) => (
+                        <motion.div
+                          key={classroom._id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.5 + Math.min(index, 5) * 0.1 }}
+                          className="p-4 rounded-xl bg-white/50 border border-[#FF991C]/10 hover:border-[#FF991C]/30 transition-all duration-200 hover:shadow-md cursor-pointer group"
+                          onClick={() => router.push(`/dashboard/teacher/classrooms/${classroom._id}`)}
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              <div className="bg-[#FF991C]/20 p-2 rounded-lg group-hover:bg-[#FF991C]/30 transition-colors">
+                                <BookOpen className="h-5 w-5 text-[#FF991C]" />
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-black group-hover:text-[#FF991C] transition-colors">{classroom.name}</h4>
+                                <p className="text-xs text-black/60">{classroom.students?.length || 0} students enrolled</p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </motion.div>
-                    ))
+                        </motion.div>
+                      ))}
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -324,7 +328,9 @@ export default function TeacherDashboard() {
                   <div className="flex items-center justify-between">
                     <div>
                       <CardTitle className="text-2xl text-black">Recent Tests</CardTitle>
-                      <CardDescription className="text-black/60">Track student submissions</CardDescription>
+                      <CardDescription className="text-black/60">
+                        {tests.length > 0 ? `${tests.length} test${tests.length !== 1 ? 's' : ''} total` : 'Track student submissions'}
+                      </CardDescription>
                     </div>
                     <Button onClick={handleCreateTest} className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black shadow-lg shadow-[#FF991C]/30">
                       <Plus className="h-4 w-4 mr-2" />
@@ -332,60 +338,63 @@ export default function TeacherDashboard() {
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent>
                   {tests.length === 0 ? (
                     <div className="text-center py-8 text-black/60">
                       <FileText className="h-12 w-12 mx-auto mb-4 text-[#FF991C]/50" />
                       <p>No tests yet. Create your first one!</p>
                     </div>
                   ) : (
-                    tests.slice(0, 3).map((test, index) => (
-                      <motion.div
-                        key={test._id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                        className="p-4 rounded-xl bg-white/50 border border-[#FF991C]/10 hover:border-[#FF991C]/30 transition-all duration-200 hover:shadow-md group"
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h4 className="font-semibold text-black group-hover:text-[#FF991C] transition-colors">{test.title}</h4>
-                              <span className={`text-xs px-2 py-1 rounded-full ${test.mode === 'live' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
-                                {test.mode === 'live' ? 'Live' : 'Deadline'}
-                              </span>
-                            </div>
-                            <p className="text-xs text-black/60">{test.classroomId?.name || 'No classroom'}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between gap-4 text-xs text-black/70">
-                          <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-1">
-                              <FileText className="h-3 w-3" />
-                              {test.questions?.length || 0} questions
-                            </div>
-                            {test.isActive && (
-                              <div className="flex items-center gap-1 text-green-600">
-                                <Clock className="h-3 w-3" />
-                                Active
+                    <div className="max-h-[400px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
+                      {tests.map((test, index) => (
+                        <motion.div
+                          key={test._id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.5 + Math.min(index, 5) * 0.1 }}
+                          className="p-4 rounded-xl bg-white/50 border border-[#FF991C]/10 hover:border-[#FF991C]/30 transition-all duration-200 hover:shadow-md group cursor-pointer"
+                          onClick={() => router.push(`/dashboard/teacher/tests/${test._id}/results`)}
+                        >
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-semibold text-black group-hover:text-[#FF991C] transition-colors">{test.title}</h4>
+                                <span className={`text-xs px-2 py-1 rounded-full ${test.mode === 'live' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
+                                  {test.mode === 'live' ? 'Live' : 'Deadline'}
+                                </span>
                               </div>
+                              <p className="text-xs text-black/60">{test.classroomId?.name || 'No classroom'}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between gap-4 text-xs text-black/70">
+                            <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-1">
+                                <FileText className="h-3 w-3" />
+                                {test.questions?.length || 0} questions
+                              </div>
+                              {test.isActive && (
+                                <div className="flex items-center gap-1 text-green-600">
+                                  <Clock className="h-3 w-3" />
+                                  Active
+                                </div>
+                              )}
+                            </div>
+                            {test.mode === 'live' && (
+                              <Button
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  router.push(`/dashboard/teacher/tests/${test._id}/live`);
+                                }}
+                                className="bg-green-500 hover:bg-green-600 text-white text-xs h-7 px-3"
+                              >
+                                Go Live
+                              </Button>
                             )}
                           </div>
-                          {test.mode === 'live' && (
-                            <Button
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                router.push(`/dashboard/teacher/tests/${test._id}/live`);
-                              }}
-                              className="bg-green-500 hover:bg-green-600 text-white text-xs h-7 px-3"
-                            >
-                              Go Live
-                            </Button>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))
+                        </motion.div>
+                      ))}
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -403,6 +412,8 @@ export default function TeacherDashboard() {
                   {[
                     { label: "Create New Classroom", icon: Users, description: "Set up a new class", onClick: handleCreateClassroom },
                     { label: "Create New Test", icon: FileText, description: "Design a new quiz", onClick: handleCreateTest },
+                    { label: "View All Tests", icon: TrendingUp, description: "See all tests & results", onClick: () => router.push("/dashboard/teacher/tests/all") },
+                    { label: "View Analytics", icon: TrendingUp, description: "Check performance", onClick: () => router.push("/dashboard/teacher/analytics") },
                     { label: "Question Bank", icon: HelpCircle, description: "Manage your questions", onClick: () => router.push("/dashboard/teacher/question-bank") },
                   ].map((action, index) => (
                     <motion.button

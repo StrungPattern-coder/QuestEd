@@ -107,3 +107,29 @@
 .progress-fill {
   @apply h-full bg-gradient-to-r from-green-400 to-green-600 transition-all duration-300 ease-out;
 }
+
+/* Custom scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 153, 28, 0.3);
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 153, 28, 0.5);
+}
+
+/* Firefox scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 153, 28, 0.3) rgba(0, 0, 0, 0.05);
+}

@@ -310,8 +310,7 @@ export default function QuestionBankPage() {
             <div className="flex gap-2">
               <Button
                 onClick={handleExportCSV}
-                variant="outline"
-                className="border-[#FF991C]/30 text-[#F5F5F5] hover:bg-[#FF991C]/10"
+                variant="ghost" className="text-[#F5F5F5] hover:bg-[#FF991C]/10"
               >
                 <Download className="mr-2 h-4 w-4" />
                 Export CSV
