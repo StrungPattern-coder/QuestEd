@@ -54,15 +54,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
-      <Link href="/" className="absolute top-8 left-8 z-20">
-        <Button variant="ghost" className="text-[#F5F5F5] hover:bg-white/10 group">
-          <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-          {t.auth.backToHome}
+    <div className="min-h-screen bg-black flex items-center justify-center p-3 sm:p-4 lg:p-6 relative overflow-hidden">
+      <Link href="/" className="absolute top-4 sm:top-6 lg:top-8 left-4 sm:left-6 lg:left-8 z-20">
+        <Button 
+          variant="ghost" 
+          className="text-[#F5F5F5] hover:bg-white/10 group text-sm sm:text-base px-2 sm:px-4 h-9 sm:h-10"
+        >
+          <ArrowLeft className="mr-1 sm:mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+          <span className="hidden sm:inline">{t.auth.backToHome}</span>
+          <span className="sm:hidden">Back</span>
         </Button>
       </Link>
       
-      <div className="absolute top-8 right-8 z-20">
+      <div className="absolute top-4 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8 z-20">
         <LanguageSwitcher />
       </div>
 
@@ -73,24 +77,24 @@ export default function LoginPage() {
         className="relative z-10 w-full max-w-md"
       >
         <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20 shadow-2xl">
-          <CardHeader className="space-y-3 text-center pb-8">
-            <div className="mx-auto bg-[#FF991C] p-3 rounded-2xl w-fit">
-              <Brain className="h-8 w-8 text-black" />
+          <CardHeader className="space-y-2 sm:space-y-3 text-center pb-6 sm:pb-8 px-4 sm:px-6">
+            <div className="mx-auto bg-[#FF991C] p-2.5 sm:p-3 rounded-2xl w-fit">
+              <Brain className="h-7 w-7 sm:h-8 sm:w-8 text-black" />
             </div>
-            <CardTitle className="text-4xl font-bold text-black">
+            <CardTitle className="text-3xl sm:text-4xl font-bold text-black">
               {t.auth.loginTitle}
             </CardTitle>
-            <CardDescription className="text-base text-black/70">
+            <CardDescription className="text-sm sm:text-base text-black/70">
               {t.auth.loginDescription}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
+          <CardContent className="px-4 sm:px-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
               {error && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg text-sm flex items-start gap-2"
+                  className="bg-red-50 border border-red-200 text-red-700 p-3 sm:p-4 rounded-lg text-xs sm:text-sm flex items-start gap-2"
                 >
                   <div className="flex-shrink-0 mt-0.5">⚠️</div>
                   <div>{error}</div>
@@ -98,8 +102,8 @@ export default function LoginPage() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-semibold text-black flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
+                <Label htmlFor="email" className="text-xs sm:text-sm font-semibold text-black flex items-center gap-2">
+                  <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   {t.auth.email}
                 </Label>
                 <Input
@@ -108,15 +112,15 @@ export default function LoginPage() {
                   placeholder={t.auth.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 border-gray-300 focus:border-[#FF991C] focus:ring-[#FF991C]"
+                  className="h-11 sm:h-12 text-sm sm:text-base border-gray-300 focus:border-[#FF991C] focus:ring-[#FF991C]"
                   required
                 />
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-sm font-semibold text-black flex items-center gap-2">
-                    <Lock className="h-4 w-4" />
+                  <Label htmlFor="password" className="text-xs sm:text-sm font-semibold text-black flex items-center gap-2">
+                    <Lock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     {t.auth.password}
                   </Label>
                   <Link href="/forgot-password" className="text-sm text-[#FF991C] hover:text-[#FF8F4D] font-semibold">

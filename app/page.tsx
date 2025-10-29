@@ -23,33 +23,38 @@ export default function Home() {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-10 flex justify-center pt-6 pb-6">
+      <nav className="relative z-10 flex justify-center pt-4 pb-4 px-4">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-full px-8 py-4 shadow-2xl"
+          className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-2xl lg:rounded-full px-4 sm:px-6 lg:px-8 py-3 lg:py-4 shadow-2xl w-full max-w-6xl"
         >
-          <div className="flex items-center gap-8">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-8">
             {/* Brand */}
             <Link href="/">
-              <span className="text-2xl font-bold text-[#F5F5F5] hover:text-[#FF991C] transition-colors cursor-pointer">
+              <span className="text-lg sm:text-xl lg:text-2xl font-bold text-[#F5F5F5] hover:text-[#FF991C] transition-colors cursor-pointer">
                 {t.brandName}
               </span>
             </Link>
 
-            {/* Divider */}
-            <div className="h-8 w-px bg-[#F5F5F5]/20"></div>
+            {/* Divider - Hidden on mobile */}
+            <div className="hidden sm:block h-8 w-px bg-[#F5F5F5]/20"></div>
 
             {/* Navigation Items */}
-            <div className="flex items-center gap-4">
-              <LanguageSwitcher />
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+              <div className="hidden sm:block">
+                <LanguageSwitcher />
+              </div>
               <Link href="/login">
-                <Button variant="ghost" className="text-[#F5F5F5] hover:bg-white/10 rounded-full">
+                <Button 
+                  variant="ghost" 
+                  className="text-[#F5F5F5] hover:bg-white/10 rounded-full text-sm sm:text-base px-3 sm:px-4 h-9 sm:h-10"
+                >
                   {t.login}
                 </Button>
               </Link>
               <Link href="/signup">
-                <Button className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg shadow-[#FF991C]/50 rounded-full">
+                <Button className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg shadow-[#FF991C]/50 rounded-full text-sm sm:text-base px-3 sm:px-4 h-9 sm:h-10">
                   {t.getStarted}
                 </Button>
               </Link>
@@ -59,13 +64,13 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <div className="relative z-10 container mx-auto px-6 pt-20 pb-32">
-        <div className="flex flex-col items-center text-center space-y-8">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 pt-12 sm:pt-16 lg:pt-20 pb-16 sm:pb-24 lg:pb-32">
+        <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-[#F5F5F5] leading-tight max-w-5xl"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-[#F5F5F5] leading-tight max-w-5xl px-2"
           >
             {t.home.heroTitle}
             <span className="text-[#FF991C]">{t.home.heroHighlight}</span>
@@ -75,7 +80,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl md:text-2xl text-[#F5F5F5]/80 max-w-3xl leading-relaxed"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-[#F5F5F5]/80 max-w-3xl leading-relaxed px-4"
           >
             {t.home.heroDescription}
           </motion.p>
@@ -84,16 +89,23 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 mt-8"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 w-full sm:w-auto px-4"
           >
-            <Link href="/signup">
-              <Button size="lg" className="text-lg px-10 py-7 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold shadow-2xl shadow-[#FF991C]/50 group">
+            <Link href="/signup" className="w-full sm:w-auto">
+              <Button 
+                size="lg" 
+                className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-7 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold shadow-2xl shadow-[#FF991C]/50 group"
+              >
                 {t.home.startLearning}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link href="/login">
-              <Button size="lg" variant="outline" className="text-lg px-10 py-7 bg-white/10 hover:bg-white/20 text-[#F5F5F5] border-[#FF991C]/30 backdrop-blur-sm">
+            <Link href="/login" className="w-full sm:w-auto">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-7 bg-white/10 hover:bg-white/20 text-[#F5F5F5] border-[#FF991C]/30 backdrop-blur-sm"
+              >
                 {t.signIn}
               </Button>
             </Link>

@@ -207,44 +207,44 @@ export default function TakeTestPage() {
 
   return (
     <div className="min-h-screen bg-black">
-      <div className="relative z-10 container mx-auto px-6 py-8">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-4 sm:py-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-[#F5F5F5]">{test.title}</h1>
-              <p className="text-sm text-[#F5F5F5]/60">{test.classroomId?.name || 'Unknown Classroom'}</p>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#F5F5F5]">{test.title}</h1>
+              <p className="text-xs sm:text-sm text-[#F5F5F5]/60">{test.classroomId?.name || 'Unknown Classroom'}</p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-sm text-[#F5F5F5]/60">Question</p>
-                <p className="text-xl font-bold text-[#FF991C]">
+              <div className="text-left sm:text-right">
+                <p className="text-xs sm:text-sm text-[#F5F5F5]/60">Question</p>
+                <p className="text-lg sm:text-xl font-bold text-[#FF991C]">
                   {currentQuestionIndex + 1} / {test.questions.length}
                 </p>
               </div>
             </div>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
+          <Progress value={progress} className="h-1.5 sm:h-2 bg-white/10" />
         </div>
 
         {/* Timer */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="mb-8"
+          className="mb-6 sm:mb-8"
         >
           <Card className={`backdrop-blur-xl border-2 transition-all duration-300 ${
             timeLeft <= 5 ? "bg-red-500/20 border-red-500" : "bg-[#F5F5F5]/10 border-[#FF991C]/30"
           }`}>
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <Clock className={`h-6 w-6 ${timeLeft <= 5 ? "text-red-500" : "text-[#FF991C]"}`} />
-                  <span className="text-2xl font-bold text-[#F5F5F5]">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <Clock className={`h-5 w-5 sm:h-6 sm:w-6 ${timeLeft <= 5 ? "text-red-500" : "text-[#FF991C]"}`} />
+                  <span className="text-xl sm:text-2xl font-bold text-[#F5F5F5]">
                     {timeLeft}s
                   </span>
                 </div>
-                <span className="text-[#F5F5F5]/60">Time Remaining</span>
+                <span className="text-xs sm:text-sm text-[#F5F5F5]/60">Time Remaining</span>
               </div>
               <Progress 
                 value={timePercentage} 

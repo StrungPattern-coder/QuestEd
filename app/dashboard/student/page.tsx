@@ -12,6 +12,7 @@ import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, Bo
 import { studentApi } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import MobileNav from "@/components/MobileNav";
 
 interface Test {
   _id: string;
@@ -137,7 +138,11 @@ export default function StudentDashboard() {
 
   return (
     <div className="min-h-screen bg-black">
-      <nav className="relative z-10 flex justify-center pt-6 pb-6">
+      {/* Mobile Navigation */}
+      <MobileNav role="student" userName={user?.name} />
+      
+      {/* Desktop Navigation */}
+      <nav className="hidden lg:flex relative z-10 justify-center pt-6 pb-6">
         <div className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-full px-8 py-4 shadow-2xl">
           <div className="flex items-center gap-8">
             {/* Brand */}
@@ -208,15 +213,32 @@ export default function StudentDashboard() {
         </div>
       </nav>
 
-      <main className="relative z-10 container mx-auto px-6 py-8">
+      {/* Mobile Header */}
+      <div className="lg:hidden px-4 pt-20 pb-4">
+        <div className="bg-white/5 backdrop-blur-xl border border-[#FF991C]/20 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-[#F5F5F5]">{t.brandName}</h1>
+            <p className="text-sm text-[#F5F5F5]/70">{t.student.portal}</p>
+          </div>
+          <Button 
+            onClick={() => router.push("/dashboard/student/live")}
+            className="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full px-4 h-9 text-sm"
+          >
+            <Zap className="h-4 w-4 mr-1" />
+            Live
+          </Button>
+        </div>
+      </div>
+
+      <main className="relative z-10 container mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-[#F5F5F5] mb-2">{t.student.welcome}, {user?.name?.split(" ")[0]}! 🚀</h2>
-            <p className="text-[#F5F5F5]/70">{t.student.welcomeMessage}</p>
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#F5F5F5] mb-2">{t.student.welcome}, {user?.name?.split(" ")[0]}! 🚀</h2>
+            <p className="text-sm sm:text-base text-[#F5F5F5]/70">{t.student.welcomeMessage}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
