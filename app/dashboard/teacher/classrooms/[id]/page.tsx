@@ -17,7 +17,9 @@ import {
   Copy,
   CheckCircle,
   BookOpen,
-  FileText
+  FileText,
+  Bell,
+  FolderOpen
 } from "lucide-react";
 import Link from "next/link";
 
@@ -180,6 +182,55 @@ export default function ClassroomDetailPage() {
               </div>
             </CardHeader>
           </Card>
+
+          {/* Quick Navigation for Materials and Announcements */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <Card 
+                className="bg-[#F5F5F5]/95 border-[#FF991C]/20 hover:border-[#FF991C]/50 transition-all cursor-pointer group"
+                onClick={() => router.push(`/dashboard/teacher/classrooms/${classroomId}/materials`)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-[#FF991C]/20 p-3 rounded-xl group-hover:bg-[#FF991C]/40 transition-colors">
+                      <FolderOpen className="h-6 w-6 text-[#FF991C]" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-black group-hover:text-[#FF991C] transition-colors">Study Materials</h3>
+                      <p className="text-sm text-black/60">Upload & manage learning resources</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Card 
+                className="bg-[#F5F5F5]/95 border-[#FF991C]/20 hover:border-[#FF991C]/50 transition-all cursor-pointer group"
+                onClick={() => router.push(`/dashboard/teacher/classrooms/${classroomId}/announcements`)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-[#FF991C]/20 p-3 rounded-xl group-hover:bg-[#FF991C]/40 transition-colors">
+                      <Bell className="h-6 w-6 text-[#FF991C]" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-black group-hover:text-[#FF991C] transition-colors">Announcements</h3>
+                      <p className="text-sm text-black/60">Post updates & notices to class</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
 
           {error && (
             <motion.div

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuthStore } from "@/lib/store";
 import { teacherApi } from "@/lib/api";
-import { Brain, Users, FileText, TrendingUp, Plus, LogOut, BookOpen, CheckCircle, Clock, Loader2 } from "lucide-react";
+import { Brain, Users, FileText, TrendingUp, Plus, LogOut, BookOpen, CheckCircle, Clock, Loader2, Bell, FolderOpen, HelpCircle } from "lucide-react";
 
 interface Classroom {
   _id: string;
@@ -126,6 +126,17 @@ export default function TeacherDashboard() {
               {/* Divider */}
               <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
 
+              {/* Quick Navigation */}
+              <div className="flex items-center gap-2">
+                <Button onClick={() => router.push("/dashboard/teacher/question-bank")} variant="ghost" className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full">
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  Question Bank
+                </Button>
+              </div>
+
+              {/* Divider */}
+              <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
+
               {/* Navigation Items */}
               <div className="flex items-center gap-4">
                 <div className="text-right">
@@ -195,6 +206,17 @@ export default function TeacherDashboard() {
             <div>
               <h1 className="text-xl font-bold text-[#F5F5F5]">QuestEd</h1>
               <p className="text-xs text-[#F5F5F5]/60">Teacher Portal</p>
+            </div>
+
+            {/* Divider */}
+            <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
+
+            {/* Quick Navigation */}
+            <div className="flex items-center gap-2">
+              <Button onClick={() => router.push("/dashboard/teacher/question-bank")} variant="ghost" className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full">
+                <HelpCircle className="h-4 w-4 mr-2" />
+                Question Bank
+              </Button>
             </div>
 
             {/* Divider */}
@@ -377,12 +399,11 @@ export default function TeacherDashboard() {
                 <CardDescription className="text-black/60">Common tasks and shortcuts</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[
                     { label: "Create New Classroom", icon: Users, description: "Set up a new class", onClick: handleCreateClassroom },
                     { label: "Create New Test", icon: FileText, description: "Design a new quiz", onClick: handleCreateTest },
-                    { label: "View All Tests", icon: TrendingUp, description: "See all tests & results", onClick: () => router.push("/dashboard/teacher/tests/all") },
-                    { label: "View Analytics", icon: TrendingUp, description: "Check performance", onClick: () => router.push("/dashboard/teacher/analytics") },
+                    { label: "Question Bank", icon: HelpCircle, description: "Manage your questions", onClick: () => router.push("/dashboard/teacher/question-bank") },
                   ].map((action, index) => (
                     <motion.button
                       key={action.label}

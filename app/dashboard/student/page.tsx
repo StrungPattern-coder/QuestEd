@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useAuthStore } from "@/lib/store";
-import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap, XCircle, Award, User } from "lucide-react";
+import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap, XCircle, Award, User, Bell, FolderOpen } from "lucide-react";
 import { studentApi } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -147,6 +147,29 @@ export default function StudentDashboard() {
                 <p className="text-xs text-[#F5F5F5]/60">{t.student.portal}</p>
               </div>
             </Link>
+
+            {/* Divider */}
+            <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
+
+            {/* Quick Navigation */}
+            <div className="flex items-center gap-2">
+              <Button 
+                onClick={() => router.push("/dashboard/student/materials")}
+                variant="ghost"
+                className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
+              >
+                <FolderOpen className="h-4 w-4 mr-2" />
+                Materials
+              </Button>
+              <Button 
+                onClick={() => router.push("/dashboard/student/announcements")}
+                variant="ghost"
+                className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
+              >
+                <Bell className="h-4 w-4 mr-2" />
+                Announcements
+              </Button>
+            </div>
 
             {/* Divider */}
             <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
