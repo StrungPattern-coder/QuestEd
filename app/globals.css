@@ -58,6 +58,33 @@
   }
 }
 
+/* Performance optimizations for mobile */
+@media (max-width: 768px) {
+  * {
+    /* Reduce animations on mobile for better performance */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  /* Disable hover effects on touch devices */
+  @media (hover: none) {
+    .group:hover {
+      transform: none !important;
+    }
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Custom animations */
 @keyframes float {
   0%, 100% {

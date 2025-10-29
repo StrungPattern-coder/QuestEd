@@ -7,20 +7,38 @@ import { Sparkles, Zap, Trophy, Users, Brain, TrendingUp, ArrowRight } from "luc
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import Aurora from "@/components/Aurora";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { t } = useLanguage();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Detect if device is mobile for performance optimization
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <main className="min-h-screen bg-black relative overflow-hidden">
-      {/* Aurora Background */}
-      <div className="absolute inset-0 z-0">
-        <Aurora
-          colorStops={["#FF991C", "#FF8F4D", "#FF991C"]}
-          blend={0.5}
-          amplitude={0.6}
-          speed={0.5}
-        />
-      </div>
+      {/* Aurora Background - Simplified on mobile */}
+      {!isMobile && (
+        <div className="absolute inset-0 z-0">
+          <Aurora
+            colorStops={["#FF991C", "#FF8F4D", "#FF991C"]}
+            blend={0.5}
+            amplitude={0.6}
+            speed={0.5}
+          />
+        </div>
+      )}
+      {isMobile && (
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-black via-[#FF991C]/10 to-black" />
+      )}
 
       {/* Navigation */}
       <nav className="relative z-10 flex justify-center pt-4 pb-4 px-4">
@@ -123,23 +141,23 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <div className="relative z-10 container mx-auto px-6 pb-32">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-20 sm:pb-32">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <h2 className="text-5xl font-bold text-[#F5F5F5] mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#F5F5F5] mb-3 sm:mb-4 px-4">
             {t.home.whyTitle}
           </h2>
-          <p className="text-xl text-[#F5F5F5]/70">
+          <p className="text-base sm:text-lg md:text-xl text-[#F5F5F5]/70 px-4">
             {t.home.whySubtitle}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {[
             {
               icon: Zap,
@@ -184,17 +202,16 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: feature.delay }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.05, y: -5 }}
               className="group"
             >
-              <div className="bg-[#F5F5F5] rounded-2xl p-8 border-2 border-[#FF991C]/20 hover:border-[#FF991C] transition-all duration-300 h-full hover:shadow-2xl hover:shadow-[#FF991C]/20">
-                <div className="inline-flex p-4 rounded-xl bg-[#FF991C] mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <feature.icon className="h-8 w-8 text-black" />
+              <div className="bg-[#F5F5F5] rounded-2xl p-6 sm:p-8 border-2 border-[#FF991C]/20 hover:border-[#FF991C] transition-all duration-300 h-full hover:shadow-2xl hover:shadow-[#FF991C]/20 md:hover:scale-105 md:hover:-translate-y-1">
+                <div className="inline-flex p-3 sm:p-4 rounded-xl bg-[#FF991C] mb-4 sm:mb-6 transition-transform duration-300 md:group-hover:scale-110">
+                  <feature.icon className="h-6 w-6 sm:h-8 sm:w-8 text-black" />
                 </div>
-                <h3 className="text-2xl font-semibold text-black mb-3 group-hover:text-[#FF991C] transition-colors">
+                <h3 className="text-xl sm:text-2xl font-semibold text-black mb-2 sm:mb-3 transition-colors md:group-hover:text-[#FF991C]">
                   {feature.title}
                 </h3>
-                <p className="text-black/70 leading-relaxed">
+                <p className="text-sm sm:text-base text-black/70 leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -204,26 +221,29 @@ export default function Home() {
       </div>
 
       {/* CTA Section */}
-      <div className="relative z-10 container mx-auto px-6 pb-20">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="bg-[#FF991C] rounded-3xl p-12 md:p-16 text-center relative overflow-hidden shadow-2xl"
+          className="bg-[#FF991C] rounded-3xl p-8 sm:p-12 md:p-16 text-center relative overflow-hidden shadow-2xl"
         >
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSA2LTYgNi02LTIuNjktNi02IDIuNjktNiA2LTZ6TTI0IDZjMy4zMSAwIDYgMi42OSA2IDZzLTIuNjkgNi02IDYtNi0yLjY5LTYtNiAyLjY5LTYgNi02eiIgZmlsbD0iIzMyMzc0QSIgZmlsbC1vcGFjaXR5PSIuMSIvPjwvZz48L3N2Zz4=')] opacity-20"></div>
           <div className="relative z-10">
-            <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4">
               {t.home.ctaTitle}
             </h2>
-            <p className="text-xl text-black/80 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-black/80 mb-8 max-w-2xl mx-auto px-2">
               {t.home.ctaDescription}
             </p>
-            <Link href="/signup">
-              <Button size="lg" className="text-lg px-12 py-7 bg-black text-[#F5F5F5] hover:bg-black/90 shadow-2xl group">
-                {t.home.ctaButton}
-                <Sparkles className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
+            <Link href="/signup" className="inline-block w-full sm:w-auto">
+              <Button 
+                size="lg" 
+                className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-12 py-6 sm:py-7 bg-black text-[#F5F5F5] hover:bg-black/90 shadow-2xl group whitespace-normal sm:whitespace-nowrap"
+              >
+                <span className="block sm:inline">{t.home.ctaButton}</span>
+                <Sparkles className="ml-2 h-5 w-5 inline-block group-hover:rotate-12 transition-transform" />
               </Button>
             </Link>
           </div>

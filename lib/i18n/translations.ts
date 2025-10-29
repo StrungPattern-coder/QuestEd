@@ -11,54 +11,54 @@ export const translations = {
     
     // Home Page
     home: {
-      heroTitle: "Master German with",
-      heroHighlight: " Interactive Quizzes",
-      heroDescription: "Experience the perfect blend of Kahoot's excitement and Duolingo's effectiveness. Live quizzes, instant feedback, and competitive learning.",
-      startLearning: "Start Learning Now",
+      heroTitle: "Create Interactive Quizzes",
+      heroHighlight: " Like Kahoot, But Free & Open Source",
+      heroDescription: "The complete quiz platform for educators and students. Live competitions, instant feedback, and powerful analytics. No subscriptions, no limits, forever free.",
+      startLearning: "Start Creating Now",
       stats: {
-        students: "Active Students",
-        teachers: "Teachers",
-        tests: "Tests Completed"
+        students: "Active Users",
+        teachers: "Educators",
+        tests: "Quizzes Created"
       },
       whyTitle: "Why Choose QuestEd?",
-      whySubtitle: "Powerful features designed for modern language learning",
+      whySubtitle: "Everything you need in a quiz platform, completely free and open-source",
       features: {
         liveQuizzes: {
-          title: "Live Quizzes",
-          description: "Real-time interactive tests with instant feedback and live leaderboards. Feel the adrenaline!"
+          title: "Live Quiz Competitions",
+          description: "Host real-time quiz sessions with join codes, live leaderboards, and instant scoring. Just like Kahoot, but better!"
         },
         classroom: {
           title: "Classroom Management",
-          description: "Effortlessly organize students, assign tests, and track progress all in one place."
+          description: "Create unlimited classrooms, invite students, assign quizzes, and track progress all in one place."
         },
         gamified: {
-          title: "Gamified Learning",
-          description: "Earn points, climb leaderboards, and compete with classmates to stay motivated."
+          title: "Gamification Built-In",
+          description: "Engage students with points, leaderboards, and competitive gameplay. Make learning fun and addictive."
         },
         analytics: {
-          title: "Detailed Analytics",
-          description: "Comprehensive insights into performance, progress, and areas for improvement."
+          title: "Powerful Analytics",
+          description: "Comprehensive insights into student performance, question difficulty, and class progress. Data-driven teaching."
         },
         adaptive: {
-          title: "Adaptive Testing",
-          description: "Smart question selection that adapts to your skill level for optimal learning."
+          title: "Question Bank",
+          description: "Build your question library, import from CSV, reuse questions across quizzes. Save time, teach better."
         },
         feedback: {
-          title: "Instant Feedback",
-          description: "Get immediate results and explanations to reinforce learning in real-time."
+          title: "100% Free Forever",
+          description: "No premium features locked behind paywalls. No student limits. No quiz limits. Completely free and open-source."
         }
       },
-      ctaTitle: "Ready to Transform Your German Learning?",
-      ctaDescription: "Join hundreds of PICT students already mastering German through interactive quizzes",
-      ctaButton: "Create Free Account"
+      ctaTitle: "Ready to Transform Your Teaching?",
+      ctaDescription: "Join educators worldwide using QuestEd as their free, open-source alternative to expensive quiz platforms",
+      ctaButton: "Get Started Free"
     },
     
     // Auth Pages
     auth: {
       loginTitle: "Welcome Back!",
-      loginDescription: "Sign in to continue your German learning journey",
+      loginDescription: "Sign in to create and host interactive quizzes",
       signupTitle: "Join QuestEd",
-      signupDescription: "Create your account to start learning German",
+      signupDescription: "Create your free account to start building quizzes",
       email: "Email",
       password: "Password",
       name: "Full Name",
@@ -267,55 +267,54 @@ export const translations = {
     
     // Home Page
     home: {
-      tagline: "PICT College Deutsch-Testplattform",
-      heroTitle: "Meistere Deutsch mit",
-      heroHighlight: " interaktiven Quiz",
-      heroDescription: "Erlebe die perfekte Mischung aus Kahoots Spannung und Duolingos Effektivität. Live-Quiz, sofortiges Feedback und wettbewerbsorientiertes Lernen.",
-      startLearning: "Jetzt lernen",
+      heroTitle: "Erstelle interaktive Quiz",
+      heroHighlight: " wie Kahoot, aber kostenlos & Open Source",
+      heroDescription: "Die komplette Quiz-Plattform für Lehrer und Schüler. Live-Wettbewerbe, sofortiges Feedback und leistungsstarke Analysen. Keine Abonnements, keine Limits, für immer kostenlos.",
+      startLearning: "Jetzt loslegen",
       stats: {
-        students: "Aktive Studenten",
-        teachers: "Lehrer",
-        tests: "Tests abgeschlossen"
+        students: "Aktive Benutzer",
+        teachers: "Pädagogen",
+        tests: "Quiz erstellt"
       },
       whyTitle: "Warum QuestEd?",
-      whySubtitle: "Leistungsstarke Funktionen für modernes Sprachenlernen",
+      whySubtitle: "Alles, was Sie in einer Quiz-Plattform benötigen, völlig kostenlos und Open Source",
       features: {
         liveQuizzes: {
-          title: "Live-Quiz",
-          description: "Echtzeit-interaktive Tests mit sofortigem Feedback und Live-Bestenlisten. Spüre das Adrenalin!"
+          title: "Live-Quiz-Wettbewerbe",
+          description: "Veranstalten Sie Echtzeit-Quiz-Sitzungen mit Beitrittscodes, Live-Bestenlisten und sofortiger Bewertung. Wie Kahoot, aber besser!"
         },
         classroom: {
           title: "Klassenverwaltung",
-          description: "Organisiere mühelos Schüler, weise Tests zu und verfolge den Fortschritt an einem Ort."
+          description: "Erstellen Sie unbegrenzt Klassenräume, laden Sie Schüler ein, weisen Sie Quiz zu und verfolgen Sie den Fortschritt - alles an einem Ort."
         },
         gamified: {
-          title: "Spielerisches Lernen",
-          description: "Sammle Punkte, erklimme Bestenlisten und trete gegen Mitschüler an, um motiviert zu bleiben."
+          title: "Eingebaute Gamification",
+          description: "Begeistern Sie Schüler mit Punkten, Bestenlisten und Wettbewerben. Machen Sie das Lernen unterhaltsam und süchtig machend."
         },
         analytics: {
-          title: "Detaillierte Analysen",
-          description: "Umfassende Einblicke in Leistung, Fortschritt und Verbesserungsbereiche."
+          title: "Leistungsstarke Analysen",
+          description: "Umfassende Einblicke in Schülerleistung, Fragenschwierigkeit und Klassenfortschritt. Datengesteuertes Lehren."
         },
         adaptive: {
-          title: "Adaptives Testen",
-          description: "Intelligente Fragenauswahl, die sich an dein Niveau anpasst für optimales Lernen."
+          title: "Fragenbank",
+          description: "Bauen Sie Ihre Fragenbibliothek auf, importieren Sie aus CSV, verwenden Sie Fragen in mehreren Quiz wieder. Sparen Sie Zeit, lehren Sie besser."
         },
         feedback: {
-          title: "Sofortiges Feedback",
-          description: "Erhalte sofortige Ergebnisse und Erklärungen zur Festigung des Lernens in Echtzeit."
+          title: "100% kostenlos für immer",
+          description: "Keine Premium-Funktionen hinter Bezahlschranken. Keine Schülerlimits. Keine Quiz-Limits. Völlig kostenlos und Open Source."
         }
       },
-      ctaTitle: "Bereit, dein Deutschlernen zu transformieren?",
-      ctaDescription: "Schließe dich Hunderten von PICT-Studenten an, die bereits Deutsch durch interaktive Quiz meistern",
-      ctaButton: "Kostenloses Konto erstellen"
+      ctaTitle: "Bereit, Ihren Unterricht zu transformieren?",
+      ctaDescription: "Schließen Sie sich Pädagogen weltweit an, die QuestEd als kostenlose Open-Source-Alternative zu teuren Quiz-Plattformen nutzen",
+      ctaButton: "Kostenlos starten"
     },
     
     // Auth Pages
     auth: {
       loginTitle: "Willkommen zurück!",
-      loginDescription: "Melde dich an, um deine Deutschlernreise fortzusetzen",
+      loginDescription: "Melden Sie sich an, um interaktive Quiz zu erstellen und zu hosten",
       signupTitle: "Tritt QuestEd bei",
-      signupDescription: "Erstelle dein Konto, um Deutsch zu lernen",
+      signupDescription: "Erstellen Sie Ihr kostenloses Konto, um mit der Quiz-Erstellung zu beginnen",
       email: "E-Mail",
       password: "Passwort",
       name: "Vollständiger Name",
