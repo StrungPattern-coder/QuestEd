@@ -167,7 +167,7 @@ export default function QuestionOfTheDay() {
                 </p>
                 <button
                   onClick={openModal}
-                  className="w-full bg-gradient-to-r text-white py-2 rounded-lg font-semibold text-sm transition-all"
+                  className="w-full bg-black hover:bg-gray-900 text-white py-2 rounded-lg font-semibold text-sm transition-all"
                 >
                   {t.qotd?.answerNow || "Answer Now!"}
                 </button>

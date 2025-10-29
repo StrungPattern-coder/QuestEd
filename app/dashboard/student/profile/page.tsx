@@ -179,48 +179,110 @@ export default function StudentProfilePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* Profile Header Card */}
-          <Card className="backdrop-blur-xl bg-gradient-to-br from-[#FF991C]/20 to-[#FF8F4D]/20 border-[#FF991C]/30 mb-8">
-            <CardContent className="pt-8">
-              <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-                <div className="bg-[#FF991C]/30 w-32 h-32 rounded-full flex items-center justify-center border-4 border-[#FF991C]/50">
-                  <User className="h-16 w-16 text-[#F5F5F5]" />
-                </div>
-                <div className="flex-1 text-center md:text-left">
-                  <h2 className="text-4xl font-bold text-[#F5F5F5] mb-2">{user.name}</h2>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-center md:justify-start gap-2 text-[#F5F5F5]/70">
-                      <Mail className="h-4 w-4" />
-                      <span>{user.email}</span>
+          {/* Profile Header Card - Redesigned with holographic effects */}
+          <div className="relative mb-8">
+            {/* Glowing background effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 via-blue-500/20 to-cyan-500/20 rounded-3xl blur-3xl"></div>
+            
+            <Card className="relative backdrop-blur-xl bg-gradient-to-br from-[#1a1a2e]/95 via-[#16213e]/95 to-[#0f3460]/95 border border-cyan-500/30 overflow-hidden">
+              {/* Animated gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-transparent to-cyan-500/10 animate-pulse"></div>
+              
+              {/* Holographic shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent pointer-events-none"></div>
+              
+              <CardContent className="relative pt-8 pb-8">
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+                  {/* Avatar with holographic effect */}
+                  <div className="relative group">
+                    {/* Glowing ring animation */}
+                    <div className="absolute -inset-2 bg-gradient-to-r from-purple-500 via-blue-500 to-cyan-500 rounded-full blur-xl opacity-75 group-hover:opacity-100 animate-pulse"></div>
+                    
+                    {/* Avatar container */}
+                    <div className="relative w-32 h-32 rounded-full bg-gradient-to-br from-purple-500/30 via-blue-500/30 to-cyan-500/30 p-1">
+                      <div className="w-full h-full rounded-full bg-gradient-to-br from-[#1a1a2e] to-[#0f3460] flex items-center justify-center border-2 border-cyan-500/50">
+                        <User className="h-16 w-16 text-cyan-400" />
+                      </div>
                     </div>
-                    {user.enrollmentNumber && (
-                      <div className="flex items-center justify-center md:justify-start gap-2 text-[#F5F5F5]/70">
-                        <Hash className="h-4 w-4" />
-                        <span>{user.enrollmentNumber}</span>
-                      </div>
-                    )}
-                    {user.rollNumber && (
-                      <div className="flex items-center justify-center md:justify-start gap-2 text-[#F5F5F5]/70">
-                        <Hash className="h-4 w-4" />
-                        <span>Roll: {user.rollNumber}</span>
-                      </div>
-                    )}
+                    
+                    {/* Status indicator */}
+                    <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-[#1a1a2e] shadow-lg shadow-green-500/50"></div>
                   </div>
-                  <div className="mt-4">
-                    <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-lg font-semibold ${
-                      stats.averageScore >= 80 
-                        ? 'bg-green-500/20 text-green-400' 
-                        : stats.averageScore >= 60 
-                        ? 'bg-blue-500/20 text-blue-400' 
-                        : 'bg-amber-500/20 text-amber-400'
-                    }`}>
-                      {performance.emoji} {performance.level} Performer
-                    </span>
+
+                  {/* User Info */}
+                  <div className="flex-1 text-center md:text-left">
+                    {/* Name with gradient */}
+                    <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                      {user.name}
+                    </h2>
+                    
+                    {/* Info badges */}
+                    <div className="flex flex-wrap gap-3 justify-center md:justify-start mb-4">
+                      <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-cyan-500/30">
+                        <Mail className="h-4 w-4 text-cyan-400" />
+                        <span className="text-[#F5F5F5] text-sm">{user.email}</span>
+                      </div>
+                      
+                      {user.enrollmentNumber && (
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-blue-500/30">
+                          <Hash className="h-4 w-4 text-blue-400" />
+                          <span className="text-[#F5F5F5] text-sm">{user.enrollmentNumber}</span>
+                        </div>
+                      )}
+                      
+                      {user.rollNumber && (
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-purple-500/30">
+                          <Hash className="h-4 w-4 text-purple-400" />
+                          <span className="text-[#F5F5F5] text-sm">Roll: {user.rollNumber}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Performance badge with glow */}
+                    <div className="relative inline-block">
+                      {/* Glow effect */}
+                      <div className={`absolute -inset-2 rounded-full blur-lg opacity-75 ${
+                        stats.averageScore >= 80 
+                          ? 'bg-gradient-to-r from-green-500 to-emerald-500' 
+                          : stats.averageScore >= 60 
+                          ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
+                          : 'bg-gradient-to-r from-amber-500 to-orange-500'
+                      }`}></div>
+                      
+                      <span className={`relative inline-flex items-center gap-2 px-6 py-3 rounded-full text-lg font-bold backdrop-blur-sm border-2 ${
+                        stats.averageScore >= 80 
+                          ? 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border-green-400/50' 
+                          : stats.averageScore >= 60 
+                          ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-300 border-blue-400/50' 
+                          : 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-400/50'
+                      }`}>
+                        <span className="text-2xl">{performance.emoji}</span>
+                        <span>{performance.level} Performer</span>
+                      </span>
+                    </div>
+
+                    {/* Quick stats bar */}
+                    <div className="mt-6 flex flex-wrap gap-4 justify-center md:justify-start">
+                      <div className="text-center">
+                        <p className="text-3xl font-bold text-cyan-400">{stats.testsCompleted}</p>
+                        <p className="text-xs text-[#F5F5F5]/60 uppercase tracking-wider">Tests</p>
+                      </div>
+                      <div className="h-12 w-px bg-gradient-to-b from-transparent via-cyan-500/50 to-transparent"></div>
+                      <div className="text-center">
+                        <p className="text-3xl font-bold text-purple-400">{stats.totalPoints}</p>
+                        <p className="text-xs text-[#F5F5F5]/60 uppercase tracking-wider">Points</p>
+                      </div>
+                      <div className="h-12 w-px bg-gradient-to-b from-transparent via-purple-500/50 to-transparent"></div>
+                      <div className="text-center">
+                        <p className="text-3xl font-bold text-blue-400">{stats.accuracy.toFixed(0)}%</p>
+                        <p className="text-xs text-[#F5F5F5]/60 uppercase tracking-wider">Accuracy</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Statistics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
