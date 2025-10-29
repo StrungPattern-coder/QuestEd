@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 text-[#FFA266] animate-spin mx-auto mb-4" />
+          <Loader2 className="h-12 w-12 text-[#FF991C] animate-spin mx-auto mb-4" />
           <p className="text-[#F5F5F5]">Loading analytics...</p>
         </div>
       </div>
@@ -144,8 +144,8 @@ export default function AnalyticsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black pb-20">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-96 h-96 bg-[#FFA266]/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-40 left-20 w-80 h-80 bg-[#FFA266]/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-20 right-20 w-96 h-96 bg-[#FF991C]/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-40 left-20 w-80 h-80 bg-[#FF991C]/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10 container mx-auto px-6 py-8">
@@ -158,7 +158,7 @@ export default function AnalyticsPage() {
           <Button
             onClick={() => router.push("/dashboard/teacher")}
             variant="outline"
-            className="border-[#FFA266] text-[#FFA266] hover:bg-[#FFA266] hover:text-black"
+            className="border-[#FF991C] text-[#FF991C] hover:bg-[#FF991C] hover:text-black"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
@@ -172,8 +172,8 @@ export default function AnalyticsPage() {
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-2">
-            <div className="bg-[#FFA266]/20 p-3 rounded-xl">
-              <BarChart3 className="h-8 w-8 text-[#FFA266]" />
+            <div className="bg-[#FF991C]/20 p-3 rounded-xl">
+              <BarChart3 className="h-8 w-8 text-[#FF991C]" />
             </div>
             <div>
               <h1 className="text-4xl font-bold text-[#F5F5F5]">Analytics Dashboard</h1>
@@ -220,7 +220,7 @@ export default function AnalyticsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="bg-white/5 backdrop-blur-xl border-[#F5F5F5]/20 hover:border-[#FFA266]/50 transition-all">
+              <Card className="bg-white/5 backdrop-blur-xl border-[#F5F5F5]/20 hover:border-[#FF991C]/50 transition-all">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -248,7 +248,7 @@ export default function AnalyticsPage() {
             <Card className="bg-white/5 backdrop-blur-xl border-[#F5F5F5]/20">
               <CardHeader>
                 <CardTitle className="text-[#F5F5F5] flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-[#FFA266]" />
+                  <Calendar className="h-5 w-5 text-[#FF991C]" />
                   Test Statistics
                 </CardTitle>
               </CardHeader>
@@ -270,9 +270,9 @@ export default function AnalyticsPage() {
                     <span className="text-[#F5F5F5]/80">Completed Tests</span>
                     <span className="text-[#F5F5F5] font-bold">{stats?.completedTests || 0}</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-[#FFA266]/10 rounded-lg">
+                  <div className="flex justify-between items-center p-3 bg-[#FF991C]/10 rounded-lg">
                     <span className="text-[#F5F5F5]/80">Submission Rate</span>
-                    <span className="text-[#FFA266] font-bold">{stats?.submissionRate || 0}%</span>
+                    <span className="text-[#FF991C] font-bold">{stats?.submissionRate || 0}%</span>
                   </div>
                 </div>
               </CardContent>
@@ -309,7 +309,7 @@ export default function AnalyticsPage() {
                                 ? "bg-gray-400 text-black"
                                 : idx === 2
                                 ? "bg-amber-600 text-white"
-                                : "bg-[#FFA266]/20 text-[#FFA266]"
+                                : "bg-[#FF991C]/20 text-[#FF991C]"
                             }`}
                           >
                             {idx + 1}
@@ -324,7 +324,7 @@ export default function AnalyticsPage() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-[#FFA266] font-bold text-lg">
+                          <p className="text-[#FF991C] font-bold text-lg">
                             {Math.round(student.avgScore)}%
                           </p>
                         </div>
@@ -348,15 +348,15 @@ export default function AnalyticsPage() {
           <Card className="bg-white/5 backdrop-blur-xl border-[#F5F5F5]/20">
             <CardHeader>
               <CardTitle className="text-[#F5F5F5] flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-[#FFA266]" />
+                <TrendingUp className="h-5 w-5 text-[#FF991C]" />
                 Recent Activity (Last 7 Days)
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 bg-[#FFA266]/10 rounded-lg border border-[#FFA266]/30">
+                <div className="p-4 bg-[#FF991C]/10 rounded-lg border border-[#FF991C]/30">
                   <p className="text-sm text-[#F5F5F5]/60 mb-1">Tests Created</p>
-                  <p className="text-3xl font-bold text-[#FFA266]">{stats?.recentTests || 0}</p>
+                  <p className="text-3xl font-bold text-[#FF991C]">{stats?.recentTests || 0}</p>
                 </div>
                 <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/30">
                   <p className="text-sm text-[#F5F5F5]/60 mb-1">Classrooms</p>

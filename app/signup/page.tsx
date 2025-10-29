@@ -11,6 +11,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
 import { Brain, Mail, Lock, User, Hash, ArrowLeft, Sparkles, UserCheck, GraduationCap } from "lucide-react";
+import ColorBends from "@/components/ColorBends";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -60,8 +61,24 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
+      {/* ColorBends Background */}
+      <div className="absolute inset-0 z-0">
+        <ColorBends
+          colors={["#ff5c7a", "#8a5cff", "#00ffd1"]}
+          rotation={30}
+          speed={0.3}
+          scale={1.2}
+          frequency={1.4}
+          warpStrength={1.2}
+          mouseInfluence={0.8}
+          parallax={0.6}
+          noise={0.08}
+          transparent
+        />
+      </div>
+
       <Link href="/" className="absolute top-8 left-8 z-20">
-        <Button variant="ghost" className="text-[#F5F5F5] hover:bg-white/10 group">
+        <Button variant="ghost" className="text-white hover:bg-white/20 backdrop-blur-sm group border border-white/30">
           <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
           Back to Home
         </Button>
@@ -71,183 +88,187 @@ export default function SignupPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 w-full max-w-md"
+        className="relative z-10 w-full max-w-sm scale-90"
       >
-        <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20 shadow-2xl">
-          <CardHeader className="space-y-3 text-center pb-8">
-            <div className="mx-auto bg-[#FFA266] p-3 rounded-2xl w-fit">
-              <Brain className="h-8 w-8 text-black" />
-            </div>
-            <CardTitle className="text-4xl font-bold text-black">
+        {/* Liquid Glass Card */}
+        <div className="relative backdrop-blur-md bg-white/10 rounded-3xl p-6 shadow-[0_8px_32px_0_rgba(255,162,102,0.3)] border border-white/30">
+          {/* Header */}
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
               Join QuestEd
-            </CardTitle>
-            <CardDescription className="text-base text-black/70">
+            </h1>
+            <p className="text-white/90 text-sm">
               Start your interactive learning journey today
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg text-sm flex items-start gap-2"
-                >
-                  <div className="flex-shrink-0 mt-0.5">⚠️</div>
-                  <div>{error}</div>
-                </motion.div>
-              )}
-
-              <div className="space-y-2">
-                <Label htmlFor="name" className="text-sm font-semibold text-black flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  Full Name
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Sriram Kommalapudi"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-semibold text-black flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  Email Address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@pict.edu or enrollmentNumber@ms.pict.edu"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
-                  required
-                />
-                <div className="flex items-center gap-2 mt-2">
-                  {isTeacher && (
-                    <div className="flex items-center gap-1.5 text-xs bg-[#FFA266]/20 text-black px-3 py-1.5 rounded-full border border-[#FFA266]/30">
-                      <UserCheck className="h-3 w-3" />
-                      Teacher Account
-                    </div>
-                  )}
-                  {isStudent && (
-                    <div className="flex items-center gap-1.5 text-xs bg-[#FFA266]/20 text-black px-3 py-1.5 rounded-full border border-[#FFA266]/30">
-                      <GraduationCap className="h-3 w-3" />
-                      Student Account
-                    </div>
-                  )}
-                  {!isTeacher && !isStudent && formData.email && (
-                    <p className="text-xs text-black/60">
-                      Use @pict.edu for teachers or @ms.pict.edu for students
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {isStudent && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="space-y-4 pt-2"
-                >
-                  <div className="space-y-2">
-                    <Label htmlFor="enrollmentNumber" className="text-sm font-semibold text-black flex items-center gap-2">
-                      <Hash className="h-4 w-4" />
-                      Enrollment Number
-                    </Label>
-                    <Input
-                      id="enrollmentNumber"
-                      type="text"
-                      placeholder="e.g., C2K231265"
-                      value={formData.enrollmentNumber}
-                      onChange={(e) => setFormData({ ...formData, enrollmentNumber: e.target.value })}
-                      className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="rollNumber" className="text-sm font-semibold text-black flex items-center gap-2">
-                      <Hash className="h-4 w-4" />
-                      Roll Number <span className="text-xs text-black/60 font-normal">(Optional)</span>
-                    </Label>
-                    <Input
-                      id="rollNumber"
-                      type="text"
-                      placeholder="e.g., 31281"
-                      value={formData.rollNumber}
-                      onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
-                      className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
-                    />
-                  </div>
-                </motion.div>
-              )}
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-semibold text-black flex items-center gap-2">
-                  <Lock className="h-4 w-4" />
-                  Password
-                </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Minimum 6 characters"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
-                  required
-                  minLength={6}
-                />
-                <p className="text-xs text-black/60 mt-1">
-                  Must be at least 6 characters long
-                </p>
-              </div>
-
-              <Button 
-                type="submit" 
-                className="w-full h-12 text-base font-semibold bg-[#FFA266] hover:bg-[#FF8F4D] text-black shadow-lg shadow-[#FFA266]/50 group" 
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <div className="h-4 w-4 border-2 border-[#32374A]/30 border-t-[#32374A] rounded-full animate-spin mr-2"></div>
-                    Creating account...
-                  </>
-                ) : (
-                  <>
-                    Create Account
-                    <Sparkles className="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform" />
-                  </>
-                )}
-              </Button>
-            </form>
-
-            <div className="mt-8 relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-[#F5F5F5] text-black/60">Already have an account?</span>
-              </div>
-            </div>
-
-            <div className="mt-6 text-center">
-              <Link href="/login">
-                <Button variant="outline" className="w-full h-12 border-2 border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-black font-semibold">
-                  Sign In Instead
-                </Button>
-              </Link>
-            </div>
-
-            <p className="mt-6 text-center text-xs text-black/50">
-              By creating an account, you agree to our Terms of Service and Privacy Policy
             </p>
-          </CardContent>
-        </Card>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-red-500/15 backdrop-blur-md border border-red-300/30 text-white p-3 rounded-2xl text-sm flex items-start gap-2"
+              >
+                <div className="flex-shrink-0 mt-0.5">⚠️</div>
+                <div>{error}</div>
+              </motion.div>
+            )}
+
+            {/* Name Field */}
+            <div className="space-y-2">
+              <label htmlFor="name" className="text-sm font-semibold text-white flex items-center gap-2">
+                <User className="h-4 w-4" />
+                Full Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                placeholder="Sriram Kommalapudi"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-2.5 bg-white/5 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/50 focus:bg-white/10 focus:border-white/50 focus:outline-none transition-all duration-300"
+                required
+              />
+            </div>
+
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-semibold text-white flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="name@pict.edu or enrollmentNumber@ms.pict.edu"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-2.5 bg-white/5 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/50 focus:bg-white/10 focus:border-white/50 focus:outline-none transition-all duration-300"
+                required
+              />
+              <div className="flex items-center gap-2 mt-2">
+                {isTeacher && (
+                  <div className="flex items-center gap-1.5 text-xs bg-white/20 backdrop-blur-md text-white px-3 py-1.5 rounded-full border border-white/40">
+                    <UserCheck className="h-3 w-3" />
+                    Teacher Account
+                  </div>
+                )}
+                {isStudent && (
+                  <div className="flex items-center gap-1.5 text-xs bg-white/20 backdrop-blur-md text-white px-3 py-1.5 rounded-full border border-white/40">
+                    <GraduationCap className="h-3 w-3" />
+                    Student Account
+                  </div>
+                )}
+                {!isTeacher && !isStudent && formData.email && (
+                  <p className="text-xs text-white/80">
+                    Use @pict.edu for teachers or @ms.pict.edu for students
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Student Fields */}
+            {isStudent && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                className="space-y-4"
+              >
+                <div className="space-y-2">
+                  <label htmlFor="enrollmentNumber" className="text-sm font-semibold text-white flex items-center gap-2">
+                    <Hash className="h-4 w-4" />
+                    Enrollment Number
+                  </label>
+                  <input
+                    id="enrollmentNumber"
+                    type="text"
+                    placeholder="e.g., C2K231265"
+                    value={formData.enrollmentNumber}
+                    onChange={(e) => setFormData({ ...formData, enrollmentNumber: e.target.value })}
+                    className="w-full px-4 py-2.5 bg-white/5 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/50 focus:bg-white/10 focus:border-white/50 focus:outline-none transition-all duration-300"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="rollNumber" className="text-sm font-semibold text-white flex items-center gap-2">
+                    <Hash className="h-4 w-4" />
+                    Roll Number <span className="text-xs text-white/70 font-normal">(Optional)</span>
+                  </label>
+                  <input
+                    id="rollNumber"
+                    type="text"
+                    placeholder="e.g., 31281"
+                    value={formData.rollNumber}
+                    onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
+                    className="w-full px-4 py-2.5 bg-white/5 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/50 focus:bg-white/10 focus:border-white/50 focus:outline-none transition-all duration-300"
+                  />
+                </div>
+              </motion.div>
+            )}
+
+            {/* Password Field */}
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-semibold text-white flex items-center gap-2">
+                <Lock className="h-4 w-4" />
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                placeholder="Minimum 6 characters"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="w-full px-4 py-2.5 bg-white/5 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/50 focus:bg-white/10 focus:border-white/50 focus:outline-none transition-all duration-300"
+                required
+                minLength={6}
+              />
+              <p className="text-xs text-white/80 mt-1">
+                Must be at least 6 characters long
+              </p>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-gradient-to-r from-white/30 to-white/15 backdrop-blur-md border border-white/30 text-white font-bold text-base rounded-2xl shadow-[0_4px_15px_rgba(0,0,0,0.2)] hover:from-white/50 hover:to-white/30 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
+                  Creating account...
+                </span>
+              ) : (
+                <span className="flex items-center justify-center">
+                  Create Account
+                  <Sparkles className="ml-2 h-5 w-5" />
+                </span>
+              )}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="my-6 relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/30"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white/5 backdrop-blur-md text-white/90 rounded-full">Already have an account?</span>
+            </div>
+          </div>
+
+          {/* Sign In Link */}
+          <Link href="/login">
+            <button className="w-full py-2.5 bg-white/5 backdrop-blur-md border-2 border-white/30 text-white font-semibold rounded-2xl hover:bg-white/15 hover:border-white/50 transition-all duration-300">
+              Sign In Instead
+            </button>
+          </Link>
+
+          {/* Terms */}
+          <p className="mt-5 text-center text-xs text-white/70">
+            By creating an account, you agree to our Terms of Service and Privacy Policy
+          </p>
+        </div>
       </motion.div>
     </div>
   );

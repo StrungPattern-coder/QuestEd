@@ -72,9 +72,9 @@ export default function LoginPage() {
         transition={{ duration: 0.5 }}
         className="relative z-10 w-full max-w-md"
       >
-        <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20 shadow-2xl">
+        <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20 shadow-2xl">
           <CardHeader className="space-y-3 text-center pb-8">
-            <div className="mx-auto bg-[#FFA266] p-3 rounded-2xl w-fit">
+            <div className="mx-auto bg-[#FF991C] p-3 rounded-2xl w-fit">
               <Brain className="h-8 w-8 text-black" />
             </div>
             <CardTitle className="text-4xl font-bold text-black">
@@ -108,7 +108,7 @@ export default function LoginPage() {
                   placeholder={t.auth.emailPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
+                  className="h-12 border-gray-300 focus:border-[#FF991C] focus:ring-[#FF991C]"
                   required
                 />
               </div>
@@ -124,14 +124,14 @@ export default function LoginPage() {
                   placeholder={t.auth.passwordPlaceholder}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
+                  className="h-12 border-gray-300 focus:border-[#FF991C] focus:ring-[#FF991C]"
                   required
                 />
               </div>
 
               <Button 
                 type="submit" 
-                className="w-full h-12 text-base font-semibold bg-[#FFA266] hover:bg-[#FF8F4D] text-black shadow-lg shadow-[#FFA266]/50 group" 
+                className="w-full h-12 text-base font-semibold bg-[#FF991C] hover:bg-[#FF8F4D] text-black shadow-lg shadow-[#FF991C]/50 group" 
                 disabled={loading}
               >
                 {loading ? (
@@ -159,7 +159,7 @@ export default function LoginPage() {
 
             <div className="mt-6 text-center">
               <Link href="/signup">
-                <Button variant="outline" className="w-full h-12 border-2 border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-black font-semibold">
+                <Button variant="outline" className="w-full h-12 border-2 border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-black font-semibold">
                   {t.auth.signupButton}
                 </Button>
               </Link>

@@ -239,8 +239,8 @@ const { t } = useLanguage();
 ## 🎨 Design Considerations
 
 - **Language Switcher** uses the existing design system:
-  - Border color: `#FFA266/30`
-  - Hover: `#FFA266`
+  - Border color: `#FF991C/30`
+  - Hover: `#FF991C`
   - Text: `#F5F5F5`
   - Icon: Lucide `Languages`
 

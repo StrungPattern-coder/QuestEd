@@ -128,7 +128,7 @@ export default function StudentDashboard() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 text-[#FFA266] animate-spin mx-auto mb-4" />
+          <Loader2 className="h-12 w-12 text-[#FF991C] animate-spin mx-auto mb-4" />
           <p className="text-[#F5F5F5]">Loading your dashboard...</p>
         </div>
       </div>
@@ -138,12 +138,12 @@ export default function StudentDashboard() {
   return (
     <div className="min-h-screen bg-black">
       <nav className="relative z-10 flex justify-center pt-6 pb-6">
-        <div className="bg-white/10 backdrop-blur-xl border border-[#FFA266]/30 rounded-full px-8 py-4 shadow-2xl">
+        <div className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-full px-8 py-4 shadow-2xl">
           <div className="flex items-center gap-8">
             {/* Brand */}
             <Link href="/dashboard/student">
               <div className="cursor-pointer">
-                <h1 className="text-xl font-bold text-[#F5F5F5] hover:text-[#FFA266] transition-colors">{t.brandName}</h1>
+                <h1 className="text-xl font-bold text-[#F5F5F5] hover:text-[#FF991C] transition-colors">{t.brandName}</h1>
                 <p className="text-xs text-[#F5F5F5]/60">{t.student.portal}</p>
               </div>
             </Link>
@@ -168,7 +168,7 @@ export default function StudentDashboard() {
               <Button 
                 onClick={handleLogout}
                 variant="outline" 
-                className="border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10 text-[#F5F5F5] rounded-full"
+                className="border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 {t.logout}
@@ -191,9 +191,9 @@ export default function StudentDashboard() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {[
-              { label: t.student.stats.testsCompleted, value: stats.testsCompleted, icon: CheckCircle, color: "#FFA266" },
-              { label: t.student.stats.avgScore, value: `${stats.averageScore}%`, icon: Target, color: "#FFA266" },
-              { label: t.student.stats.streak, value: stats.totalPoints, icon: TrendingUp, color: "#FFA266" },
+              { label: t.student.stats.testsCompleted, value: stats.testsCompleted, icon: CheckCircle, color: "#FF991C" },
+              { label: t.student.stats.avgScore, value: `${stats.averageScore}%`, icon: Target, color: "#FF991C" },
+              { label: t.student.stats.streak, value: stats.totalPoints, icon: TrendingUp, color: "#FF991C" },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -201,15 +201,15 @@ export default function StudentDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20 hover:border-[#FFA266]/50 transition-all duration-300 hover:shadow-xl hover:shadow-[#FFA266]/20">
+                <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20 hover:border-[#FF991C]/50 transition-all duration-300 hover:shadow-xl hover:shadow-[#FF991C]/20">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-black/70 mb-1">{stat.label}</p>
                         <p className="text-3xl font-bold text-black">{stat.value}</p>
                       </div>
-                      <div className="bg-[#FFA266]/20 p-3 rounded-xl">
-                        <stat.icon className="h-6 w-6 text-[#FFA266]" />
+                      <div className="bg-[#FF991C]/20 p-3 rounded-xl">
+                        <stat.icon className="h-6 w-6 text-[#FF991C]" />
                       </div>
                     </div>
                   </CardContent>
@@ -224,7 +224,7 @@ export default function StudentDashboard() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20">
+              <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20">
                 <CardHeader>
                   <CardTitle className="text-2xl text-black">My Tests</CardTitle>
                   <CardDescription className="text-black/60">View all your tests organized by status</CardDescription>

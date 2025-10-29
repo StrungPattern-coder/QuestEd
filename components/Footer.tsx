@@ -23,7 +23,7 @@ export default function Footer() {
           {/* Made with love */}
           <div className="flex items-center gap-2 text-sm text-[#F5F5F5]/60">
             <span>Made with</span>
-            <Heart className="h-4 w-4 text-[#FFA266] fill-[#FFA266] animate-pulse" />
+            <Heart className="h-4 w-4 text-[#FF991C] fill-[#FF991C] animate-pulse" />
             <span>for educators</span>
           </div>
 
@@ -33,14 +33,14 @@ export default function Footer() {
               href="https://github.com/StrungPattern-coder"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#F5F5F5]/60 hover:text-[#FFA266] transition-colors"
+              className="text-[#F5F5F5]/60 hover:text-[#FF991C] transition-colors"
               aria-label="GitHub"
             >
               <Github className="h-5 w-5" />
             </a>
             <a
               href="mailto:support@quested.com"
-              className="text-[#F5F5F5]/60 hover:text-[#FFA266] transition-colors"
+              className="text-[#F5F5F5]/60 hover:text-[#FF991C] transition-colors"
               aria-label="Email"
             >
               <Mail className="h-5 w-5" />

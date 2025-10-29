@@ -49,7 +49,7 @@ export default function TestResultPage() {
         particleCount: 150,
         spread: 80,
         origin: { y: 0.6 },
-        colors: ["#FFA266", "#FF8F4D", "#FFB280"],
+        colors: ["#FF991C", "#FF8F4D", "#FFB280"],
       });
     }
   }, [result]);
@@ -67,7 +67,7 @@ export default function TestResultPage() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 text-[#FFA266] animate-spin mx-auto mb-4" />
+          <Loader2 className="h-12 w-12 text-[#FF991C] animate-spin mx-auto mb-4" />
           <p className="text-[#F5F5F5]">Loading results...</p>
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function TestResultPage() {
           <p className="text-[#F5F5F5] text-xl">Results not found</p>
           <Button 
             onClick={() => router.push("/dashboard/student")}
-            className="mt-4 bg-[#FFA266] hover:bg-[#FF8F4D] text-black"
+            className="mt-4 bg-[#FF991C] hover:bg-[#FF8F4D] text-black"
           >
             Back to Dashboard
           </Button>
@@ -163,10 +163,10 @@ export default function TestResultPage() {
           </Card>
 
           {/* Question Review */}
-          <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20 mb-6">
+          <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20 mb-6">
             <CardHeader>
               <CardTitle className="text-2xl text-black flex items-center gap-3">
-                <Brain className="h-6 w-6 text-[#FFA266]" />
+                <Brain className="h-6 w-6 text-[#FF991C]" />
                 Answer Review
               </CardTitle>
               <CardDescription className="text-black/60">
@@ -254,14 +254,14 @@ export default function TestResultPage() {
           <div className="flex gap-4">
             <Button
               onClick={() => router.push("/dashboard/student")}
-              className="flex-1 h-14 bg-[#F5F5F5] hover:bg-white text-black border-2 border-[#FFA266]/20 font-semibold"
+              className="flex-1 h-14 bg-[#F5F5F5] hover:bg-white text-black border-2 border-[#FF991C]/20 font-semibold"
             >
               <Home className="h-5 w-5 mr-2" />
               Back to Dashboard
             </Button>
             <Button
               onClick={() => router.push(`/dashboard/student/tests/${testId}/take`)}
-              className="flex-1 h-14 bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg"
+              className="flex-1 h-14 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg"
             >
               <Target className="h-5 w-5 mr-2" />
               Retake Test

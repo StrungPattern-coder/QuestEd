@@ -122,7 +122,7 @@ If you didn't expect this invitation, you can safely ignore this email.
 
 ### 🎨 Visual Design
 - **Dark theme** (#000000 background) matching QuestEd UI
-- **Orange accents** (#FFA266) for brand consistency
+- **Orange accents** (#FF991C) for brand consistency
 - **Gradient logo** with rounded corners
 - **Card-based layout** with subtle shadows
 - **Responsive design** adapts to mobile/desktop
@@ -174,8 +174,8 @@ Edit `/backend/utils/email.ts`:
 
 ```css
 /* Find these styles */
-background: linear-gradient(135deg, #FFA266 0%, #FF8F4D 100%);
-color: #FFA266;
+background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
+color: #FF991C;
 border: 1px solid rgba(255, 162, 102, 0.3);
 ```
 

@@ -99,7 +99,7 @@ async function testEmailConfiguration() {
       text-align: center;
     }
     .logo {
-      background: linear-gradient(135deg, #FFA266 0%, #FF8F4D 100%);
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
       width: 80px;
       height: 80px;
       border-radius: 20px;
@@ -113,7 +113,7 @@ async function testEmailConfiguration() {
       font-family: 'Audiowide', sans-serif;
     }
     h1 {
-      color: #FFA266;
+      color: #FF991C;
       font-size: 28px;
       margin: 20px 0;
       font-family: 'Audiowide', sans-serif;
@@ -136,7 +136,7 @@ async function testEmailConfiguration() {
       font-size: 14px;
     }
     .config-label {
-      color: #FFA266;
+      color: #FF991C;
       font-weight: bold;
     }
   </style>

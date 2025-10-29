@@ -165,7 +165,7 @@ export default function AllTestsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader2 className="h-12 w-12 text-[#FFA266] animate-spin" />
+        <Loader2 className="h-12 w-12 text-[#FF991C] animate-spin" />
       </div>
     );
   }
@@ -189,7 +189,7 @@ export default function AllTestsPage() {
           
           <Button
             onClick={() => router.push('/dashboard/teacher/tests/create')}
-            className="bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold"
+            className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold"
           >
             <Plus className="h-4 w-4 mr-2" />
             Create New Test
@@ -209,8 +209,8 @@ export default function AllTestsPage() {
               variant={filter === tab.key ? 'default' : 'outline'}
               className={`${
                 filter === tab.key
-                  ? 'bg-[#FFA266] text-black hover:bg-[#FF8F4D]'
-                  : 'border-[#FFA266]/30 text-[#F5F5F5] hover:bg-white/10'
+                  ? 'bg-[#FF991C] text-black hover:bg-[#FF8F4D]'
+                  : 'border-[#FF991C]/30 text-[#F5F5F5] hover:bg-white/10'
               }`}
             >
               <tab.icon className="h-4 w-4 mr-2" />
@@ -221,19 +221,19 @@ export default function AllTestsPage() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-black/70 mb-1">Total Tests</p>
                   <p className="text-3xl font-bold text-black">{tests.length}</p>
                 </div>
-                <FileText className="h-10 w-10 text-[#FFA266]" />
+                <FileText className="h-10 w-10 text-[#FF991C]" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -247,7 +247,7 @@ export default function AllTestsPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -258,12 +258,12 @@ export default function AllTestsPage() {
                       : 0}%
                   </p>
                 </div>
-                <TrendingUp className="h-10 w-10 text-[#FFA266]" />
+                <TrendingUp className="h-10 w-10 text-[#FF991C]" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -282,14 +282,14 @@ export default function AllTestsPage() {
 
         {/* Tests List */}
         {filteredTests.length === 0 ? (
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
             <CardContent className="p-12 text-center">
               <FileText className="h-16 w-16 text-black/20 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-black mb-2">No tests found</h3>
               <p className="text-black/60 mb-6">Create your first test to get started!</p>
               <Button
                 onClick={() => router.push('/dashboard/teacher/tests/create')}
-                className="bg-[#FFA266] hover:bg-[#FF8F4D] text-black"
+                className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Create Test
@@ -305,7 +305,7 @@ export default function AllTestsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20 hover:border-[#FFA266]/50 transition-all">
+                <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20 hover:border-[#FF991C]/50 transition-all">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -352,7 +352,7 @@ export default function AllTestsPage() {
                           size="sm"
                           variant="outline"
                           onClick={() => downloadResults(test._id, test.title)}
-                          className="border-[#FFA266]/30 hover:border-[#FFA266]"
+                          className="border-[#FF991C]/30 hover:border-[#FF991C]"
                         >
                           <Download className="h-4 w-4 mr-1" />
                           Export
@@ -390,7 +390,7 @@ export default function AllTestsPage() {
                       <div className="bg-white p-3 rounded-lg border border-gray-200">
                         <p className="text-xs text-black/60 mb-1">Students</p>
                         <div className="flex items-center gap-2">
-                          <Users className="h-4 w-4 text-[#FFA266]" />
+                          <Users className="h-4 w-4 text-[#FF991C]" />
                           <p className="text-lg font-bold text-black">{test.stats.totalStudents}</p>
                         </div>
                       </div>
@@ -414,7 +414,7 @@ export default function AllTestsPage() {
                       <div className="bg-white p-3 rounded-lg border border-gray-200">
                         <p className="text-xs text-black/60 mb-1">Rate</p>
                         <div className="flex items-center gap-2">
-                          <TrendingUp className="h-4 w-4 text-[#FFA266]" />
+                          <TrendingUp className="h-4 w-4 text-[#FF991C]" />
                           <p className="text-lg font-bold text-black">{test.stats.submissionRate}%</p>
                         </div>
                       </div>
@@ -454,7 +454,7 @@ export default function AllTestsPage() {
                               >
                                 <span className="text-yellow-600">#{idx + 1}</span>
                                 <span className="text-black">{sub.student?.name}</span>
-                                <span className="text-[#FFA266] font-bold">{sub.score}%</span>
+                                <span className="text-[#FF991C] font-bold">{sub.score}%</span>
                               </div>
                             ))}
                         </div>

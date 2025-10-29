@@ -68,12 +68,12 @@ export default function JoinClassroomPage() {
         animate={{ opacity: 1, y: 0 }}
         className="relative z-10 w-full max-w-md"
       >
-        <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+        <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="bg-[#FFA266]/20 p-4 rounded-full">
+              <div className="bg-[#FF991C]/20 p-4 rounded-full">
                 {loading ? (
-                  <Loader2 className="h-12 w-12 text-[#FFA266] animate-spin" />
+                  <Loader2 className="h-12 w-12 text-[#FF991C] animate-spin" />
                 ) : success ? (
                   <CheckCircle className="h-12 w-12 text-green-600" />
                 ) : (
@@ -98,7 +98,7 @@ export default function JoinClassroomPage() {
                 </div>
                 <Button
                   onClick={() => router.push("/dashboard/student")}
-                  className="w-full bg-[#FFA266] hover:bg-[#FF8F4D] text-black"
+                  className="w-full bg-[#FF991C] hover:bg-[#FF8F4D] text-black"
                 >
                   Go to Dashboard
                 </Button>
@@ -116,9 +116,9 @@ export default function JoinClassroomPage() {
             {loading && (
               <div className="flex justify-center">
                 <div className="animate-pulse flex space-x-2">
-                  <div className="h-2 w-2 bg-[#FFA266] rounded-full"></div>
-                  <div className="h-2 w-2 bg-[#FFA266] rounded-full" style={{ animationDelay: "0.2s" }}></div>
-                  <div className="h-2 w-2 bg-[#FFA266] rounded-full" style={{ animationDelay: "0.4s" }}></div>
+                  <div className="h-2 w-2 bg-[#FF991C] rounded-full"></div>
+                  <div className="h-2 w-2 bg-[#FF991C] rounded-full" style={{ animationDelay: "0.2s" }}></div>
+                  <div className="h-2 w-2 bg-[#FF991C] rounded-full" style={{ animationDelay: "0.4s" }}></div>
                 </div>
               </div>
             )}

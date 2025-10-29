@@ -124,7 +124,7 @@ export default function ClassroomDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-[#FFA266]" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#FF991C]" />
       </div>
     );
   }
@@ -135,7 +135,7 @@ export default function ClassroomDetailPage() {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-[#F5F5F5] mb-4">Classroom Not Found</h2>
           <Link href="/dashboard/teacher">
-            <Button className="bg-[#FFA266] hover:bg-[#FF8F4D]">
+            <Button className="bg-[#FF991C] hover:bg-[#FF8F4D]">
               Back to Dashboard
             </Button>
           </Link>
@@ -160,12 +160,12 @@ export default function ClassroomDetailPage() {
           className="max-w-5xl mx-auto"
         >
           {/* Header */}
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20 mb-6">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20 mb-6">
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="bg-[#FFA266]/20 p-4 rounded-xl">
-                    <BookOpen className="h-8 w-8 text-[#FFA266]" />
+                  <div className="bg-[#FF991C]/20 p-4 rounded-xl">
+                    <BookOpen className="h-8 w-8 text-[#FF991C]" />
                   </div>
                   <div>
                     <CardTitle className="text-3xl text-black mb-1">{classroom.name}</CardTitle>
@@ -204,11 +204,11 @@ export default function ClassroomDetailPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Invite Student Card */}
-            <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+            <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <div className="bg-[#FFA266]/20 p-2 rounded-lg">
-                    <UserPlus className="h-5 w-5 text-[#FFA266]" />
+                  <div className="bg-[#FF991C]/20 p-2 rounded-lg">
+                    <UserPlus className="h-5 w-5 text-[#FF991C]" />
                   </div>
                   <div>
                     <CardTitle className="text-xl text-black">Invite Student</CardTitle>
@@ -233,7 +233,7 @@ export default function ClassroomDetailPage() {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full h-12 bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold"
+                    className="w-full h-12 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold"
                     disabled={inviting}
                   >
                     {inviting ? (
@@ -255,7 +255,7 @@ export default function ClassroomDetailPage() {
                   <Button
                     onClick={copyInviteLink}
                     variant="outline"
-                    className="w-full border-[#FFA266]/30 hover:border-[#FFA266] hover:bg-[#FFA266]/10"
+                    className="w-full border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10"
                   >
                     {copiedLink ? (
                       <>
@@ -274,28 +274,28 @@ export default function ClassroomDetailPage() {
             </Card>
 
             {/* Quick Stats Card */}
-            <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+            <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
               <CardHeader>
                 <CardTitle className="text-xl text-black">Classroom Stats</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between p-4 bg-white/50 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <Users className="h-5 w-5 text-[#FFA266]" />
+                    <Users className="h-5 w-5 text-[#FF991C]" />
                     <span className="text-black font-medium">Total Students</span>
                   </div>
                   <span className="text-2xl font-bold text-black">{classroom.students.length}</span>
                 </div>
                 <div className="flex items-center justify-between p-4 bg-white/50 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-[#FFA266]" />
+                    <FileText className="h-5 w-5 text-[#FF991C]" />
                     <span className="text-black font-medium">Tests Created</span>
                   </div>
                   <span className="text-2xl font-bold text-black">-</span>
                 </div>
                 <div className="flex items-center justify-between p-4 bg-white/50 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-[#FFA266]" />
+                    <CheckCircle className="h-5 w-5 text-[#FF991C]" />
                     <span className="text-black font-medium">Created</span>
                   </div>
                   <span className="text-sm text-black/70">
@@ -307,7 +307,7 @@ export default function ClassroomDetailPage() {
           </div>
 
           {/* Students List */}
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20 mt-6">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20 mt-6">
             <CardHeader>
               <CardTitle className="text-2xl text-black">Enrolled Students</CardTitle>
               <CardDescription className="text-black/60">
@@ -331,11 +331,11 @@ export default function ClassroomDetailPage() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="flex items-center justify-between p-4 bg-white/50 rounded-lg border border-[#FFA266]/10 hover:border-[#FFA266]/30 transition-all"
+                      className="flex items-center justify-between p-4 bg-white/50 rounded-lg border border-[#FF991C]/10 hover:border-[#FF991C]/30 transition-all"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="bg-[#FFA266]/20 w-12 h-12 rounded-full flex items-center justify-center">
-                          <span className="text-[#FFA266] font-bold text-lg">
+                        <div className="bg-[#FF991C]/20 w-12 h-12 rounded-full flex items-center justify-center">
+                          <span className="text-[#FF991C] font-bold text-lg">
                             {student.name.charAt(0).toUpperCase()}
                           </span>
                         </div>

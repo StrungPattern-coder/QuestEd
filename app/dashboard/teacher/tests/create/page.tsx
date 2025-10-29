@@ -283,7 +283,7 @@ export default function CreateTestPage() {
               initial={false}
               animate={{
                 scale: currentStep === step.id ? 1.1 : 1,
-                backgroundColor: currentStep >= step.id ? "#FFA266" : "#E5E7EB",
+                backgroundColor: currentStep >= step.id ? "#FF991C" : "#E5E7EB",
               }}
               className={`w-12 h-12 rounded-full flex items-center justify-center ${
                 currentStep >= step.id ? "text-black" : "text-gray-400"
@@ -296,7 +296,7 @@ export default function CreateTestPage() {
               )}
             </motion.div>
             <p className={`text-xs mt-2 font-medium ${
-              currentStep >= step.id ? "text-[#FFA266]" : "text-gray-400"
+              currentStep >= step.id ? "text-[#FF991C]" : "text-gray-400"
             }`}>
               {step.name}
             </p>
@@ -305,7 +305,7 @@ export default function CreateTestPage() {
             <motion.div
               initial={false}
               animate={{
-                backgroundColor: currentStep > step.id ? "#FFA266" : "#E5E7EB",
+                backgroundColor: currentStep > step.id ? "#FF991C" : "#E5E7EB",
               }}
               className="w-24 h-1 mx-4 rounded-full"
             />
@@ -335,7 +335,7 @@ export default function CreateTestPage() {
           </Label>
           {loadingClassrooms ? (
             <div className="w-full h-14 px-4 border-2 border-gray-200 rounded-xl flex items-center text-black/50 bg-white">
-              <Loader2 className="h-5 w-5 mr-2 animate-spin text-[#FFA266]" />
+              <Loader2 className="h-5 w-5 mr-2 animate-spin text-[#FF991C]" />
               Loading classrooms...
             </div>
           ) : classrooms.length === 0 ? (
@@ -348,7 +348,7 @@ export default function CreateTestPage() {
               id="classroomId"
               value={formData.classroomId}
               onChange={(e) => setFormData({ ...formData, classroomId: e.target.value })}
-              className="w-full h-14 px-4 border-2 border-gray-200 rounded-xl focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20 transition-all bg-white text-base"
+              className="w-full h-14 px-4 border-2 border-gray-200 rounded-xl focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20 transition-all bg-white text-base"
               required
             >
               <option value="">Choose a classroom...</option>
@@ -369,7 +369,7 @@ export default function CreateTestPage() {
             id="mode"
             value={formData.mode}
             onChange={(e) => setFormData({ ...formData, mode: e.target.value as "live" | "deadline" })}
-            className="w-full h-14 px-4 border-2 border-gray-200 rounded-xl focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20 transition-all bg-white text-base"
+            className="w-full h-14 px-4 border-2 border-gray-200 rounded-xl focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20 transition-all bg-white text-base"
             required
           >
             <option value="deadline">📅 Deadline Mode (Scheduled)</option>
@@ -388,7 +388,7 @@ export default function CreateTestPage() {
           placeholder="e.g., German Verbs & Conjugation Quiz"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="h-14 border-2 border-gray-200 rounded-xl focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20 text-base"
+          className="h-14 border-2 border-gray-200 rounded-xl focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20 text-base"
           required
         />
       </div>
@@ -402,7 +402,7 @@ export default function CreateTestPage() {
           placeholder="Brief description of what this test covers..."
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20 transition-all resize-none text-base"
+          className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20 transition-all resize-none text-base"
         />
       </div>
 
@@ -414,7 +414,7 @@ export default function CreateTestPage() {
         >
           <div className="space-y-2">
             <Label htmlFor="startTime" className="text-base font-semibold text-black flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-[#FFA266]" />
+              <Calendar className="h-5 w-5 text-[#FF991C]" />
               Start Time *
             </Label>
             <Input
@@ -422,14 +422,14 @@ export default function CreateTestPage() {
               type="datetime-local"
               value={formData.startTime}
               onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
-              className="h-14 border-2 border-gray-200 rounded-xl focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20"
+              className="h-14 border-2 border-gray-200 rounded-xl focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20"
               required={formData.mode === "deadline"}
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="endTime" className="text-base font-semibold text-black flex items-center gap-2">
-              <Clock className="h-5 w-5 text-[#FFA266]" />
+              <Clock className="h-5 w-5 text-[#FF991C]" />
               End Time *
             </Label>
             <Input
@@ -437,7 +437,7 @@ export default function CreateTestPage() {
               type="datetime-local"
               value={formData.endTime}
               onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-              className="h-14 border-2 border-gray-200 rounded-xl focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20"
+              className="h-14 border-2 border-gray-200 rounded-xl focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20"
               required={formData.mode === "deadline"}
             />
           </div>
@@ -446,7 +446,7 @@ export default function CreateTestPage() {
 
       <div className="space-y-2 pt-4 border-t-2 border-gray-100">
         <Label htmlFor="timeLimit" className="text-base font-semibold text-black flex items-center gap-2">
-          <Clock className="h-5 w-5 text-[#FFA266]" />
+          <Clock className="h-5 w-5 text-[#FF991C]" />
           Time per Question
         </Label>
         <div className="flex items-center gap-4">
@@ -457,7 +457,7 @@ export default function CreateTestPage() {
             max="300"
             value={formData.timeLimitPerQuestion}
             onChange={(e) => setFormData({ ...formData, timeLimitPerQuestion: parseInt(e.target.value) || 30 })}
-            className="h-14 w-32 border-2 border-gray-200 rounded-xl focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20 text-center text-lg font-semibold"
+            className="h-14 w-32 border-2 border-gray-200 rounded-xl focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20 text-center text-lg font-semibold"
           />
           <span className="text-black/60">seconds</span>
         </div>
@@ -518,8 +518,8 @@ export default function CreateTestPage() {
 
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="bg-[#FFA266]/20 p-2 rounded-lg">
-            <ListChecks className="h-5 w-5 text-[#FFA266]" />
+          <div className="bg-[#FF991C]/20 p-2 rounded-lg">
+            <ListChecks className="h-5 w-5 text-[#FF991C]" />
           </div>
           <span className="font-semibold text-black">
             {questions.length} Question{questions.length !== 1 ? "s" : ""}
@@ -528,7 +528,7 @@ export default function CreateTestPage() {
         <Button
           type="button"
           onClick={addQuestion}
-          className="bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg"
+          className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg"
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Question
@@ -543,8 +543,8 @@ export default function CreateTestPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: qIndex * 0.05 }}
           >
-            <Card className="bg-white border-2 border-gray-200 hover:border-[#FFA266]/50 transition-all">
-              <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-[#FFA266]/10 to-transparent">
+            <Card className="bg-white border-2 border-gray-200 hover:border-[#FF991C]/50 transition-all">
+              <CardHeader className="flex flex-row items-center justify-between bg-gradient-to-r from-[#FF991C]/10 to-transparent">
                 <CardTitle className="text-lg text-black font-bold">
                   Question {qIndex + 1}
                 </CardTitle>
@@ -570,7 +570,7 @@ export default function CreateTestPage() {
                     placeholder="Was ist das? (What is this?)"
                     value={question.questionText}
                     onChange={(e) => updateQuestion(qIndex, "questionText", e.target.value)}
-                    className="h-12 border-2 border-gray-200 rounded-lg focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20"
+                    className="h-12 border-2 border-gray-200 rounded-lg focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20"
                     required
                   />
                 </div>
@@ -587,7 +587,7 @@ export default function CreateTestPage() {
                         placeholder={`Option ${String.fromCharCode(65 + optIndex)}`}
                         value={option}
                         onChange={(e) => updateOption(qIndex, optIndex, e.target.value)}
-                        className="flex-1 h-12 border-2 border-gray-200 rounded-lg focus:border-[#FFA266] focus:ring-2 focus:ring-[#FFA266]/20"
+                        className="flex-1 h-12 border-2 border-gray-200 rounded-lg focus:border-[#FF991C] focus:ring-2 focus:ring-[#FF991C]/20"
                         required
                       />
                       <div className="flex items-center gap-2">
@@ -596,7 +596,7 @@ export default function CreateTestPage() {
                           name={`correct-${qIndex}`}
                           checked={question.correctAnswer === optIndex}
                           onChange={() => updateQuestion(qIndex, "correctAnswer", optIndex)}
-                          className="w-5 h-5 text-[#FFA266] focus:ring-[#FFA266] cursor-pointer"
+                          className="w-5 h-5 text-[#FF991C] focus:ring-[#FF991C] cursor-pointer"
                         />
                         <span className={`text-xs font-semibold min-w-[60px] ${
                           question.correctAnswer === optIndex ? "text-green-600" : "text-gray-400"
@@ -607,7 +607,7 @@ export default function CreateTestPage() {
                     </div>
                   ))}
                   <p className="text-xs text-black/50 mt-2 flex items-center gap-2">
-                    <span className="inline-block w-2 h-2 rounded-full bg-[#FFA266]"></span>
+                    <span className="inline-block w-2 h-2 rounded-full bg-[#FF991C]"></span>
                     Select the radio button to mark the correct answer
                   </p>
                 </div>
@@ -624,7 +624,7 @@ export default function CreateTestPage() {
           <Button
             type="button"
             onClick={addQuestion}
-            className="mt-4 bg-[#FFA266] hover:bg-[#FF8F4D] text-black"
+            className="mt-4 bg-[#FF991C] hover:bg-[#FF8F4D] text-black"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Your First Question
@@ -647,7 +647,7 @@ export default function CreateTestPage() {
         <p className="text-black/60">Everything looks good? Let's create it!</p>
       </div>
 
-      <Card className="bg-gradient-to-br from-[#FFA266]/10 to-[#FF8F4D]/5 border-2 border-[#FFA266]/30">
+      <Card className="bg-gradient-to-br from-[#FF991C]/10 to-[#FF8F4D]/5 border-2 border-[#FF991C]/30">
         <CardHeader>
           <CardTitle className="text-xl text-black">Test Summary</CardTitle>
         </CardHeader>
@@ -712,7 +712,7 @@ export default function CreateTestPage() {
       <Card className="bg-white border-2 border-gray-200">
         <CardHeader>
           <CardTitle className="text-lg text-black flex items-center gap-2">
-            <ListChecks className="h-5 w-5 text-[#FFA266]" />
+            <ListChecks className="h-5 w-5 text-[#FF991C]" />
             Questions Preview
           </CardTitle>
         </CardHeader>
@@ -759,11 +759,11 @@ export default function CreateTestPage() {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-5xl mx-auto"
         >
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20 shadow-2xl">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20 shadow-2xl">
             <CardHeader className="text-center pb-8">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <motion.div 
-                  className="bg-[#FFA266] p-4 rounded-2xl"
+                  className="bg-[#FF991C] p-4 rounded-2xl"
                   animate={{ rotate: [0, 5, -5, 0] }}
                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                 >
@@ -831,7 +831,7 @@ export default function CreateTestPage() {
                     <Button
                       type="button"
                       onClick={handleNext}
-                      className="flex-1 h-14 bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-bold text-lg shadow-xl"
+                      className="flex-1 h-14 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-bold text-lg shadow-xl"
                     >
                       Continue
                       <ArrowRight className="h-5 w-5 ml-2" />
@@ -839,7 +839,7 @@ export default function CreateTestPage() {
                   ) : (
                     <Button
                       type="submit"
-                      className="flex-1 h-14 bg-gradient-to-r from-[#FFA266] to-[#FF8F4D] hover:from-[#FF8F4D] hover:to-[#FFA266] text-black font-bold text-lg shadow-xl"
+                      className="flex-1 h-14 bg-gradient-to-r from-[#FF991C] to-[#FF8F4D] hover:from-[#FF8F4D] hover:to-[#FF991C] text-black font-bold text-lg shadow-xl"
                       disabled={loading}
                     >
                       {loading ? (

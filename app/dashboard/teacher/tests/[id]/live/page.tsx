@@ -104,7 +104,7 @@ export default function LiveTestControlPage() {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#FFA266", "#FF8F4D", "#FFB280"],
+        colors: ["#FF991C", "#FF8F4D", "#FFB280"],
       });
     } else if (response.error) {
       alert(response.error);
@@ -148,7 +148,7 @@ export default function LiveTestControlPage() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 text-[#FFA266] animate-spin mx-auto mb-4" />
+          <Loader2 className="h-12 w-12 text-[#FF991C] animate-spin mx-auto mb-4" />
           <p className="text-[#F5F5F5]">Loading live session...</p>
         </div>
       </div>
@@ -162,7 +162,7 @@ export default function LiveTestControlPage() {
           <p className="text-[#F5F5F5] text-xl">Test not found</p>
           <Button
             onClick={() => router.push("/dashboard/teacher")}
-            className="mt-4 bg-[#FFA266] hover:bg-[#FF8F4D] text-black"
+            className="mt-4 bg-[#FF991C] hover:bg-[#FF8F4D] text-black"
           >
             Back to Dashboard
           </Button>
@@ -183,7 +183,7 @@ export default function LiveTestControlPage() {
           <Button
             onClick={() => router.push("/dashboard/teacher")}
             variant="outline"
-            className="border-[#FFA266] text-[#FFA266] hover:bg-[#FFA266] hover:text-black"
+            className="border-[#FF991C] text-[#FF991C] hover:bg-[#FF991C] hover:text-black"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
@@ -199,8 +199,8 @@ export default function LiveTestControlPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <div className="bg-[#FFA266]/20 p-3 rounded-xl">
-                  <Zap className="h-6 w-6 text-[#FFA266]" />
+                <div className="bg-[#FF991C]/20 p-3 rounded-xl">
+                  <Zap className="h-6 w-6 text-[#FF991C]" />
                 </div>
                 <div>
                   <h1 className="text-3xl font-bold text-[#F5F5F5]">{test.title}</h1>
@@ -269,14 +269,14 @@ export default function LiveTestControlPage() {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="text-xs text-[#F5F5F5]/60 mb-1">Join Code</p>
-                      <p className="text-3xl font-bold text-[#FFA266] tracking-wider">
+                      <p className="text-3xl font-bold text-[#FF991C] tracking-wider">
                         {test.joinCode}
                       </p>
                     </div>
                     <Button
                       onClick={copyJoinCode}
                       variant="outline"
-                      className="border-[#FFA266] text-[#FFA266] hover:bg-[#FFA266] hover:text-black"
+                      className="border-[#FF991C] text-[#FF991C] hover:bg-[#FF991C] hover:text-black"
                     >
                       {copiedCode ? (
                         <>
@@ -300,15 +300,15 @@ export default function LiveTestControlPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {[
-            { label: "Participants", value: participants, icon: Users, color: "#FFA266" },
-            { label: "Questions", value: test.questions.length, icon: Target, color: "#FFA266" },
+            { label: "Participants", value: participants, icon: Users, color: "#FF991C" },
+            { label: "Questions", value: test.questions.length, icon: Target, color: "#FF991C" },
             { 
               label: "Status", 
               value: test.isCompleted ? "Completed" : isLive ? "Active" : "Idle", 
               icon: Clock, 
               color: test.isCompleted ? "#6B7280" : isLive ? "#10B981" : "#6B7280" 
             },
-            { label: "Join Code", value: test.joinCode || "N/A", icon: Brain, color: "#FFA266" },
+            { label: "Join Code", value: test.joinCode || "N/A", icon: Brain, color: "#FF991C" },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -316,14 +316,14 @@ export default function LiveTestControlPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20 hover:border-[#FFA266]/50 transition-all">
+              <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20 hover:border-[#FF991C]/50 transition-all">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-black/70 mb-1">{stat.label}</p>
                       <p className="text-2xl font-bold text-black">{stat.value}</p>
                     </div>
-                    <div className="bg-[#FFA266]/20 p-3 rounded-xl">
+                    <div className="bg-[#FF991C]/20 p-3 rounded-xl">
                       <stat.icon className="h-6 w-6" style={{ color: stat.color }} />
                     </div>
                   </div>
@@ -339,12 +339,12 @@ export default function LiveTestControlPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20">
+          <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-2xl text-black flex items-center gap-3">
-                    <Trophy className="h-6 w-6 text-[#FFA266]" />
+                    <Trophy className="h-6 w-6 text-[#FF991C]" />
                     Live Leaderboard
                   </CardTitle>
                   <CardDescription className="text-black/60">
@@ -400,7 +400,7 @@ export default function LiveTestControlPage() {
                               ? "bg-gray-400 text-gray-900"
                               : index === 2
                               ? "bg-orange-400 text-orange-900"
-                              : "bg-[#FFA266]/20 text-[#FFA266]"
+                              : "bg-[#FF991C]/20 text-[#FF991C]"
                           }`}>
                             {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : index + 1}
                           </div>
@@ -412,7 +412,7 @@ export default function LiveTestControlPage() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-[#FFA266] flex items-center gap-2">
+                          <div className="text-2xl font-bold text-[#FF991C] flex items-center gap-2">
                             <TrendingUp className="h-5 w-5" />
                             {entry.score}
                           </div>

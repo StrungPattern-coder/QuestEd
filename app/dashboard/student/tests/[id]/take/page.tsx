@@ -92,7 +92,7 @@ export default function TakeTestPage() {
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#FFA266", "#FF8F4D", "#FFB280"],
+        colors: ["#FF991C", "#FF8F4D", "#FFB280"],
       });
     }
   };
@@ -150,7 +150,7 @@ export default function TakeTestPage() {
         particleCount: 200,
         spread: 100,
         origin: { y: 0.5 },
-        colors: ["#FFA266", "#FF8F4D", "#FFB280"],
+        colors: ["#FF991C", "#FF8F4D", "#FFB280"],
       });
       
       // Redirect to results after 3 seconds
@@ -166,7 +166,7 @@ export default function TakeTestPage() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 text-[#FFA266] animate-spin mx-auto mb-4" />
+          <Loader2 className="h-12 w-12 text-[#FF991C] animate-spin mx-auto mb-4" />
           <p className="text-[#F5F5F5]">Loading test...</p>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default function TakeTestPage() {
           transition={{ type: "spring", duration: 0.5 }}
           className="text-center"
         >
-          <Trophy className="h-24 w-24 text-[#FFA266] mx-auto mb-6" />
+          <Trophy className="h-24 w-24 text-[#FF991C] mx-auto mb-6" />
           <h1 className="text-4xl font-bold text-[#F5F5F5] mb-4">Test Complete! 🎉</h1>
           <p className="text-[#F5F5F5]/70 text-lg">Redirecting to results...</p>
         </motion.div>
@@ -218,7 +218,7 @@ export default function TakeTestPage() {
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm text-[#F5F5F5]/60">Question</p>
-                <p className="text-xl font-bold text-[#FFA266]">
+                <p className="text-xl font-bold text-[#FF991C]">
                   {currentQuestionIndex + 1} / {test.questions.length}
                 </p>
               </div>
@@ -234,12 +234,12 @@ export default function TakeTestPage() {
           className="mb-8"
         >
           <Card className={`backdrop-blur-xl border-2 transition-all duration-300 ${
-            timeLeft <= 5 ? "bg-red-500/20 border-red-500" : "bg-[#F5F5F5]/10 border-[#FFA266]/30"
+            timeLeft <= 5 ? "bg-red-500/20 border-red-500" : "bg-[#F5F5F5]/10 border-[#FF991C]/30"
           }`}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <Clock className={`h-6 w-6 ${timeLeft <= 5 ? "text-red-500" : "text-[#FFA266]"}`} />
+                  <Clock className={`h-6 w-6 ${timeLeft <= 5 ? "text-red-500" : "text-[#FF991C]"}`} />
                   <span className="text-2xl font-bold text-[#F5F5F5]">
                     {timeLeft}s
                   </span>
@@ -263,7 +263,7 @@ export default function TakeTestPage() {
             exit={{ opacity: 0, x: -100 }}
             transition={{ duration: 0.3 }}
           >
-            <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20 mb-6">
+            <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20 mb-6">
               <CardContent className="p-8">
                 <h2 className="text-2xl font-bold text-black mb-8">{currentQuestion.questionText}</h2>
 
@@ -287,8 +287,8 @@ export default function TakeTestPage() {
                             : showWrong
                             ? "bg-red-500 text-white border-4 border-red-600"
                             : isSelected
-                            ? "bg-[#FFA266] text-black border-4 border-[#FF8F4D] shadow-lg"
-                            : "bg-white/50 text-black border-2 border-black/10 hover:border-[#FFA266] hover:bg-white/70"
+                            ? "bg-[#FF991C] text-black border-4 border-[#FF8F4D] shadow-lg"
+                            : "bg-white/50 text-black border-2 border-black/10 hover:border-[#FF991C] hover:bg-white/70"
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -345,7 +345,7 @@ export default function TakeTestPage() {
               <Button
                 onClick={handleNext}
                 disabled={submitting}
-                className="w-full h-16 bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-bold text-xl shadow-xl"
+                className="w-full h-16 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-bold text-xl shadow-xl"
               >
                 {submitting ? (
                   <>
@@ -365,7 +365,7 @@ export default function TakeTestPage() {
               <Button
                 onClick={handleAnswerSubmit}
                 disabled={selectedAnswer === null}
-                className="w-full h-16 bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-bold text-xl shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-16 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-bold text-xl shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Submit Answer
               </Button>

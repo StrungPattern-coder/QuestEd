@@ -329,8 +329,8 @@ To customize email templates, edit `/backend/utils/email.ts`:
 ### Change Colors
 ```typescript
 // Find these in the template:
-background: linear-gradient(135deg, #FFA266 0%, #FF8F4D 100%);
-color: #FFA266;
+background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
+color: #FF991C;
 ```
 
 ### Change Content

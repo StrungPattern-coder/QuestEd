@@ -47,10 +47,10 @@ export default function JoinLiveTestPage() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FFA266]/20 shadow-2xl">
+          <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20 shadow-2xl">
             <CardHeader className="text-center pb-8">
               <div className="flex justify-center mb-4">
-                <div className="bg-[#FFA266] p-4 rounded-2xl">
+                <div className="bg-[#FF991C] p-4 rounded-2xl">
                   <Zap className="h-12 w-12 text-black" />
                 </div>
               </div>
@@ -74,7 +74,7 @@ export default function JoinLiveTestPage() {
                     placeholder="Enter 6-digit code"
                     value={joinCode}
                     onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                    className="h-16 text-center text-3xl font-bold tracking-widest border-2 border-[#FFA266]/30 focus:border-[#FFA266] uppercase"
+                    className="h-16 text-center text-3xl font-bold tracking-widest border-2 border-[#FF991C]/30 focus:border-[#FF991C] uppercase"
                     maxLength={6}
                     required
                   />
@@ -86,7 +86,7 @@ export default function JoinLiveTestPage() {
                 <Button
                   type="submit"
                   disabled={loading || joinCode.length < 6}
-                  className="w-full h-14 bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-bold text-lg shadow-xl disabled:opacity-50"
+                  className="w-full h-14 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-bold text-lg shadow-xl disabled:opacity-50"
                 >
                   {loading ? (
                     <>
@@ -116,24 +116,24 @@ export default function JoinLiveTestPage() {
               {/* Info Section */}
               <div className="mt-8 pt-6 border-t border-black/10">
                 <h4 className="text-sm font-semibold text-black mb-3 flex items-center gap-2">
-                  <Users className="h-4 w-4 text-[#FFA266]" />
+                  <Users className="h-4 w-4 text-[#FF991C]" />
                   How it works:
                 </h4>
                 <ol className="space-y-2 text-xs text-black/70">
                   <li className="flex gap-2">
-                    <span className="font-bold text-[#FFA266]">1.</span>
+                    <span className="font-bold text-[#FF991C]">1.</span>
                     <span>Your teacher starts a live quiz and shares a join code</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="font-bold text-[#FFA266]">2.</span>
+                    <span className="font-bold text-[#FF991C]">2.</span>
                     <span>Enter the code above to join the session</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="font-bold text-[#FFA266]">3.</span>
+                    <span className="font-bold text-[#FF991C]">3.</span>
                     <span>Answer questions in real-time and compete with classmates</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="font-bold text-[#FFA266]">4.</span>
+                    <span className="font-bold text-[#FF991C]">4.</span>
                     <span>Watch your score climb on the live leaderboard!</span>
                   </li>
                 </ol>

@@ -58,11 +58,11 @@ export default function CreateClassroomPage() {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-2xl mx-auto"
         >
-          <Card className="bg-[#F5F5F5]/95 border-[#FFA266]/20">
+          <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20">
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
-                <div className="bg-[#FFA266]/20 p-3 rounded-xl">
-                  <Users className="h-6 w-6 text-[#FFA266]" />
+                <div className="bg-[#FF991C]/20 p-3 rounded-xl">
+                  <Users className="h-6 w-6 text-[#FF991C]" />
                 </div>
                 <div>
                   <CardTitle className="text-3xl text-black">Create New Classroom</CardTitle>
@@ -91,7 +91,7 @@ export default function CreateClassroomPage() {
                     placeholder="e.g., German A1 - Batch 2025"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="h-12 border-gray-300 focus:border-[#FFA266] focus:ring-[#FFA266]"
+                    className="h-12 border-gray-300 focus:border-[#FF991C] focus:ring-[#FF991C]"
                     required
                   />
                 </div>
@@ -105,7 +105,7 @@ export default function CreateClassroomPage() {
                     placeholder="Brief description of the classroom..."
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full min-h-[120px] px-3 py-2 border border-gray-300 rounded-md focus:border-[#FFA266] focus:ring-[#FFA266] focus:ring-1"
+                    className="w-full min-h-[120px] px-3 py-2 border border-gray-300 rounded-md focus:border-[#FF991C] focus:ring-[#FF991C] focus:ring-1"
                   />
                 </div>
 
@@ -121,7 +121,7 @@ export default function CreateClassroomPage() {
                   </Button>
                   <Button
                     type="submit"
-                    className="flex-1 h-12 bg-[#FFA266] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg"
+                    className="flex-1 h-12 bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold shadow-lg"
                     disabled={loading}
                   >
                     {loading ? (

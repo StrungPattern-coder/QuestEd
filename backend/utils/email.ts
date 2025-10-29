@@ -96,7 +96,7 @@ export const emailTemplates = {
       margin-bottom: 30px;
     }
     .logo {
-      background: linear-gradient(135deg, #FFA266 0%, #FF8F4D 100%);
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
       width: 80px;
       height: 80px;
       border-radius: 20px;
@@ -110,7 +110,7 @@ export const emailTemplates = {
       font-family: 'Audiowide', sans-serif;
     }
     h1 {
-      color: #FFA266;
+      color: #FF991C;
       font-size: 28px;
       margin: 0 0 10px 0;
       font-weight: 700;
@@ -127,12 +127,12 @@ export const emailTemplates = {
       padding: 24px;
       border-radius: 12px;
       margin-bottom: 24px;
-      border-left: 4px solid #FFA266;
+      border-left: 4px solid #FF991C;
     }
     .classroom-name {
       font-size: 24px;
       font-weight: 700;
-      color: #FFA266;
+      color: #FF991C;
       margin-bottom: 8px;
       font-family: 'Audiowide', sans-serif;
       letter-spacing: 0.5px;
@@ -150,7 +150,7 @@ export const emailTemplates = {
     }
     .cta-button {
       display: inline-block;
-      background: linear-gradient(135deg, #FFA266 0%, #FF8F4D 100%);
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
       color: #000000;
       text-decoration: none;
       padding: 16px 40px;
@@ -196,7 +196,7 @@ export const emailTemplates = {
     .link-fallback {
       word-break: break-all;
       font-size: 12px;
-      color: #FFA266;
+      color: #FF991C;
       margin-top: 16px;
       padding: 12px;
       background: rgba(255, 162, 102, 0.1);
@@ -335,7 +335,7 @@ If you didn't expect this invitation, you can safely ignore this email.
       margin-bottom: 30px;
     }
     .logo {
-      background: linear-gradient(135deg, #FFA266 0%, #FF8F4D 100%);
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
       width: 80px;
       height: 80px;
       border-radius: 20px;
@@ -349,7 +349,7 @@ If you didn't expect this invitation, you can safely ignore this email.
       font-family: 'Audiowide', sans-serif;
     }
     h1 {
-      color: #FFA266;
+      color: #FF991C;
       font-size: 28px;
       margin: 0 0 10px 0;
       font-weight: 700;
@@ -357,13 +357,13 @@ If you didn't expect this invitation, you can safely ignore this email.
       letter-spacing: 1px;
     }
     h2 {
-      color: #FFA266;
+      color: #FF991C;
       font-family: 'Audiowide', sans-serif;
       letter-spacing: 0.5px;
     }
     .cta-button {
       display: inline-block;
-      background: linear-gradient(135deg, #FFA266 0%, #FF8F4D 100%);
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
       color: #000000;
       text-decoration: none;
       padding: 16px 40px;
@@ -392,7 +392,7 @@ If you didn't expect this invitation, you can safely ignore this email.
       <p>Hi <strong>${studentName}</strong>,</p>
       <p>A new test has been created in <strong>${classroomName}</strong>:</p>
       
-      <h2 style="color: #FFA266;">${testTitle}</h2>
+      <h2 style="color: #FF991C;">${testTitle}</h2>
       ${testDescription ? `<p>${testDescription}</p>` : ''}
       
       <div class="button-container">

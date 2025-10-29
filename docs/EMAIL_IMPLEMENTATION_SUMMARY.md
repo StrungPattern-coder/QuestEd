@@ -77,7 +77,7 @@ The classroom invitation email system has been **fully implemented** without usi
 
 ### Design Highlights:
 - Dark background (#000000) matching QuestEd theme
-- Orange accent color (#FFA266) for branding
+- Orange accent color (#FF991C) for branding
 - Gradient effects and shadows
 - Professional typography
 - Accessibility-friendly contrast ratios

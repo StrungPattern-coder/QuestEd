@@ -14,7 +14,7 @@ Located in the top-right corner of all major pages:
 **Features:**
 - 🔄 Toggle between English and German
 - 💾 Saves preference to localStorage
-- 🎨 Matches your platform's design (coral orange #FFA266)
+- 🎨 Matches your platform's design (coral orange #FF991C)
 - ⚡ Instant language switching (no page reload)
 
 ---
