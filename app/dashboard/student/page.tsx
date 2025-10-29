@@ -167,8 +167,8 @@ export default function StudentDashboard() {
               </div>
               <Button 
                 onClick={handleLogout}
-                variant="outline" 
-                className="border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
+                variant="ghost" 
+                className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 {t.logout}
