@@ -28,11 +28,10 @@ const UserSchema: Schema<IUser> = new Schema(
       trim: true,
       validate: {
         validator: function (email: string) {
-          // Teacher email: name@pict.edu
-          // Student email: enrollment@ms.pict.edu
-          return /^[^\s@]+@(pict\.edu|ms\.pict\.edu)$/.test(email);
+          // Accept any valid email format
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         },
-        message: 'Invalid email format. Use @pict.edu for teachers or @ms.pict.edu for students',
+        message: 'Invalid email format',
       },
     },
     role: {
@@ -69,14 +68,8 @@ const UserSchema: Schema<IUser> = new Schema(
   }
 );
 
-// Validate role based on email domain
+// No email domain validation - users can choose their role freely
 UserSchema.pre('save', function (next) {
-  if (this.email.endsWith('@ms.pict.edu') && this.role !== 'student') {
-    return next(new Error('Email domain @ms.pict.edu is for students only'));
-  }
-  if (this.email.endsWith('@pict.edu') && !this.email.endsWith('@ms.pict.edu') && this.role !== 'teacher') {
-    return next(new Error('Email domain @pict.edu is for teachers only'));
-  }
   next();
 });
 

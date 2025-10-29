@@ -7,18 +7,23 @@ import { Types } from 'mongoose';
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, enrollmentNumber, rollNumber } = req.body;
+    const { name, email, password, role, enrollmentNumber, rollNumber } = req.body;
 
     // Validate required fields
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Name, email, and password are required' });
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ error: 'Name, email, password, and role are required' });
     }
 
-    // Validate email format and determine role
+    // Validate role
+    if (role !== 'teacher' && role !== 'student') {
+      return res.status(400).json({ error: 'Role must be either teacher or student' });
+    }
+
+    // Validate email format
     const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
       return res.status(400).json({ 
-        error: 'Invalid email format. Use @pict.edu for teachers or @ms.pict.edu for students' 
+        error: 'Invalid email format' 
       });
     }
 
@@ -36,9 +41,9 @@ export const signup = async (req: Request, res: Response) => {
       name,
       email,
       password: hashedPassword,
-      role: emailValidation.role,
-      enrollmentNumber: emailValidation.role === 'student' ? enrollmentNumber : undefined,
-      rollNumber: emailValidation.role === 'student' ? rollNumber : undefined,
+      role,
+      enrollmentNumber: role === 'student' ? enrollmentNumber : undefined,
+      rollNumber: role === 'student' ? rollNumber : undefined,
     });
 
     // Generate token

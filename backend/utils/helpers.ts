@@ -18,19 +18,10 @@ export const isSubmissionLate = (submittedAt: Date, endTime: Date): boolean => {
   return submittedAt > endTime;
 };
 
-export const validateEmail = (email: string): { valid: boolean; role?: 'teacher' | 'student' } => {
-  const studentPattern = /^[^\s@]+@ms\.pict\.edu$/;
-  const teacherPattern = /^[^\s@]+@pict\.edu$/;
-
-  if (studentPattern.test(email)) {
-    return { valid: true, role: 'student' };
-  }
-
-  if (teacherPattern.test(email) && !email.endsWith('@ms.pict.edu')) {
-    return { valid: true, role: 'teacher' };
-  }
-
-  return { valid: false };
+export const validateEmail = (email: string): { valid: boolean } => {
+  // Accept any valid email format
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return { valid: emailPattern.test(email) };
 };
 
 export const parseCSVQuestions = (csvContent: string): Array<{

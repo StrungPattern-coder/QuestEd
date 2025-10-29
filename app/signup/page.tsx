@@ -20,18 +20,22 @@ export default function SignupPage() {
     name: "",
     email: "",
     password: "",
+    role: "" as "teacher" | "student" | "",
     enrollmentNumber: "",
     rollNumber: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const isStudent = formData.email.endsWith("@ms.pict.edu");
-  const isTeacher = formData.email.endsWith("@pict.edu");
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!formData.role) {
+      setError("Please select whether you are a teacher or student");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -140,35 +144,50 @@ export default function SignupPage() {
               <input
                 id="email"
                 type="email"
-                placeholder="name@pict.edu or enrollmentNumber@ms.pict.edu"
+                placeholder="your@email.com"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="w-full px-4 py-2.5 bg-white/5 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/50 focus:bg-white/10 focus:border-white/50 focus:outline-none transition-all duration-300"
                 required
               />
-              <div className="flex items-center gap-2 mt-2">
-                {isTeacher && (
-                  <div className="flex items-center gap-1.5 text-xs bg-white/20 backdrop-blur-md text-white px-3 py-1.5 rounded-full border border-white/40">
-                    <UserCheck className="h-3 w-3" />
-                    Teacher Account
-                  </div>
-                )}
-                {isStudent && (
-                  <div className="flex items-center gap-1.5 text-xs bg-white/20 backdrop-blur-md text-white px-3 py-1.5 rounded-full border border-white/40">
-                    <GraduationCap className="h-3 w-3" />
-                    Student Account
-                  </div>
-                )}
-                {!isTeacher && !isStudent && formData.email && (
-                  <p className="text-xs text-white/80">
-                    Use @pict.edu for teachers or @ms.pict.edu for students
-                  </p>
-                )}
+            </div>
+
+            {/* Role Selection */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-white flex items-center gap-2">
+                <UserCheck className="h-4 w-4" />
+                I am a
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "teacher" })}
+                  className={`py-3 px-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${
+                    formData.role === "teacher"
+                      ? "bg-white/20 border-white/60 text-white"
+                      : "bg-white/5 border-white/30 text-white/70 hover:bg-white/10 hover:border-white/40"
+                  }`}
+                >
+                  <UserCheck className="h-5 w-5" />
+                  <span className="text-sm font-semibold">Teacher</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "student" })}
+                  className={`py-3 px-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2 ${
+                    formData.role === "student"
+                      ? "bg-white/20 border-white/60 text-white"
+                      : "bg-white/5 border-white/30 text-white/70 hover:bg-white/10 hover:border-white/40"
+                  }`}
+                >
+                  <GraduationCap className="h-5 w-5" />
+                  <span className="text-sm font-semibold">Student</span>
+                </button>
               </div>
             </div>
 
             {/* Student Fields */}
-            {isStudent && (
+            {formData.role === "student" && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}

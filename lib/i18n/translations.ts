@@ -254,6 +254,19 @@ export const translations = {
       sort: "Sort",
       yes: "Yes",
       no: "No"
+    },
+    
+    // Question of the Day
+    qotd: {
+      title: "Question of the Day",
+      promptTitle: "Question of the Day!",
+      promptText: "Answer today's fun question and see what everyone thinks!",
+      answerNow: "Answer Now!",
+      resultsText: "Here's what the community thinks!",
+      yourChoice: "Your choice",
+      totalVotes: "total votes",
+      loading: "Loading question...",
+      newDaily: "New question every day! Come back tomorrow."
     }
   },
   de: {
@@ -510,6 +523,19 @@ export const translations = {
       sort: "Sortieren",
       yes: "Ja",
       no: "Nein"
+    },
+    
+    // Question of the Day
+    qotd: {
+      title: "Frage des Tages",
+      promptTitle: "Frage des Tages!",
+      promptText: "Beantworte die heutige Spaßfrage und sehe, was alle denken!",
+      answerNow: "Jetzt antworten!",
+      resultsText: "Das denkt die Community!",
+      yourChoice: "Deine Wahl",
+      totalVotes: "Stimmen insgesamt",
+      loading: "Frage wird geladen...",
+      newDaily: "Jeden Tag eine neue Frage! Komm morgen wieder."
     }
   }
 } as const;

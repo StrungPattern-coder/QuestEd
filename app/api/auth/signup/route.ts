@@ -12,21 +12,29 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    const { name, email, password, enrollmentNumber, rollNumber } = await request.json();
+    const { name, email, password, role, enrollmentNumber, rollNumber } = await request.json();
 
     // Validate required fields
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !role) {
       return NextResponse.json(
-        { error: 'Name, email, and password are required' },
+        { error: 'Name, email, password, and role are required' },
         { status: 400 }
       );
     }
 
-    // Validate email format and determine role
+    // Validate role
+    if (role !== 'teacher' && role !== 'student') {
+      return NextResponse.json(
+        { error: 'Role must be either teacher or student' },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format
     const emailValidation = validateEmail(email);
     if (!emailValidation.valid) {
       return NextResponse.json(
-        { error: 'Invalid email format. Use @pict.edu for teachers or @ms.pict.edu for students' },
+        { error: 'Invalid email format' },
         { status: 400 }
       );
     }
@@ -48,9 +56,9 @@ export async function POST(request: NextRequest) {
       name,
       email,
       password: hashedPassword,
-      role: emailValidation.role,
-      enrollmentNumber: emailValidation.role === 'student' ? enrollmentNumber : undefined,
-      rollNumber: emailValidation.role === 'student' ? rollNumber : undefined,
+      role,
+      enrollmentNumber: role === 'student' ? enrollmentNumber : undefined,
+      rollNumber: role === 'student' ? rollNumber : undefined,
     });
 
     // Generate token

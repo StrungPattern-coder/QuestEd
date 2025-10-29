@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Github, Mail, Heart } from "lucide-react";
+import { Github, Mail, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -20,12 +22,17 @@ export default function Footer() {
             © {currentYear} QuestEd. All rights reserved.
           </p>
 
-          {/* Made with love */}
-          <div className="flex items-center gap-2 text-sm text-[#F5F5F5]/60">
-            <span>Made with</span>
-            <Heart className="h-4 w-4 text-[#FF991C] fill-[#FF991C] animate-pulse" />
-            <span>for educators</span>
-          </div>
+          {/* Center Button */}
+          <Link href="/about-creator">
+            <Button
+              variant="outline"
+              size="sm"
+              className="bg-white/10 hover:bg-white/20 text-[#F5F5F5] border-[#FF991C]/30 backdrop-blur-sm"
+            >
+              <User className="mr-2 h-4 w-4" />
+              About the Creator
+            </Button>
+          </Link>
 
           {/* Links */}
           <div className="flex items-center gap-4">
