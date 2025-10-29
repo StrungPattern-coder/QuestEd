@@ -50,10 +50,12 @@ export async function GET(
     // Format answers with question details
     const formattedAnswers = submission.answers.map((answer: any) => {
       const question = questions.find((q: any) => q._id.toString() === answer.questionId);
+      // Convert correctAnswer from string to index
+      const correctAnswerIndex = question.options.indexOf(question.correctAnswer);
       return {
         questionText: question.questionText,
         options: question.options,
-        correctAnswer: question.correctAnswer,
+        correctAnswer: correctAnswerIndex, // Now sending as index for frontend
         selectedAnswer: answer.selectedAnswer,
         isCorrect: answer.isCorrect,
       };

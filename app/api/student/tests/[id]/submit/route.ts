@@ -50,9 +50,16 @@ export async function POST(
     const questions = test.questions as any[];
     const processedAnswers = answers.map((answer: any) => {
       const question = questions.find((q: any) => q._id.toString() === answer.questionId);
-      if (question && question.correctAnswer === answer.selectedAnswer) {
-        score++;
-        return { ...answer, isCorrect: true };
+      if (question) {
+        // correctAnswer is stored as the actual answer text (string)
+        // selectedAnswer comes as an index (number)
+        // So we need to compare: question.options[selectedAnswer] === question.correctAnswer
+        const selectedAnswerText = question.options[answer.selectedAnswer];
+        const isCorrect = selectedAnswerText === question.correctAnswer;
+        if (isCorrect) {
+          score++;
+        }
+        return { ...answer, isCorrect };
       }
       return { ...answer, isCorrect: false };
     });

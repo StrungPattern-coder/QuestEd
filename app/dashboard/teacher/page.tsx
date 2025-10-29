@@ -76,9 +76,41 @@ export default function TeacherDashboard() {
       if (testsRes.data) {
         const testsData = (testsRes.data as any).tests || [];
         setTests(testsData);
+        
+        // Calculate average score from all submissions
+        let totalScore = 0;
+        let totalMaxScore = 0;
+        
+        // Fetch results for each test to calculate average
+        const allResultsPromises = testsData.map(async (test: Test) => {
+          try {
+            const response = await fetch(`/api/teacher/tests/${test._id}/results`, {
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              },
+            });
+            if (response.ok) {
+              const data = await response.json();
+              if (data.submissions && data.submissions.length > 0) {
+                data.submissions.forEach((sub: any) => {
+                  totalScore += sub.score || 0;
+                  totalMaxScore += sub.maxScore || 0;
+                });
+              }
+            }
+          } catch (error) {
+            console.error(`Failed to fetch results for test ${test._id}:`, error);
+          }
+        });
+        
+        await Promise.all(allResultsPromises);
+        
+        const averageScore = totalMaxScore > 0 ? Math.round((totalScore / totalMaxScore) * 100) : 0;
+        
         setStats(prev => ({
           ...prev,
           totalTests: testsData.length,
+          averageScore,
         }));
       }
       

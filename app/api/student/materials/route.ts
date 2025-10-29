@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/backend/utils/db';
-import Material from '@/backend/models/Material';
+// Import models in dependency order
+import User from '@/backend/models/User';
 import Classroom from '@/backend/models/Classroom';
+import Material from '@/backend/models/Material';
 import jwt from 'jsonwebtoken';
 
 export const dynamic = 'force-dynamic';
