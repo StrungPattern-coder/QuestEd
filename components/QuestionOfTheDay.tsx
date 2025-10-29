@@ -154,7 +154,7 @@ export default function QuestionOfTheDay() {
             </button>
             
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-gradient-to-br rounded-full flex items-center justify-center flex-shrink-0">
                 <HelpCircle className="w-5 h-5 text-white" />
               </div>
               
@@ -167,7 +167,7 @@ export default function QuestionOfTheDay() {
                 </p>
                 <button
                   onClick={openModal}
-                  className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-lg font-semibold text-sm hover:from-purple-600 hover:to-pink-600 transition-all"
+                  className="w-full bg-gradient-to-r text-white py-2 rounded-lg font-semibold text-sm transition-all"
                 >
                   {t.qotd?.answerNow || "Answer Now!"}
                 </button>
