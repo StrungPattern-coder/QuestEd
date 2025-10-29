@@ -7,6 +7,8 @@ export interface IUser extends Document {
   enrollmentNumber?: string;
   rollNumber?: string;
   password: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,6 +53,14 @@ const UserSchema: Schema<IUser> = new Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters'],
+      select: false,
+    },
+    resetPasswordToken: {
+      type: String,
+      select: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
       select: false,
     },
   },

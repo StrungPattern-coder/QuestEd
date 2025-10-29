@@ -420,6 +420,233 @@ ${testLink}
       `,
     };
   },
+
+  passwordReset: (data: {
+    userName: string;
+    resetLink: string;
+    expiresIn: string;
+  }) => {
+    const { userName, resetLink, expiresIn } = data;
+
+    return {
+      subject: 'Reset Your QuestEd Password',
+      html: `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Reset</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Audiowide', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #000000;
+      color: #F5F5F5;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(255, 162, 102, 0.2);
+      border: 1px solid rgba(255, 162, 102, 0.3);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo {
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: bold;
+      color: #000;
+      margin-bottom: 20px;
+      font-family: 'Audiowide', sans-serif;
+    }
+    h1 {
+      color: #FF991C;
+      font-size: 28px;
+      margin: 0 0 10px 0;
+      font-weight: 700;
+      font-family: 'Audiowide', sans-serif;
+      letter-spacing: 1px;
+    }
+    .greeting {
+      font-size: 18px;
+      color: #F5F5F5;
+      margin-bottom: 24px;
+    }
+    .content {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      line-height: 1.6;
+      color: #D0D0D0;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
+      color: #000000;
+      text-decoration: none;
+      padding: 16px 40px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(255, 162, 102, 0.4);
+      transition: all 0.3s ease;
+      margin: 20px 0;
+      font-family: 'Audiowide', sans-serif;
+      letter-spacing: 1px;
+    }
+    .cta-button:hover {
+      box-shadow: 0 6px 24px rgba(255, 162, 102, 0.6);
+      transform: translateY(-2px);
+    }
+    .button-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .warning-box {
+      background: rgba(255, 69, 58, 0.1);
+      border: 1px solid rgba(255, 69, 58, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    .warning-box p {
+      margin: 0;
+      font-size: 14px;
+      color: #FFB3B3;
+      line-height: 1.6;
+    }
+    .info-box {
+      background: rgba(255, 162, 102, 0.1);
+      border: 1px solid rgba(255, 162, 102, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+    }
+    .info-box p {
+      margin: 0;
+      font-size: 14px;
+      color: #D0D0D0;
+      line-height: 1.6;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 162, 102, 0.2);
+      font-size: 12px;
+      color: #808080;
+    }
+    .link-fallback {
+      word-break: break-all;
+      font-size: 12px;
+      color: #FF991C;
+      margin-top: 16px;
+      padding: 12px;
+      background: rgba(255, 162, 102, 0.1);
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="logo">Q</div>
+        <h1>🔐 Password Reset Request</h1>
+      </div>
+      
+      <p class="greeting">Hi <strong>${userName}</strong>,</p>
+      
+            <p style="color: #666; font-size: 14px; margin: 20px 0;">
+        We received a request to reset your password. Click the button below to create a new password:
+      </p>
+      
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${resetLink}" style="background-color: #FF991C; color: #000; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 16px;">
+          Reset Password
+        </a>
+      </div>
+      
+      <p style="color: #666; font-size: 14px; margin: 20px 0;">
+        Or copy and paste this link into your browser:
+      </p>
+      <p style="color: #FF991C; font-size: 14px; word-break: break-all; background-color: #f5f5f5; padding: 10px; border-radius: 4px;">
+        ${resetLink}
+      </p>
+      
+      <div style="background-color: #fff3e0; border-left: 4px solid #FF991C; padding: 15px; margin: 20px 0; border-radius: 4px;">
+        <p style="color: #333; font-size: 14px; margin: 0;">
+          ⚠️ <strong>Important:</strong> This link will expire in <strong>${expiresIn}</strong> for security reasons. If you didn't request this reset, please ignore this email and your password will remain unchanged.
+        </p>
+      </div>
+      
+      <div class="warning-box">
+        <p>
+          <strong>⚠️ Didn't request this?</strong><br>
+          If you didn't request a password reset, you can safely ignore this email. 
+          Your password will remain unchanged and your account is secure.
+        </p>
+      </div>
+      
+      <div class="link-fallback">
+        <strong>Button not working?</strong> Copy and paste this link into your browser:<br>
+        ${resetLink}
+      </div>
+      
+      <div class="footer">
+        <p>
+          This is an automated email from QuestEd.<br>
+          Never share your password or reset link with anyone.
+        </p>
+        <p style="margin-top: 12px;">
+          © 2025 QuestEd - Interactive Learning Platform
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+      `,
+      text: `
+Hi ${userName},
+
+We received a request to reset your password for your QuestEd account.
+
+Click the link below to create a new password:
+${resetLink}
+
+⏰ This link will expire in ${expiresIn}.
+
+⚠️ Didn't request this?
+If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.
+
+Never share your password or reset link with anyone.
+
+© 2025 QuestEd - Interactive Learning Platform
+      `,
+    };
+  },
 };
 
 // Helper function to send classroom invitation
@@ -454,6 +681,27 @@ export const sendTestNotification = async (data: {
   
   return await sendEmail({
     to: data.studentEmail,
+    subject: template.subject,
+    html: template.html,
+    text: template.text,
+  });
+};
+
+// Helper function to send password reset email
+export const sendPasswordResetEmail = async (data: {
+  userEmail: string;
+  userName: string;
+  resetLink: string;
+  expiresIn?: string;
+}) => {
+  const template = emailTemplates.passwordReset({
+    userName: data.userName,
+    resetLink: data.resetLink,
+    expiresIn: data.expiresIn || '1 hour',
+  });
+  
+  return await sendEmail({
+    to: data.userEmail,
     subject: template.subject,
     html: template.html,
     text: template.text,

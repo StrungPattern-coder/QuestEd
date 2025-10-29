@@ -114,10 +114,15 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-semibold text-black flex items-center gap-2">
-                  <Lock className="h-4 w-4" />
-                  {t.auth.password}
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password" className="text-sm font-semibold text-black flex items-center gap-2">
+                    <Lock className="h-4 w-4" />
+                    {t.auth.password}
+                  </Label>
+                  <Link href="/forgot-password" className="text-sm text-[#FF991C] hover:text-[#FF8F4D] font-semibold">
+                    Forgot?
+                  </Link>
+                </div>
                 <Input
                   id="password"
                   type="password"

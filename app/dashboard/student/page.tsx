@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useAuthStore } from "@/lib/store";
-import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap, XCircle, Award } from "lucide-react";
+import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap, XCircle, Award, User } from "lucide-react";
 import { studentApi } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -160,6 +160,13 @@ export default function StudentDashboard() {
               >
                 <Zap className="h-4 w-4 mr-2" />
                 {t.student.joinLive}
+              </Button>
+              <Button 
+                onClick={() => router.push("/dashboard/student/profile")}
+                className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold rounded-full"
+              >
+                <User className="h-4 w-4 mr-2" />
+                My Profile
               </Button>
               <div className="text-right">
                 <p className="text-sm font-medium text-[#F5F5F5]">{user?.name}</p>
