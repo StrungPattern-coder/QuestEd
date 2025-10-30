@@ -3,11 +3,32 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Github, Linkedin, Mail, ExternalLink } from "lucide-react";
+import { ArrowLeft, Github, Linkedin, Mail, ExternalLink, Smartphone } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
 import Aurora from "@/components/Aurora";
+import { useEffect, useState } from "react";
 
 export default function AboutCreator() {
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMobileHint, setShowMobileHint] = useState(false);
+
+  useEffect(() => {
+    // Detect if device is mobile and has gyroscope
+    const checkMobile = () => {
+      const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      setIsMobile(mobile);
+      
+      // Show hint for mobile users, hide after 5 seconds
+      if (mobile) {
+        setShowMobileHint(true);
+        const timer = setTimeout(() => setShowMobileHint(false), 5000);
+        return () => clearTimeout(timer);
+      }
+    };
+    
+    checkMobile();
+  }, []);
+
   const projects = [
     {
       title: "QuestEd",
@@ -70,7 +91,7 @@ export default function AboutCreator() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex justify-center"
+            className="flex justify-center relative"
           >
             <ProfileCard
               name="Sriram Kommalapudi"
@@ -81,9 +102,24 @@ export default function AboutCreator() {
               avatarUrl="/sriram-temporary-avatar.png"
               showUserInfo={true}
               enableTilt={true}
-              enableMobileTilt={false}
+              enableMobileTilt={true}
+              mobileTiltSensitivity={8}
               onContactClick={handleContactClick}
             />
+            
+            {/* Mobile Gyroscope Hint */}
+            {isMobile && showMobileHint && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 bg-[#FF991C] text-black px-4 py-2 rounded-full text-sm font-semibold shadow-lg flex items-center gap-2 whitespace-nowrap"
+              >
+                <Smartphone className="h-4 w-4" />
+                Tilt your device to move the card!
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Projects & Info */}

@@ -54,7 +54,9 @@ export async function GET(
     let lowestScore = Infinity;
 
     submissions.forEach((sub: any) => {
-      const percentage = sub.maxScore > 0 ? (sub.score / sub.maxScore) * 100 : 0;
+      // Calculate maxScore if not present (for backward compatibility with older submissions)
+      const calculatedMaxScore = sub.maxScore || test.questions.length;
+      const percentage = calculatedMaxScore > 0 ? (sub.score / calculatedMaxScore) * 100 : 0;
       totalScore += percentage;
       if (percentage > highestScore) highestScore = percentage;
       if (percentage < lowestScore) lowestScore = percentage;
@@ -90,8 +92,10 @@ export async function GET(
         _id: sub._id,
         studentId: sub.studentId,
         score: sub.score,
-        maxScore: sub.maxScore,
-        percentage: sub.maxScore > 0 ? Math.round((sub.score / sub.maxScore) * 100) : 0,
+        maxScore: sub.maxScore || test.questions.length, // Use test questions length for older submissions
+        percentage: (sub.maxScore || test.questions.length) > 0 
+          ? Math.round((sub.score / (sub.maxScore || test.questions.length)) * 100) 
+          : 0,
         answers: sub.answers,
         submittedAt: sub.submittedAt,
         submittedLate: sub.submittedLate,
