@@ -141,37 +141,67 @@ export default function QuickQuizPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="grid md:grid-cols-2 gap-6"
+            className="grid md:grid-cols-2 gap-8"
           >
-            <Card 
-              className="bg-gradient-to-br from-[#FF991C]/20 to-[#FF8F4D]/20 border-[#FF991C]/30 cursor-pointer hover:scale-105 transition-transform"
-              onClick={() => setMode('create')}
+            {/* Create Quiz Card */}
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.3 }}
             >
-              <CardContent className="p-8 text-center">
-                <div className="bg-[#FF991C] w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Plus className="h-10 w-10 text-black" />
-                </div>
-                <h2 className="text-2xl font-bold text-[#F5F5F5] mb-2">Create Quiz</h2>
-                <p className="text-[#F5F5F5]/70">
-                  Host your own quiz and get a join code to share
-                </p>
-              </CardContent>
-            </Card>
+              <Card 
+                className="relative overflow-hidden cursor-pointer border-2 border-[#FF991C]/40 bg-gradient-to-br from-[#FF991C]/30 via-[#FF8F4D]/20 to-[#FFB84D]/30 backdrop-blur-sm shadow-xl hover:shadow-2xl hover:shadow-[#FF991C]/30 transition-all duration-300"
+                onClick={() => setMode('create')}
+                style={{
+                  background: 'radial-gradient(circle at 50% 0%, rgba(255, 153, 28, 0.4) 0%, rgba(255, 143, 77, 0.2) 50%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(135deg, rgba(255, 153, 28, 0.3) 0%, rgba(255, 184, 77, 0.25) 100%)',
+                }}
+              >
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C]/20 via-transparent to-[#FFB84D]/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                
+                <CardContent className="p-10 text-center relative z-10">
+                  <div className="relative w-24 h-24 mx-auto mb-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C] via-[#FFB84D] to-[#FF8F4D] rounded-full blur-md opacity-70" />
+                    <div className="relative bg-gradient-to-br from-[#FF991C] to-[#FF8F4D] w-full h-full rounded-full flex items-center justify-center shadow-lg">
+                      <Plus className="h-12 w-12 text-black drop-shadow-lg" strokeWidth={2.5} />
+                    </div>
+                  </div>
+                  <h2 className="text-3xl font-bold text-[#F5F5F5] mb-3 drop-shadow-lg">Create Quiz</h2>
+                  <p className="text-[#F5F5F5]/90 text-base leading-relaxed">
+                    Host your own quiz and get a join code to share
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-            <Card 
-              className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-500/30 cursor-pointer hover:scale-105 transition-transform"
-              onClick={() => setMode('join')}
+            {/* Join Quiz Card */}
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.3 }}
             >
-              <CardContent className="p-8 text-center">
-                <div className="bg-blue-500 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <ArrowRight className="h-10 w-10 text-white" />
-                </div>
-                <h2 className="text-2xl font-bold text-[#F5F5F5] mb-2">Join Quiz</h2>
-                <p className="text-[#F5F5F5]/70">
-                  Enter a join code to participate in a quiz
-                </p>
-              </CardContent>
-            </Card>
+              <Card 
+                className="relative overflow-hidden cursor-pointer border-2 border-cyan-400/40 bg-gradient-to-br from-cyan-500/30 via-purple-500/20 to-blue-600/30 backdrop-blur-sm shadow-xl hover:shadow-2xl hover:shadow-cyan-400/30 transition-all duration-300"
+                onClick={() => setMode('join')}
+                style={{
+                  background: 'radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.4) 0%, rgba(147, 51, 234, 0.2) 50%, rgba(37, 99, 235, 0.3) 100%), linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(147, 51, 234, 0.25) 100%)',
+                }}
+              >
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 via-transparent to-purple-500/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                
+                <CardContent className="p-10 text-center relative z-10">
+                  <div className="relative w-24 h-24 mx-auto mb-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-full blur-md opacity-70" />
+                    <div className="relative bg-gradient-to-br from-cyan-500 via-blue-500 to-purple-600 w-full h-full rounded-full flex items-center justify-center shadow-lg">
+                      <ArrowRight className="h-12 w-12 text-white drop-shadow-lg" strokeWidth={2.5} />
+                    </div>
+                  </div>
+                  <h2 className="text-3xl font-bold text-[#F5F5F5] mb-3 drop-shadow-lg">Join Quiz</h2>
+                  <p className="text-[#F5F5F5]/90 text-base leading-relaxed">
+                    Enter a join code to participate in a quiz
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
           </motion.div>
         )}
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Github, Linkedin, Mail, ExternalLink, Smartphone } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 export default function AboutCreator() {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileHint, setShowMobileHint] = useState(false);
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
 
   useEffect(() => {
     // Detect if device is mobile and has gyroscope
@@ -29,19 +30,68 @@ export default function AboutCreator() {
     checkMobile();
   }, []);
 
+  // Auto-scroll projects every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentProjectIndex((prev) => (prev + 1) % projects.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const projects = [
-    {
-      title: "QuestEd",
-      description: "Free, open-source quiz platform - An alternative to Kahoot with unlimited quizzes, students, and features.",
-      tech: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS"],
-      link: "https://github.com/StrungPattern-coder/QuestEd",
-      status: "Active"
-    },
-    // Add more projects here as needed
-  ];
+  {
+    title: "QuestEd",
+    description:
+      "Free, open-source quiz platform — an alternative to Kahoot with unlimited quizzes, real-time multiplayer, classrooms, leaderboards, and teacher dashboards.",
+    tech: ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS"],
+    link: "https://github.com/StrungPattern-coder/QuestEd",
+    status: "Active",
+  },
+  {
+    title: "Connect",
+    description:
+      "Hackathon discovery and participation platform — aggregates hackathons across India, offers personalized recommendations, dashboards, and real-time updates.",
+    tech: ["Next.js", "FastAPI", "Supabase", "PostgreSQL", "Celery", "Redis"],
+    link: "https://connect-website-three.vercel.app",
+    status: "Active",
+  },
+  {
+    title: "QuickCourt",
+    description:
+      "Real-time multi-sport court discovery, booking, and engagement platform. Includes live availability, instant slot locking, secure Razorpay payments, loyalty & rewards, referral codes, and admin/owner workflows — built with Vite + React + Express + Neon Postgres + Prisma.",
+    tech: ["React", "Vite", "Express", "PostgreSQL (Neon)", "Prisma", "Razorpay"],
+    link: "https://quick-court-ten.vercel.app",
+    status: "Active",
+  },
+  {
+    title: "Document Intelligence System — 1A",
+    description:
+      "Lightning-fast PDF outline extractor with zero ML dependencies — extracts titles and headings using advanced rule-based intelligence matching ML accuracy. Multilingual, OCR-enabled, Dockerized, and optimized for hackathon constraints.",
+    tech: ["Python", "PyMuPDF (fitz)", "Tesseract OCR", "Docker"],
+    link: "https://github.com/StrungPattern-coder/cpt-adobe-1a",
+    status: "Completed",
+  },
+  {
+    title: "Document Intelligence System — 1B",
+    description:
+      "Persona-driven offline document analysis system for extracting persona- and task-specific insights from unstructured PDFs. Uses all-mpnet-base-v2 embeddings, extractive summarization, diversity-based ranking, and fully containerized Docker environment.",
+    tech: [
+      "Python",
+      "Sentence Transformers",
+      "PyTorch (CPU)",
+      "PyMuPDF",
+      "Docker",
+      "NumPy",
+      "NLTK",
+    ],
+    link: "https://github.com/StrungPattern-coder/cpt-adobe-1b",
+    status: "Completed",
+  },
+];
 
   const handleContactClick = () => {
-    window.location.href = "mailto:sriram@example.com"; // Replace with your actual email
+    window.location.href = "ksriram4584@gmail.com"; // Replace with your actual email
   };
 
   return (
@@ -142,21 +192,49 @@ export default function AboutCreator() {
               </p>
             </div>
 
-            {/* Projects Section */}
+            {/* Projects Section - Auto-scrolling Carousel */}
             <div className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-2xl p-6 sm:p-8">
-              <h2 className="text-2xl font-bold text-[#F5F5F5] mb-6">Featured Projects</h2>
-              <div className="space-y-6">
-                {projects.map((project, index) => (
-                  <div key={index} className="space-y-3">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-[#F5F5F5]">Featured Projects</h2>
+                <div className="flex items-center gap-2">
+                  {projects.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentProjectIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        index === currentProjectIndex 
+                          ? 'bg-[#FF991C] w-6' 
+                          : 'bg-[#F5F5F5]/30 hover:bg-[#F5F5F5]/50'
+                      }`}
+                      aria-label={`Go to project ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              {/* Project Carousel */}
+              <div className="relative overflow-hidden min-h-[280px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentProjectIndex}
+                    initial={{ opacity: 0, x: 100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    className="space-y-4"
+                  >
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="text-xl font-semibold text-[#F5F5F5]">{project.title}</h3>
-                        <span className="inline-block px-2 py-1 text-xs bg-[#FF991C] text-black rounded-full mt-1">
-                          {project.status}
+                        <h3 className="text-xl sm:text-2xl font-bold text-[#F5F5F5] mb-2">
+                          {projects[currentProjectIndex].title}
+                        </h3>
+                        <span className="inline-block px-3 py-1 text-xs font-semibold bg-[#FF991C] text-black rounded-full">
+                          {projects[currentProjectIndex].status}
                         </span>
                       </div>
+                      
                       <a
-                        href={project.link}
+                        href={projects[currentProjectIndex].link}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[#FF991C] hover:text-[#FF8F4D] transition-colors"
@@ -164,9 +242,13 @@ export default function AboutCreator() {
                         <ExternalLink className="h-5 w-5" />
                       </a>
                     </div>
-                    <p className="text-[#F5F5F5]/70 text-sm">{project.description}</p>
+                    
+                    <p className="text-[#F5F5F5]/80 text-sm leading-relaxed">
+                      {projects[currentProjectIndex].description}
+                    </p>
+                    
                     <div className="flex flex-wrap gap-2">
-                      {project.tech.map((tech, techIndex) => (
+                      {projects[currentProjectIndex].tech.map((tech, techIndex) => (
                         <span
                           key={techIndex}
                           className="px-3 py-1 text-xs bg-white/10 text-[#F5F5F5] rounded-full"
@@ -175,8 +257,41 @@ export default function AboutCreator() {
                         </span>
                       ))}
                     </div>
-                  </div>
-                ))}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Navigation Arrows */}
+              <div className="flex items-center justify-between mt-6 pt-4 border-t border-[#F5F5F5]/10">
+                <button
+                  onClick={() => setCurrentProjectIndex((prev) => (prev - 1 + projects.length) % projects.length)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-[#F5F5F5] rounded-full transition-colors text-sm font-medium"
+                >
+                  ← Previous
+                </button>
+                <span className="text-[#F5F5F5]/60 text-sm">
+                  {currentProjectIndex + 1} / {projects.length}
+                </span>
+                <button
+                  onClick={() => setCurrentProjectIndex((prev) => (prev + 1) % projects.length)}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-[#F5F5F5] rounded-full transition-colors text-sm font-medium"
+                >
+                  Next →
+                </button>
+              </div>
+
+              {/* More Projects Link */}
+              <div className="mt-6 pt-4 border-t border-[#F5F5F5]/10">
+                <a
+                  href="https://github.com/StrungPattern-coder"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 text-[#FF991C] hover:text-[#FF8F4D] transition-colors text-sm font-medium group"
+                >
+                  <Github className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                  Visit my GitHub profile to explore more of my latest projects
+                  <ExternalLink className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </a>
               </div>
             </div>
 

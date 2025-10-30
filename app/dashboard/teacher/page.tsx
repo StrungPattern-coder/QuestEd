@@ -200,30 +200,54 @@ export default function TeacherDashboard() {
               Let's get started by creating your first classroom or test
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
-              <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20 hover:border-[#FF991C]/50 transition-all cursor-pointer" onClick={handleCreateClassroom}>
-                <CardHeader>
-                  <div className="bg-[#FF991C]/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                    <Users className="h-6 w-6 text-[#FF991C]" />
-                  </div>
-                  <CardTitle className="text-2xl text-black">Create Classroom</CardTitle>
-                  <CardDescription className="text-black/60">
-                    Set up a new class and invite students
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+              <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
+                <Card 
+                  className="relative overflow-hidden cursor-pointer border-2 border-[#FF991C]/40 backdrop-blur-sm shadow-xl hover:shadow-2xl hover:shadow-[#FF991C]/30 transition-all duration-300"
+                  onClick={handleCreateClassroom}
+                  style={{
+                    background: 'radial-gradient(circle at 50% 0%, rgba(255, 153, 28, 0.4) 0%, rgba(255, 143, 77, 0.2) 50%, rgba(0, 0, 0, 0.3) 100%), linear-gradient(135deg, rgba(255, 153, 28, 0.3) 0%, rgba(255, 184, 77, 0.25) 100%)',
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C]/20 via-transparent to-[#FFB84D]/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                  <CardHeader className="relative z-10">
+                    <div className="relative w-16 h-16 mb-4">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C] via-[#FFB84D] to-[#FF8F4D] rounded-xl blur-md opacity-70" />
+                      <div className="relative bg-gradient-to-br from-[#FF991C] to-[#FF8F4D] w-full h-full rounded-xl flex items-center justify-center shadow-lg">
+                        <Users className="h-8 w-8 text-black drop-shadow-lg" strokeWidth={2.5} />
+                      </div>
+                    </div>
+                    <CardTitle className="text-2xl text-[#F5F5F5] drop-shadow-lg">Create Classroom</CardTitle>
+                    <CardDescription className="text-[#F5F5F5]/90">
+                      Set up a new class and invite students
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </motion.div>
 
-              <Card className="bg-[#F5F5F5]/95 border-[#FF991C]/20 hover:border-[#FF991C]/50 transition-all cursor-pointer" onClick={handleCreateTest}>
-                <CardHeader>
-                  <div className="bg-[#FF991C]/20 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                    <FileText className="h-6 w-6 text-[#FF991C]" />
-                  </div>
-                  <CardTitle className="text-2xl text-black">Create Test</CardTitle>
-                  <CardDescription className="text-black/60">
-                    Design a new German language quiz
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+              <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
+                <Card 
+                  className="relative overflow-hidden cursor-pointer border-2 border-purple-400/40 backdrop-blur-sm shadow-xl hover:shadow-2xl hover:shadow-purple-400/30 transition-all duration-300"
+                  onClick={handleCreateTest}
+                  style={{
+                    background: 'radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.4) 0%, rgba(147, 51, 234, 0.2) 50%, rgba(126, 34, 206, 0.3) 100%), linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(147, 51, 234, 0.25) 100%)',
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-400/20 via-transparent to-purple-600/20 opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                  <CardHeader className="relative z-10">
+                    <div className="relative w-16 h-16 mb-4">
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600 rounded-xl blur-md opacity-70" />
+                      <div className="relative bg-gradient-to-br from-purple-400 to-purple-600 w-full h-full rounded-xl flex items-center justify-center shadow-lg">
+                        <FileText className="h-8 w-8 text-white drop-shadow-lg" strokeWidth={2.5} />
+                      </div>
+                    </div>
+                    <CardTitle className="text-2xl text-[#F5F5F5] drop-shadow-lg">Create Test</CardTitle>
+                    <CardDescription className="text-[#F5F5F5]/90">
+                      Design a new German language quiz
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </motion.div>
             </div>
           </motion.div>
         </main>

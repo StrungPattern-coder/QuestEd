@@ -216,18 +216,30 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: feature.delay }}
               viewport={{ once: true }}
+              whileHover={{ scale: 1.05 }}
               className="group"
             >
-              <div className="bg-[#F5F5F5] rounded-2xl p-6 sm:p-8 border-2 border-[#FF991C]/20 hover:border-[#FF991C] transition-all duration-300 h-full hover:shadow-2xl hover:shadow-[#FF991C]/20 md:hover:scale-105 md:hover:-translate-y-1">
-                <div className="inline-flex p-3 sm:p-4 rounded-xl bg-[#FF991C] mb-4 sm:mb-6 transition-transform duration-300 md:group-hover:scale-110">
-                  <feature.icon className="h-6 w-6 sm:h-8 sm:w-8 text-black" />
+              <div 
+                className="relative overflow-hidden rounded-2xl p-6 sm:p-8 border-2 border-[#FF991C]/40 backdrop-blur-sm transition-all duration-300 h-full shadow-xl hover:shadow-2xl hover:shadow-[#FF991C]/30"
+                style={{
+                  background: 'radial-gradient(circle at 50% 0%, rgba(255, 153, 28, 0.35) 0%, rgba(255, 143, 77, 0.15) 50%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(135deg, rgba(255, 153, 28, 0.25) 0%, rgba(255, 184, 77, 0.2) 100%)',
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C]/15 via-transparent to-[#FFB84D]/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="relative w-16 h-16 mb-4 sm:mb-6">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C] via-[#FFB84D] to-[#FF8F4D] rounded-xl blur-md opacity-70" />
+                    <div className="relative bg-gradient-to-br from-[#FF991C] to-[#FF8F4D] w-full h-full rounded-xl flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                      <feature.icon className="h-6 w-6 sm:h-8 sm:w-8 text-black drop-shadow-lg" strokeWidth={2.5} />
+                    </div>
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-semibold text-[#F5F5F5] mb-2 sm:mb-3 drop-shadow-lg">
+                    {feature.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#F5F5F5]/90 leading-relaxed">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-black mb-2 sm:mb-3 transition-colors md:group-hover:text-[#FF991C]">
-                  {feature.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-black/70 leading-relaxed">
-                  {feature.description}
-                </p>
               </div>
             </motion.div>
           ))}
