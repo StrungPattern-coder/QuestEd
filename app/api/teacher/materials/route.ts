@@ -3,6 +3,7 @@ import connectDB from '@/backend/utils/db';
 import Material from '@/backend/models/Material';
 import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
+import { publishMaterialAdded } from '@/backend/utils/ably-server';
 
 export const dynamic = 'force-dynamic';
 
@@ -91,6 +92,9 @@ export async function POST(request: NextRequest) {
     });
 
     const populatedMaterial = await Material.findById(material._id).populate('uploadedBy', 'name email');
+
+    // Publish real-time event to all students in the classroom
+    await publishMaterialAdded(classroomId, populatedMaterial);
 
     return NextResponse.json({ material: populatedMaterial }, { status: 201 });
   } catch (error: any) {

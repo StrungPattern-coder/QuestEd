@@ -62,3 +62,87 @@ export const publishLeaderboardUpdate = (testId: string, leaderboard: any[]) => 
   
   channel.publish('update', leaderboard);
 };
+
+// Materials real-time functions
+export const subscribeToClassroomMaterials = (
+  classroomId: string,
+  onMaterialAdded: (material: any) => void,
+  onMaterialDeleted: (materialId: string) => void
+) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`classroom-${classroomId}-materials`);
+  
+  channel.subscribe('material-added', (message) => {
+    onMaterialAdded(message.data);
+  });
+  
+  channel.subscribe('material-deleted', (message) => {
+    onMaterialDeleted(message.data.materialId);
+  });
+  
+  return () => {
+    channel.unsubscribe();
+  };
+};
+
+export const publishMaterialAdded = (classroomId: string, material: any) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`classroom-${classroomId}-materials`);
+  
+  channel.publish('material-added', material);
+};
+
+export const publishMaterialDeleted = (classroomId: string, materialId: string) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`classroom-${classroomId}-materials`);
+  
+  channel.publish('material-deleted', { materialId });
+};
+
+// Announcements real-time functions
+export const subscribeToClassroomAnnouncements = (
+  classroomId: string,
+  onAnnouncementAdded: (announcement: any) => void,
+  onAnnouncementUpdated: (announcement: any) => void,
+  onAnnouncementDeleted: (announcementId: string) => void
+) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`classroom-${classroomId}-announcements`);
+  
+  channel.subscribe('announcement-added', (message) => {
+    onAnnouncementAdded(message.data);
+  });
+  
+  channel.subscribe('announcement-updated', (message) => {
+    onAnnouncementUpdated(message.data);
+  });
+  
+  channel.subscribe('announcement-deleted', (message) => {
+    onAnnouncementDeleted(message.data.announcementId);
+  });
+  
+  return () => {
+    channel.unsubscribe();
+  };
+};
+
+export const publishAnnouncementAdded = (classroomId: string, announcement: any) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`classroom-${classroomId}-announcements`);
+  
+  channel.publish('announcement-added', announcement);
+};
+
+export const publishAnnouncementUpdated = (classroomId: string, announcement: any) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`classroom-${classroomId}-announcements`);
+  
+  channel.publish('announcement-updated', announcement);
+};
+
+export const publishAnnouncementDeleted = (classroomId: string, announcementId: string) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`classroom-${classroomId}-announcements`);
+  
+  channel.publish('announcement-deleted', { announcementId });
+};

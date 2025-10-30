@@ -3,6 +3,7 @@ import connectDB from '@/backend/utils/db';
 import Material from '@/backend/models/Material';
 import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
+import { publishMaterialDeleted } from '@/backend/utils/ably-server';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,7 +38,13 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized to delete this material' }, { status: 403 });
     }
 
+    const classroomId = material.classroomId.toString();
+    const materialId = params.id;
+
     await Material.findByIdAndDelete(params.id);
+
+    // Publish real-time event to all students in the classroom
+    await publishMaterialDeleted(classroomId, materialId);
 
     return NextResponse.json({ message: 'Material deleted successfully' });
   } catch (error: any) {

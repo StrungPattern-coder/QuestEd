@@ -3,6 +3,7 @@ import connectDB from '@/backend/utils/db';
 import Announcement from '@/backend/models/Announcement';
 import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
+import { publishAnnouncementUpdated, publishAnnouncementDeleted } from '@/backend/utils/ably-server';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,6 +49,9 @@ export async function PUT(
       { new: true }
     ).populate('createdBy', 'name email');
 
+    // Publish real-time event to all students in the classroom
+    await publishAnnouncementUpdated(announcement.classroomId.toString(), updatedAnnouncement);
+
     return NextResponse.json({ announcement: updatedAnnouncement });
   } catch (error: any) {
     console.error('Update announcement error:', error);
@@ -89,7 +93,13 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized to delete this announcement' }, { status: 403 });
     }
 
+    const classroomId = announcement.classroomId.toString();
+    const announcementId = params.id;
+
     await Announcement.findByIdAndDelete(params.id);
+
+    // Publish real-time event to all students in the classroom
+    await publishAnnouncementDeleted(classroomId, announcementId);
 
     return NextResponse.json({ message: 'Announcement deleted successfully' });
   } catch (error: any) {

@@ -3,6 +3,7 @@ import connectDB from '@/backend/utils/db';
 import Announcement from '@/backend/models/Announcement';
 import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
+import { publishAnnouncementAdded } from '@/backend/utils/ably-server';
 
 export const dynamic = 'force-dynamic';
 
@@ -90,6 +91,9 @@ export async function POST(request: NextRequest) {
 
     const populatedAnnouncement = await Announcement.findById(announcement._id)
       .populate('createdBy', 'name email');
+
+    // Publish real-time event to all students in the classroom
+    await publishAnnouncementAdded(classroomId, populatedAnnouncement);
 
     return NextResponse.json({ announcement: populatedAnnouncement }, { status: 201 });
   } catch (error: any) {

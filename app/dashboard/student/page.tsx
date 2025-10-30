@@ -14,6 +14,7 @@ import { useLanguage } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileNav from "@/components/MobileNav";
 import DashboardWalkthroughWrapper from "@/components/DashboardWalkthroughWrapper";
+import NotificationBell from "@/components/NotificationBell";
 
 interface Test {
   _id: string;
@@ -183,6 +184,7 @@ export default function StudentDashboard() {
 
             {/* Navigation Items */}
             <div className="flex items-center gap-4">
+              <NotificationBell userId={user?.id || ''} />
               <LanguageSwitcher />
               <Button 
                 onClick={() => router.push("/dashboard/student/live")}

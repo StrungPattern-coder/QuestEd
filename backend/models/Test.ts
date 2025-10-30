@@ -136,7 +136,8 @@ TestSchema.index(
 // Middleware to cascade delete questions when a test is deleted
 TestSchema.pre('deleteOne', { document: true, query: false }, async function(next) {
   try {
-    const Question = mongoose.model('Question');
+    // Import Question model to ensure it's registered
+    const Question = (await import('./Question')).default;
     await Question.deleteMany({ testId: this._id });
     next();
   } catch (error: any) {
@@ -149,7 +150,8 @@ TestSchema.pre('findOneAndDelete', async function(next) {
   try {
     const doc = await this.model.findOne(this.getFilter());
     if (doc) {
-      const Question = mongoose.model('Question');
+      // Import Question model to ensure it's registered
+      const Question = (await import('./Question')).default;
       await Question.deleteMany({ testId: doc._id });
     }
     next();
