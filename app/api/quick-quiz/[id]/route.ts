@@ -4,12 +4,14 @@ import Test from '@/backend/models/Test';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
-    const test = await Test.findById(params.id).populate('questions');
+    const { id } = await params;
+
+    const test = await Test.findById(id).populate('questions');
 
     if (!test) {
       return NextResponse.json(

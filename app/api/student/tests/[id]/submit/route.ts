@@ -9,10 +9,12 @@ import jwt from 'jsonwebtoken';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
+
+    const { id } = await params;
 
     // Get token from Authorization header
     const authHeader = request.headers.get('authorization');
@@ -30,14 +32,14 @@ export async function POST(
     const body = await request.json();
     const { answers } = body;
 
-    const test = await Test.findById(params.id).populate('questions');
+    const test = await Test.findById(id).populate('questions');
     if (!test) {
       return NextResponse.json({ error: 'Test not found' }, { status: 404 });
     }
 
     // Check if already submitted
     const existingSubmission = await Submission.findOne({
-      testId: params.id,
+      testId: id,
       studentId: decoded.userId,
     });
 
@@ -72,7 +74,7 @@ export async function POST(
 
     // Create submission
     const submission = await Submission.create({
-      testId: params.id,
+      testId: id,
       studentId: decoded.userId,
       answers: processedAnswers,
       score,

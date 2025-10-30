@@ -145,10 +145,11 @@ export default function QuickQuizTakePage() {
     setQuizStarted(true);
   };
 
-  const handleAnswerSubmit = () => {
+  const handleAnswerSubmit = async () => {
     if (!test) return;
 
     const currentQuestion = test.questions[currentQuestionIndex];
+    const answerTime = test.timeLimitPerQuestion - timeLeft; // Time taken to answer
     
     // correctAnswer is stored as the text, not the index
     // So we need to find which option matches the correctAnswer text
@@ -163,13 +164,35 @@ export default function QuickQuizTakePage() {
     newAnswers[currentQuestionIndex] = selectedAnswer ?? -1;
     setAnswers(newAnswers);
 
+    // Calculate new score
+    const newScore = correct ? currentScore + 1 : currentScore;
+
     // Update score
     if (correct) {
-      setCurrentScore(currentScore + 1);
+      setCurrentScore(newScore);
       playSoundEffect.correctAnswer();
       triggerRandomCelebration();
     } else {
       playSoundEffect.wrongAnswer();
+    }
+
+    // Publish answer to Ably for real-time leaderboard updates
+    try {
+      const ably = getAblyClient();
+      const channel = ably.channels.get(`quick-quiz-${testId}`);
+      
+      await channel.publish('answer-submitted', {
+        participantName,
+        questionIndex: currentQuestionIndex,
+        selectedAnswer: selectedAnswer ?? -1,
+        isCorrect: correct,
+        score: newScore,
+        timeToAnswer: answerTime,
+        timestamp: Date.now()
+      });
+    } catch (error) {
+      console.error('Error publishing answer to Ably:', error);
+      // Continue anyway - don't block the user
     }
   };
 

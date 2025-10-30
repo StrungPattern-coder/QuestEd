@@ -11,10 +11,13 @@ import jwt from 'jsonwebtoken';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
+
+    // Await params in Next.js 15
+    const { id } = await params;
 
     // Get token from Authorization header
     const authHeader = request.headers.get('authorization');
@@ -30,7 +33,7 @@ export async function GET(
     }
 
     // Fetch test with all related data
-    const test = await Test.findOne({ _id: params.id, teacherId: decoded.userId })
+    const test = await Test.findOne({ _id: id, teacherId: decoded.userId })
       .populate('classroomId', 'name students')
       .populate('questions');
 
@@ -39,7 +42,7 @@ export async function GET(
     }
 
     // Fetch all submissions for this test
-    const submissions = await Submission.find({ testId: params.id })
+    const submissions = await Submission.find({ testId: id })
       .populate('studentId', 'name email enrollmentNumber rollNumber')
       .sort({ score: -1, submittedAt: 1 });
 

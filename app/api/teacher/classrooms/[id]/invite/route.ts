@@ -13,10 +13,12 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await dbConnect();
+
+    const { id: classroomId } = await params;
 
     // Get token from header
     const token = request.headers.get('authorization')?.replace('Bearer ', '');
@@ -30,7 +32,6 @@ export async function POST(
       return NextResponse.json({ error: 'Only teachers can invite students' }, { status: 403 });
     }
 
-    const classroomId = params.id;
     const { studentEmail } = await request.json();
 
     if (!studentEmail || !studentEmail.trim()) {

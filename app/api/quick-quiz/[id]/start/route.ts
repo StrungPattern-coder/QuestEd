@@ -5,12 +5,12 @@ import Ably from 'ably';
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
-    const testId = params.id;
+    const { id: testId } = await params;
 
     // Find and update the test
     const test = await Test.findById(testId);

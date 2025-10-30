@@ -10,10 +10,12 @@ import jwt from 'jsonwebtoken';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
+
+    const { id } = await params;
 
     // Get token from Authorization header
     const authHeader = request.headers.get('authorization');
@@ -29,7 +31,7 @@ export async function GET(
     }
 
     const submission = await Submission.findOne({
-      testId: params.id,
+      testId: id,
       studentId: decoded.userId,
     }).populate({
       path: 'testId',
