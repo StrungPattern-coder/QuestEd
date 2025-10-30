@@ -2,13 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { studentApi } from "@/lib/api";
 import { Trophy, CheckCircle, XCircle, Loader2, Home, Target, Brain } from "lucide-react";
-import confetti from "canvas-confetti";
+import TrophyReveal from "@/components/TrophyReveal";
+import Podium from "@/components/Podium";
+import ShareResults from "@/components/ShareResults";
+import CertificateDownload from "@/components/CertificateDownload";
+import SoundToggle from "@/components/SoundToggle";
+import { celebrateAllWinners, celebratePodiumPlacement } from "@/lib/podiumCelebrations";
+import { playSoundEffect } from "@/lib/sounds";
 
 interface QuestionResult {
   questionText: string;
@@ -22,6 +28,8 @@ interface Result {
   score: number;
   maxScore: number;
   percentage: number;
+  placement?: number;
+  totalParticipants?: number;
   test: {
     title: string;
     classroom?: {
@@ -38,19 +46,41 @@ export default function TestResultPage() {
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<Result | null>(null);
+  const [showTrophyReveal, setShowTrophyReveal] = useState(false);
+  const [showPodium, setShowPodium] = useState(false);
+  const [userName, setUserName] = useState("Student");
 
   useEffect(() => {
     fetchResult();
+    // Get user name from localStorage
+    const user = localStorage.getItem('user');
+    if (user) {
+      try {
+        const userData = JSON.parse(user);
+        setUserName(userData.name || "Student");
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+      }
+    }
   }, [testId]);
 
   useEffect(() => {
-    if (result && result.percentage >= 80) {
-      confetti({
-        particleCount: 150,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ["#FF991C", "#FF8F4D", "#FFB280"],
-      });
+    if (result) {
+      // Play appropriate celebration based on score
+      if (result.percentage >= 80) {
+        playSoundEffect.winnerFanfare();
+        celebrateAllWinners();
+        
+        // Show trophy reveal if top 3
+        if (result.placement && result.placement <= 3) {
+          setTimeout(() => {
+            setShowTrophyReveal(true);
+            playSoundEffect.drumRoll();
+          }, 1000);
+        }
+      } else if (result.percentage >= 60) {
+        playSoundEffect.achievement();
+      }
     }
   }, [result]);
 
@@ -61,6 +91,17 @@ export default function TestResultPage() {
       setResult(response.data as any);
     }
     setLoading(false);
+  };
+
+  const handleTrophyRevealComplete = () => {
+    setShowTrophyReveal(false);
+    setShowPodium(true);
+    
+    // Celebrate based on placement
+    if (result?.placement && result.placement <= 3) {
+      celebratePodiumPlacement(result.placement as 1 | 2 | 3);
+      playSoundEffect.applause();
+    }
   };
 
   if (loading) {
@@ -114,12 +155,64 @@ export default function TestResultPage() {
 
   return (
     <div className="min-h-screen bg-black pb-20">
+      {/* Trophy Reveal Animation */}
+      <AnimatePresence>
+        {showTrophyReveal && result?.placement && result.placement <= 3 && (
+          <div onClick={handleTrophyRevealComplete}>
+            <TrophyReveal
+              placement={result.placement as 1 | 2 | 3}
+              playerName={userName}
+              score={result.score}
+              onAnimationComplete={handleTrophyRevealComplete}
+            />
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Sound Toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <SoundToggle />
+      </div>
+
       <div className="relative z-10 container mx-auto px-6 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-4xl mx-auto"
         >
+          {/* Podium Display for Top 3 */}
+          {showPodium && result?.placement && result.placement <= 3 && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mb-8"
+            >
+              <Podium
+                winners={[
+                  {
+                    name: userName,
+                    score: result.score,
+                    percentage: result.percentage,
+                    emoji: "🎯",
+                  },
+                  // Placeholder for other top performers - would come from API in real implementation
+                  ...(result.placement === 2 ? [{
+                    name: "1st Place",
+                    score: result.maxScore,
+                    percentage: 100,
+                    emoji: "🏆",
+                  }] : []),
+                  ...(result.placement === 3 ? [{
+                    name: "2nd Place",
+                    score: Math.floor(result.maxScore * 0.9),
+                    percentage: 90,
+                    emoji: "🥈",
+                  }] : []),
+                ].slice(0, 3)}
+              />
+            </motion.div>
+          )}
+
           {/* Score Card */}
           <Card className={`backdrop-blur-xl border-2 mb-8 ${getScoreBg(result.percentage)}`}>
             <CardContent className="p-8">
@@ -156,8 +249,31 @@ export default function TestResultPage() {
 
                 <Progress 
                   value={result.percentage} 
-                  className="h-3 bg-black/20 mb-4"
+                  className="h-3 bg-black/20 mb-6"
                 />
+
+                {/* Social Sharing & Certificates */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4">
+                  <ShareResults
+                    quizTitle={result.test.title}
+                    playerName={userName}
+                    score={result.score}
+                    totalQuestions={result.maxScore}
+                    percentage={result.percentage}
+                    placement={result.placement}
+                  />
+                  
+                  {result.percentage >= 60 && (
+                    <CertificateDownload
+                      playerName={userName}
+                      quizTitle={result.test.title}
+                      score={result.score}
+                      totalQuestions={result.maxScore}
+                      percentage={result.percentage}
+                      placement={result.placement && result.placement <= 3 ? result.placement as 1 | 2 | 3 : undefined}
+                    />
+                  )}
+                </div>
               </motion.div>
             </CardContent>
           </Card>

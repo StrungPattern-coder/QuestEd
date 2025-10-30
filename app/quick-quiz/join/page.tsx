@@ -1,17 +1,31 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Users, ArrowRight, Home } from 'lucide-react';
 import Link from 'next/link';
 
 export default function QuickQuizJoin() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [joinCode, setJoinCode] = useState('');
   const [participantName, setParticipantName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Pre-fill form from query parameters
+  useEffect(() => {
+    const codeParam = searchParams.get('code');
+    const nameParam = searchParams.get('name');
+    
+    if (codeParam) {
+      setJoinCode(codeParam.toUpperCase());
+    }
+    if (nameParam) {
+      setParticipantName(decodeURIComponent(nameParam));
+    }
+  }, [searchParams]);
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();

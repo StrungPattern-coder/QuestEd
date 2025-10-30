@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuthStore } from "@/lib/store";
 import { teacherApi } from "@/lib/api";
-import { Brain, Users, FileText, TrendingUp, Plus, LogOut, BookOpen, CheckCircle, Clock, Loader2, Bell, FolderOpen, HelpCircle } from "lucide-react";
+import { Brain, Users, FileText, TrendingUp, Plus, LogOut, BookOpen, CheckCircle, Clock, Loader2, Bell, FolderOpen, HelpCircle, Library } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
 
 interface Classroom {
@@ -457,6 +457,7 @@ export default function TeacherDashboard() {
                   {[
                     { label: "Create New Classroom", icon: Users, description: "Set up a new class", onClick: handleCreateClassroom },
                     { label: "Create New Test", icon: FileText, description: "Design a new quiz", onClick: handleCreateTest },
+                    { label: "Browse Templates", icon: Library, description: "Clone ready-made quizzes", onClick: () => router.push("/templates") },
                     { label: "View All Tests", icon: TrendingUp, description: "See all tests & results", onClick: () => router.push("/dashboard/teacher/tests/all") },
                     { label: "View Analytics", icon: TrendingUp, description: "Check performance", onClick: () => router.push("/dashboard/teacher/analytics") },
                     { label: "Question Bank", icon: HelpCircle, description: "Manage your questions", onClick: () => router.push("/dashboard/teacher/question-bank") },

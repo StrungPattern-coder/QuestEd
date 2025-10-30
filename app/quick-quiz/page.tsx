@@ -35,8 +35,8 @@ export default function QuickQuizPage() {
       setError("Please enter both join code and your name");
       return;
     }
-    // Redirect to join page with code
-    router.push(`/quick-quiz/join/${joinCode}?name=${encodeURIComponent(joiningName)}`);
+    // Redirect to join page with code and name as query params
+    router.push(`/quick-quiz/join?code=${joinCode.toUpperCase()}&name=${encodeURIComponent(joiningName)}`);
   };
 
   const addQuestion = () => {
