@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Users, ArrowRight, Home } from 'lucide-react';
 import Link from 'next/link';
 
-export default function QuickQuizJoin() {
+function QuickQuizJoinContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [joinCode, setJoinCode] = useState('');
@@ -199,5 +199,21 @@ export default function QuickQuizJoin() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Wrap the component in Suspense boundary
+export default function QuickQuizJoin() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    }>
+      <QuickQuizJoinContent />
+    </Suspense>
   );
 }
