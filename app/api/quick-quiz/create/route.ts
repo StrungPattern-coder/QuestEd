@@ -54,6 +54,12 @@ export async function POST(request: NextRequest) {
       hostName, // Store host name for display
     });
 
+    // Update questions with testId after test is created
+    await Question.updateMany(
+      { _id: { $in: questionIds } },
+      { $set: { testId: test._id } }
+    );
+
     return NextResponse.json({
       message: 'Quick quiz created successfully',
       test: {

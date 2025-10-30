@@ -1,5 +1,19 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
+/**
+ * Test Model
+ * 
+ * IMPORTANT: Automatic Cleanup Policy
+ * ====================================
+ * - Quick Quizzes (guest quizzes): Automatically deleted after 24 hours via TTL index
+ *   - Identified by: NO teacherId, NO classroomId, HAS hostName
+ *   - Related questions are cascaded deleted automatically
+ * 
+ * - Teacher Tests (classroom tests): Stored permanently for record-keeping
+ *   - Identified by: HAS teacherId OR classroomId
+ *   - Never auto-deleted, can only be manually deleted by teacher
+ */
+
 export interface ITest extends Document {
   classroomId?: mongoose.Types.ObjectId;
   teacherId?: mongoose.Types.ObjectId;
@@ -100,6 +114,49 @@ const TestSchema: Schema<ITest> = new Schema(
 TestSchema.index({ classroomId: 1 });
 TestSchema.index({ teacherId: 1 });
 TestSchema.index({ startTime: 1, endTime: 1 });
+
+// TTL Index for Quick Quizzes ONLY (automatic cleanup after 24 hours)
+// This ONLY applies to guest/quick quizzes without teachers or classrooms
+// Teacher-created tests are preserved forever for record-keeping
+TestSchema.index(
+  { createdAt: 1 }, 
+  { 
+    expireAfterSeconds: 86400, // 24 hours = 86400 seconds
+    partialFilterExpression: { 
+      $and: [
+        { teacherId: { $exists: false } },      // No teacher = quick quiz
+        { classroomId: { $exists: false } },    // No classroom = quick quiz
+        { hostName: { $exists: true } }         // Has hostName = quick quiz
+      ]
+    },
+    name: 'quick_quiz_ttl_index'
+  }
+);
+
+// Middleware to cascade delete questions when a test is deleted
+TestSchema.pre('deleteOne', { document: true, query: false }, async function(next) {
+  try {
+    const Question = mongoose.model('Question');
+    await Question.deleteMany({ testId: this._id });
+    next();
+  } catch (error: any) {
+    next(error);
+  }
+});
+
+// Handle findOneAndDelete and findByIdAndDelete
+TestSchema.pre('findOneAndDelete', async function(next) {
+  try {
+    const doc = await this.model.findOne(this.getFilter());
+    if (doc) {
+      const Question = mongoose.model('Question');
+      await Question.deleteMany({ testId: doc._id });
+    }
+    next();
+  } catch (error: any) {
+    next(error);
+  }
+});
 
 const Test: Model<ITest> = mongoose.models.Test || mongoose.model<ITest>('Test', TestSchema);
 

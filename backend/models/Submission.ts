@@ -4,6 +4,8 @@ interface IAnswer {
   questionId: mongoose.Types.ObjectId;
   selectedAnswer: string;
   isCorrect: boolean;
+  points?: number; // Points earned for this answer (for live tests with time-based scoring)
+  timeSpent?: number; // Time spent on this question in seconds
 }
 
 export interface ISubmission extends Document {
@@ -11,6 +13,7 @@ export interface ISubmission extends Document {
   studentId: mongoose.Types.ObjectId;
   answers: IAnswer[];
   score: number;
+  maxScore?: number; // Maximum possible score
   submittedAt: Date;
   submittedLate: boolean;
 }
@@ -29,6 +32,15 @@ const AnswerSchema = new Schema(
     isCorrect: {
       type: Boolean,
       required: true,
+    },
+    points: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    timeSpent: {
+      type: Number,
+      min: 0,
     },
   },
   { _id: false }
@@ -50,6 +62,10 @@ const SubmissionSchema: Schema<ISubmission> = new Schema(
     score: {
       type: Number,
       required: true,
+      min: 0,
+    },
+    maxScore: {
+      type: Number,
       min: 0,
     },
     submittedAt: {

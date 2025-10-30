@@ -14,7 +14,7 @@ const QuestionSchema: Schema<IQuestion> = new Schema(
     testId: {
       type: Schema.Types.ObjectId,
       ref: 'Test',
-      required: [true, 'Test ID is required'],
+      required: false, // Made optional for quick quiz questions
     },
     questionText: {
       type: String,

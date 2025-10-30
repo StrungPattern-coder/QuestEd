@@ -73,11 +73,20 @@ export default function StudentProfilePage() {
         },
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       
+      if (data.error) {
+        console.error('API Error:', data.error);
+        return;
+      }
+      
       if (data.tests) {
-        // Filter tests that have been completed
-        const completedTests = data.tests.filter((test: any) => test.hasSubmitted);
+        // Filter tests that have been completed and have submission data
+        const completedTests = data.tests.filter((test: any) => test.hasSubmitted && test.submission);
         
         // Calculate statistics
         let totalScore = 0;
@@ -90,22 +99,28 @@ export default function StudentProfilePage() {
         const submissionsData: Submission[] = [];
 
         completedTests.forEach((test: any) => {
-          const percentage = (test.score / test.questions.length) * 100;
-          totalScore += percentage;
-          totalPossible += test.questions.length;
-          totalQuestions += test.questions.length;
-          correctAnswers += test.score;
+          // Get score from submission object
+          const score = test.submission?.score || 0;
+          const questionCount = test.questions?.length || 0;
+          
+          if (questionCount > 0) {
+            const percentage = (score / questionCount) * 100;
+            totalScore += percentage;
+            totalPossible += questionCount;
+            totalQuestions += questionCount;
+            correctAnswers += score;
 
-          if (percentage > highest) highest = percentage;
-          if (percentage < lowest) lowest = percentage;
+            if (percentage > highest) highest = percentage;
+            if (percentage < lowest) lowest = percentage;
 
-          submissionsData.push({
-            _id: test._id,
-            testId: test,
-            score: test.score,
-            submittedAt: test.submittedAt || new Date().toISOString(),
-            answers: [],
-          });
+            submissionsData.push({
+              _id: test._id,
+              testId: test,
+              score: score,
+              submittedAt: test.submission?.submittedAt || new Date().toISOString(),
+              answers: [],
+            });
+          }
         });
 
         const averageScore = completedTests.length > 0 ? totalScore / completedTests.length : 0;
@@ -439,7 +454,11 @@ export default function StudentProfilePage() {
               ) : (
                 <div className="space-y-4">
                   {submissions.slice(0, 10).map((submission) => {
-                    const percentage = (submission.score / submission.testId.questions.length) * 100;
+                    // Add null checks for safety
+                    const questionCount = submission.testId?.questions?.length || 1;
+                    const percentage = (submission.score / questionCount) * 100;
+                    const classroomName = submission.testId?.classroomId?.name || 'Unknown Classroom';
+                    
                     return (
                       <div
                         key={submission._id}
@@ -447,10 +466,10 @@ export default function StudentProfilePage() {
                       >
                         <div className="flex-1">
                           <h3 className="font-semibold text-black mb-1">
-                            {submission.testId.title}
+                            {submission.testId?.title || 'Untitled Test'}
                           </h3>
                           <p className="text-sm text-black/60">
-                            {submission.testId.classroomId.name}
+                            {classroomName}
                           </p>
                         </div>
                         <div className="flex items-center gap-4">
@@ -462,14 +481,16 @@ export default function StudentProfilePage() {
                               {percentage.toFixed(0)}%
                             </p>
                             <p className="text-xs text-black/50">
-                              {submission.score}/{submission.testId.questions.length}
+                              {submission.score}/{questionCount}
                             </p>
                           </div>
-                          <Link href={`/dashboard/student/tests/${submission.testId._id}/result`}>
-                            <Button variant="outline" size="sm" className="border-[#FF991C]/30 hover:bg-[#FF991C]/10">
-                              View
-                            </Button>
-                          </Link>
+                          {submission.testId?._id && (
+                            <Link href={`/dashboard/student/tests/${submission.testId._id}/result`}>
+                              <Button variant="outline" size="sm" className="border-[#FF991C]/30 hover:bg-[#FF991C]/10">
+                                View
+                              </Button>
+                            </Link>
+                          )}
                         </div>
                       </div>
                     );

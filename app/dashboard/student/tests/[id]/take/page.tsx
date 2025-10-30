@@ -7,9 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { studentApi } from "@/lib/api";
-import { publishLeaderboardUpdate } from "@/lib/ably";
+import { publishLeaderboardUpdate, subscribeToLeaderboard } from "@/lib/ably";
 import { Brain, Clock, CheckCircle, XCircle, Loader2, ArrowRight, Trophy } from "lucide-react";
+import { triggerRandomCelebration } from "@/lib/celebrations";
 import confetti from "canvas-confetti";
+
+interface LeaderboardEntry {
+  studentId: string;
+  studentName: string;
+  score: number;
+  position: number;
+  answeredQuestions: number;
+}
 
 interface Question {
   _id: string;
@@ -45,10 +54,27 @@ export default function TakeTestPage() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [testComplete, setTestComplete] = useState(false);
+  const [isLiveTest, setIsLiveTest] = useState(false);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [currentScore, setCurrentScore] = useState(0);
+  const [questionStartTime, setQuestionStartTime] = useState(Date.now());
 
   useEffect(() => {
     fetchTest();
   }, [testId]);
+
+  useEffect(() => {
+    // Subscribe to leaderboard updates for live tests
+    if (test && isLiveTest) {
+      const unsubscribe = subscribeToLeaderboard(testId, (data) => {
+        setLeaderboard(data);
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [test, isLiveTest, testId]);
 
   useEffect(() => {
     if (test && timeLeft > 0 && !showFeedback) {
@@ -68,13 +94,41 @@ export default function TakeTestPage() {
       setTest(testData.test);
       setTimeLeft(testData.test.timeLimitPerQuestion);
       setAnswers(new Array(testData.test.questions.length).fill(-1));
+      setIsLiveTest(testData.test.mode === 'live');
+      setQuestionStartTime(Date.now());
+      
+      // If it's a live test, join it and initialize leaderboard
+      if (testData.test.mode === 'live') {
+        await joinLiveTest();
+      }
     } else {
       router.push("/dashboard/student");
     }
     setLoading(false);
   };
 
-  const handleAnswerSubmit = () => {
+  const joinLiveTest = async () => {
+    try {
+      const response = await fetch(`/api/student/tests/${testId}/join-live`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setLeaderboard(data.leaderboard || []);
+        // Broadcast updated leaderboard to all participants
+        publishLeaderboardUpdate(testId, data.leaderboard);
+      }
+    } catch (error) {
+      console.error('Error joining live test:', error);
+    }
+  };
+
+  const handleAnswerSubmit = async () => {
     if (!test) return;
 
     const currentQuestion = test.questions[currentQuestionIndex];
@@ -87,13 +141,39 @@ export default function TakeTestPage() {
     newAnswers[currentQuestionIndex] = selectedAnswer ?? -1;
     setAnswers(newAnswers);
 
+    // For live tests, submit answer to API and update leaderboard
+    if (isLiveTest) {
+      try {
+        const timeSpent = Math.floor((Date.now() - questionStartTime) / 1000);
+        const response = await fetch(`/api/student/tests/${testId}/submit-question`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify({
+            questionId: currentQuestion._id,
+            selectedAnswer: selectedAnswer ?? -1,
+            questionIndex: currentQuestionIndex,
+            timeSpent,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setCurrentScore(data.currentScore);
+          setLeaderboard(data.leaderboard || []);
+          // Broadcast updated leaderboard to all participants
+          publishLeaderboardUpdate(testId, data.leaderboard);
+        }
+      } catch (error) {
+        console.error('Error submitting answer:', error);
+      }
+    }
+
     if (correct) {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ["#FF991C", "#FF8F4D", "#FFB280"],
-      });
+      // Trigger random celebration animation for correct answers
+      triggerRandomCelebration();
     }
   };
 
@@ -106,6 +186,7 @@ export default function TakeTestPage() {
     if (currentQuestionIndex < test.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setTimeLeft(test.timeLimitPerQuestion);
+      setQuestionStartTime(Date.now()); // Reset timer for next question
     } else {
       submitTest();
     }
@@ -116,44 +197,29 @@ export default function TakeTestPage() {
 
     setSubmitting(true);
     
-    const formattedAnswers = test.questions.map((question, index) => ({
-      questionId: question._id,
-      selectedAnswer: answers[index],
-    }));
+    // For non-live tests, use the traditional submission
+    if (!isLiveTest) {
+      const formattedAnswers = test.questions.map((question, index) => ({
+        questionId: question._id,
+        selectedAnswer: answers[index],
+      }));
 
-    const response = await studentApi.submitTest(testId, formattedAnswers);
-    
-    if (response.data) {
-      // Calculate score for live leaderboard
-      const score = answers.reduce((total, answer, idx) => {
-        return total + (answer === test.questions[idx].correctAnswer ? 1 : 0);
-      }, 0);
-
-      // Publish to live leaderboard if it's a live test
-      if (test.mode === 'live') {
-        const userId = localStorage.getItem('userId');
-        const userName = localStorage.getItem('userName') || 'Anonymous';
-        
-        // Note: In production, you'd fetch the current leaderboard and update it
-        // For now, we'll just publish this user's score
-        publishLeaderboardUpdate(testId, [{
-          studentId: userId || '',
-          studentName: userName,
-          score: score,
-          position: 1,
-          answeredQuestions: answers.filter(a => a !== -1).length,
-        }]);
-      }
-
-      setTestComplete(true);
-      confetti({
-        particleCount: 200,
-        spread: 100,
-        origin: { y: 0.5 },
-        colors: ["#FF991C", "#FF8F4D", "#FFB280"],
-      });
+      const response = await studentApi.submitTest(testId, formattedAnswers);
       
-      // Redirect to results after 3 seconds
+      if (response.data) {
+        setTestComplete(true);
+        triggerRandomCelebration();
+        
+        setTimeout(() => {
+          router.push(`/dashboard/student/tests/${testId}/result`);
+        }, 3000);
+      }
+    } else {
+      // For live tests, all answers are already submitted
+      // Just mark as complete and redirect
+      setTestComplete(true);
+      triggerRandomCelebration();
+      
       setTimeout(() => {
         router.push(`/dashboard/student/tests/${testId}/result`);
       }, 3000);
