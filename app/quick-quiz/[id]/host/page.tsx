@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Copy, Users, Play, Trophy, X } from 'lucide-react';
+import { getAblyClient } from '@/lib/ably';
 
 interface Participant {
   name: string;
@@ -33,6 +34,26 @@ export default function QuickQuizHost() {
 
     // Fetch test details
     fetchTestDetails();
+
+    // Subscribe to participant joins via Ably
+    const ably = getAblyClient();
+    const channel = ably.channels.get(`quick-quiz-${testId}`);
+    
+    channel.subscribe('participant-joined', (message: any) => {
+      const { participantName } = message.data;
+      setParticipants((prev) => {
+        // Avoid duplicates
+        if (prev.some(p => p.name === participantName)) {
+          return prev;
+        }
+        return [...prev, { name: participantName, joinedAt: new Date() }];
+      });
+    });
+
+    // Cleanup
+    return () => {
+      channel.unsubscribe('participant-joined');
+    };
   }, [testId]);
 
   const fetchTestDetails = async () => {

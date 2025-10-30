@@ -6,19 +6,21 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Brain, Clock, CheckCircle, XCircle, Loader2, ArrowRight, Trophy, Users } from "lucide-react";
+import { Brain, Clock, CheckCircle, XCircle, Loader2, ArrowRight, Trophy, Users, X } from "lucide-react";
 import { triggerRandomCelebration } from "@/lib/celebrations";
 import ShareResults from "@/components/ShareResults";
 import CertificateDownload from "@/components/CertificateDownload";
 import SoundToggle from "@/components/SoundToggle";
 import { celebrateAllWinners } from "@/lib/podiumCelebrations";
 import { playSoundEffect } from "@/lib/sounds";
+import TrophyReveal from "@/components/TrophyReveal";
+import Podium from "@/components/Podium";
 
 interface Question {
   _id: string;
   questionText: string;
   options: string[];
-  correctAnswer: number;
+  correctAnswer: string; // Changed from number to string (stores the actual answer text)
 }
 
 interface Test {
@@ -112,7 +114,12 @@ export default function QuickQuizTakePage() {
     if (!test) return;
 
     const currentQuestion = test.questions[currentQuestionIndex];
-    const correct = selectedAnswer === currentQuestion.correctAnswer;
+    
+    // correctAnswer is stored as the text, not the index
+    // So we need to find which option matches the correctAnswer text
+    const correctIndex = currentQuestion.options.indexOf(currentQuestion.correctAnswer);
+    const correct = selectedAnswer === correctIndex;
+    
     setIsCorrect(correct);
     setShowFeedback(true);
 
@@ -176,96 +183,14 @@ export default function QuickQuizTakePage() {
   if (testComplete) {
     const percentage = Math.round((currentScore / test.questions.length) * 100);
     
-    // Trigger celebrations on mount
-    useEffect(() => {
-      if (percentage >= 80) {
-        playSoundEffect.winnerFanfare();
-        celebrateAllWinners();
-      } else if (percentage >= 60) {
-        playSoundEffect.achievement();
-        triggerRandomCelebration();
-      }
-    }, []);
-    
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4">
-        {/* Sound Toggle */}
-        <div className="fixed top-4 right-4 z-50">
-          <SoundToggle />
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="max-w-2xl mx-auto mt-20"
-        >
-          <Card className="text-center p-8">
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            >
-              <Trophy className="w-20 h-20 text-yellow-500 mx-auto mb-4" />
-            </motion.div>
-            <h1 className="text-3xl font-bold mb-2">Quiz Complete!</h1>
-            <p className="text-xl text-gray-600 mb-6">
-              Great job, {participantName}!
-            </p>
-            
-            <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-xl p-6 mb-6">
-              <div className="text-5xl font-bold text-purple-600 mb-2">
-                {currentScore}/{test.questions.length}
-              </div>
-              <div className="text-gray-700">
-                {percentage}% Correct
-              </div>
-              <Progress value={percentage} className="mt-4 h-2" />
-            </div>
-
-            <div className="space-y-2 mb-6">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Questions Answered:</span>
-                <span className="font-semibold">{test.questions.length}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Correct Answers:</span>
-                <span className="font-semibold text-green-600">{currentScore}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Incorrect Answers:</span>
-                <span className="font-semibold text-red-600">{test.questions.length - currentScore}</span>
-              </div>
-            </div>
-
-            {/* Share and Certificate Options */}
-            <div className="space-y-4 mb-6">
-              <ShareResults
-                quizTitle={test.title}
-                playerName={participantName}
-                score={currentScore}
-                totalQuestions={test.questions.length}
-                percentage={percentage}
-                className="justify-center"
-              />
-              
-              {percentage >= 60 && (
-                <CertificateDownload
-                  playerName={participantName}
-                  quizTitle={test.title}
-                  score={currentScore}
-                  totalQuestions={test.questions.length}
-                  percentage={percentage}
-                  className="justify-center"
-                />
-              )}
-            </div>
-
-            <Button onClick={handleReturnHome} className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600">
-              Back to Home
-            </Button>
-          </Card>
-        </motion.div>
-      </div>
+      <CompletionResults
+        test={test}
+        participantName={participantName}
+        currentScore={currentScore}
+        percentage={percentage}
+        onReturnHome={handleReturnHome}
+      />
     );
   }
 
@@ -415,7 +340,8 @@ export default function QuickQuizTakePage() {
                 <div className="space-y-3">
                   {currentQuestion.options.map((option, index) => {
                     const isSelected = selectedAnswer === index;
-                    const isCorrectAnswer = index === currentQuestion.correctAnswer;
+                    // correctAnswer is the text, so compare option text with it
+                    const isCorrectAnswer = option === currentQuestion.correctAnswer;
                     const showCorrect = showFeedback && isCorrectAnswer;
                     const showIncorrect = showFeedback && isSelected && !isCorrectAnswer;
 
@@ -478,6 +404,182 @@ export default function QuickQuizTakePage() {
           </motion.div>
         </AnimatePresence>
       </div>
+    </div>
+  );
+}
+
+// Separate component for completion results to avoid React hooks issues
+function CompletionResults({
+  test,
+  participantName,
+  currentScore,
+  percentage,
+  onReturnHome,
+}: {
+  test: Test;
+  participantName: string;
+  currentScore: number;
+  percentage: number;
+  onReturnHome: () => void;
+}) {
+  const [showTrophyReveal, setShowTrophyReveal] = useState(false);
+  const [showPodium, setShowPodium] = useState(false);
+  const [celebrationsTriggered, setCelebrationsTriggered] = useState(false);
+
+  useEffect(() => {
+    // Trigger celebrations only once
+    if (!celebrationsTriggered) {
+      if (percentage >= 80) {
+        playSoundEffect.winnerFanfare();
+        celebrateAllWinners();
+        // Show trophy reveal for high scores
+        setTimeout(() => setShowTrophyReveal(true), 500);
+      } else if (percentage >= 60) {
+        playSoundEffect.achievement();
+        triggerRandomCelebration();
+      }
+      setCelebrationsTriggered(true);
+    }
+  }, [percentage, celebrationsTriggered]);
+
+  // When trophy is dismissed, show podium
+  const handleTrophyDismiss = () => {
+    setShowTrophyReveal(false);
+    setTimeout(() => setShowPodium(true), 300);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4">
+      {/* Sound Toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <SoundToggle />
+      </div>
+
+      {/* Trophy Reveal for high scores */}
+      {showTrophyReveal && percentage >= 80 && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={handleTrophyDismiss}
+        >
+          <TrophyReveal
+            placement={1}
+            playerName={participantName}
+            score={currentScore}
+            onAnimationComplete={handleTrophyDismiss}
+          />
+        </div>
+      )}
+
+      {/* Podium Display */}
+      {showPodium && percentage >= 80 && (
+        <div className="fixed inset-0 z-40 bg-black/50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative max-w-4xl w-full"
+          >
+            <button
+              onClick={() => setShowPodium(false)}
+              className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 hover:bg-gray-100"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <Podium
+              winners={[
+                {
+                  name: participantName,
+                  score: currentScore,
+                  percentage: percentage,
+                  emoji: percentage >= 95 ? "🏆" : percentage >= 90 ? "🌟" : "🎯",
+                },
+              ]}
+            />
+          </motion.div>
+        </div>
+      )}
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-2xl mx-auto mt-20"
+      >
+        <Card className="text-center p-8">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+          >
+            <Trophy className="w-20 h-20 text-yellow-500 mx-auto mb-4" />
+          </motion.div>
+          <h1 className="text-3xl font-bold mb-2">Quiz Complete!</h1>
+          <p className="text-xl text-gray-600 mb-6">
+            Great job, {participantName}!
+          </p>
+          
+          <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-xl p-6 mb-6">
+            <div className="text-5xl font-bold text-purple-600 mb-2">
+              {currentScore}/{test.questions.length}
+            </div>
+            <div className="text-gray-700">
+              {percentage}% Correct
+            </div>
+            <Progress value={percentage} className="mt-4 h-2" />
+          </div>
+
+          <div className="space-y-2 mb-6">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">Questions Answered:</span>
+              <span className="font-semibold">{test.questions.length}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">Correct Answers:</span>
+              <span className="font-semibold text-green-600">{currentScore}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">Incorrect Answers:</span>
+              <span className="font-semibold text-red-600">{test.questions.length - currentScore}</span>
+            </div>
+          </div>
+
+          {/* Show podium button for high scores */}
+          {percentage >= 80 && (
+            <Button
+              onClick={() => setShowPodium(true)}
+              className="w-full mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600"
+            >
+              <Trophy className="w-4 h-4 mr-2" />
+              View Victory Podium
+            </Button>
+          )}
+
+          {/* Share and Certificate Options */}
+          <div className="space-y-4 mb-6">
+            <ShareResults
+              quizTitle={test.title}
+              playerName={participantName}
+              score={currentScore}
+              totalQuestions={test.questions.length}
+              percentage={percentage}
+              className="justify-center"
+            />
+            
+            {percentage >= 60 && (
+              <CertificateDownload
+                playerName={participantName}
+                quizTitle={test.title}
+                score={currentScore}
+                totalQuestions={test.questions.length}
+                percentage={percentage}
+                className="justify-center"
+              />
+            )}
+          </div>
+
+          <Button onClick={onReturnHome} className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600">
+            Back to Home
+          </Button>
+        </Card>
+      </motion.div>
     </div>
   );
 }
