@@ -647,6 +647,231 @@ Never share your password or reset link with anyone.
       `,
     };
   },
+
+  // Welcome email for new users
+  welcome: (data: {
+    userName: string;
+    userEmail: string;
+    role: 'student' | 'teacher';
+    dashboardLink: string;
+  }) => {
+    const { userName, role, dashboardLink } = data;
+    const roleTitle = role === 'teacher' ? 'Teacher' : 'Student';
+    const features = role === 'teacher' 
+      ? [
+          '📚 Create and manage classrooms',
+          '📝 Design custom tests and quizzes',
+          '⚡ Host live quick quizzes',
+          '📊 Track student performance',
+          '🏆 View leaderboards and analytics'
+        ]
+      : [
+          '🎓 Join classrooms with ease',
+          '📝 Take tests and quizzes',
+          '⚡ Participate in live quizzes',
+          '📊 Track your progress',
+          '🏆 Compete on leaderboards'
+        ];
+
+    return {
+      subject: `Welcome to QuestEd! 🎉`,
+      html: `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to QuestEd</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Audiowide', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background-color: #000000;
+      color: #F5F5F5;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    .card {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(255, 162, 102, 0.2);
+      border: 1px solid rgba(255, 162, 102, 0.3);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo {
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-center;
+      font-size: 48px;
+      font-weight: bold;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 16px rgba(255, 162, 102, 0.4);
+    }
+    h1 {
+      color: #FF991C;
+      font-size: 28px;
+      margin: 0;
+      text-shadow: 0 2px 8px rgba(255, 162, 102, 0.3);
+    }
+    .greeting {
+      font-size: 18px;
+      color: #F5F5F5;
+      margin-bottom: 20px;
+    }
+    .role-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .feature-list {
+      margin: 20px 0;
+      padding: 20px;
+      background: rgba(255, 162, 102, 0.1);
+      border-radius: 12px;
+      border-left: 4px solid #FF991C;
+    }
+    .feature-item {
+      margin: 12px 0;
+      font-size: 15px;
+      color: #F5F5F5;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #FF991C 0%, #FF8F4D 100%);
+      color: #000 !important;
+      padding: 16px 32px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 24px 0;
+      box-shadow: 0 4px 16px rgba(255, 162, 102, 0.4);
+      transition: transform 0.2s;
+    }
+    .button-container {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .info-box {
+      background: rgba(255, 162, 102, 0.15);
+      border: 1px solid rgba(255, 162, 102, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      color: #F5F5F5;
+    }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 162, 102, 0.2);
+      text-align: center;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="logo">Q</div>
+        <h1>🎉 Welcome to QuestEd!</h1>
+      </div>
+      
+      <p class="greeting">Hi <strong>${userName}</strong>,</p>
+      
+      <div style="text-align: center;">
+        <span class="role-badge">${roleTitle} Account</span>
+      </div>
+      
+      <div class="info-box">
+        <p style="margin: 0; font-size: 16px;">
+          <strong>🚀 Your account is ready!</strong><br>
+          Thank you for joining QuestEd - the interactive learning platform that makes education engaging and fun!
+        </p>
+      </div>
+      
+      <div class="feature-list">
+        <p style="margin-top: 0; font-weight: bold; color: #FF991C; margin-bottom: 16px;">
+          ✨ What you can do as a ${roleTitle}:
+        </p>
+        ${features.map(feature => `<div class="feature-item">${feature}</div>`).join('')}
+      </div>
+      
+      <div class="button-container">
+        <a href="${dashboardLink}" class="cta-button">
+          Go to Dashboard →
+        </a>
+      </div>
+      
+      <div class="info-box">
+        <p style="margin: 0;">
+          <strong>💡 Pro Tips:</strong><br>
+          ${role === 'teacher' 
+            ? '• Start by creating your first classroom<br>• Invite students using their email addresses<br>• Create your first test or try a quick quiz'
+            : '• Wait for your teacher to invite you to a classroom<br>• Check notifications for class invites<br>• Join live quizzes using join codes'
+          }
+        </p>
+      </div>
+      
+      <div class="footer">
+        <p>
+          Need help? Check out our <a href="${dashboardLink}/how-to-use" style="color: #FF991C; text-decoration: none;">How to Use Guide</a>
+        </p>
+        <p style="margin-top: 12px;">
+          © 2025 QuestEd - Interactive Learning Platform
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+      `,
+      text: `
+Hi ${userName},
+
+🎉 Welcome to QuestEd!
+
+Your ${roleTitle} account is ready!
+Thank you for joining QuestEd - the interactive learning platform that makes education engaging and fun!
+
+✨ What you can do as a ${roleTitle}:
+${features.join('\n')}
+
+Get Started: ${dashboardLink}
+
+💡 Pro Tips:
+${role === 'teacher' 
+  ? '• Start by creating your first classroom\n• Invite students using their email addresses\n• Create your first test or try a quick quiz'
+  : '• Wait for your teacher to invite you to a classroom\n• Check notifications for class invites\n• Join live quizzes using join codes'
+}
+
+Need help? Check out our How to Use Guide: ${dashboardLink}/how-to-use
+
+© 2025 QuestEd - Interactive Learning Platform
+      `,
+    };
+  },
 };
 
 // Helper function to send classroom invitation
@@ -699,6 +924,23 @@ export const sendPasswordResetEmail = async (data: {
     resetLink: data.resetLink,
     expiresIn: data.expiresIn || '1 hour',
   });
+  
+  return await sendEmail({
+    to: data.userEmail,
+    subject: template.subject,
+    html: template.html,
+    text: template.text,
+  });
+};
+
+// Helper function to send welcome email to new users
+export const sendWelcomeEmail = async (data: {
+  userName: string;
+  userEmail: string;
+  role: 'student' | 'teacher';
+  dashboardLink: string;
+}) => {
+  const template = emailTemplates.welcome(data);
   
   return await sendEmail({
     to: data.userEmail,

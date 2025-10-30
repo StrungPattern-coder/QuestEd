@@ -19,13 +19,12 @@ export async function POST(request: NextRequest) {
     // Find test by join code
     const test = await Test.findOne({ 
       joinCode: joinCode.toUpperCase(),
-      isActive: true,
-      isCompleted: false,
+      isCompleted: false, // Only check if not completed
     });
 
     if (!test) {
       return NextResponse.json(
-        { error: 'Quiz not found or no longer active' },
+        { error: 'Quiz not found or has ended' },
         { status: 404 }
       );
     }

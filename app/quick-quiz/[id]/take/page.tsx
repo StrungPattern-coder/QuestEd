@@ -15,6 +15,7 @@ import { celebrateAllWinners } from "@/lib/podiumCelebrations";
 import { playSoundEffect } from "@/lib/sounds";
 import TrophyReveal from "@/components/TrophyReveal";
 import Podium from "@/components/Podium";
+import { getAblyClient } from "@/lib/ably";
 
 interface Question {
   _id: string;
@@ -49,6 +50,7 @@ export default function QuickQuizTakePage() {
   const [testComplete, setTestComplete] = useState(false);
   const [currentScore, setCurrentScore] = useState(0);
   const [quizStarted, setQuizStarted] = useState(false);
+  const [waitingForHost, setWaitingForHost] = useState(true);
 
   useEffect(() => {
     // Get participant info from sessionStorage
@@ -58,6 +60,39 @@ export default function QuickQuizTakePage() {
       setParticipantName(parsed.name);
       if (parsed.testId === testId) {
         fetchTest();
+        
+        // Subscribe to quiz start event
+        try {
+          const ably = getAblyClient();
+          const channel = ably.channels.get(`quick-quiz-${testId}`);
+          
+          channel.subscribe('quiz-started', (message: any) => {
+            setWaitingForHost(false);
+            setQuizStarted(false); // Reset to show "Start Quiz" button
+          });
+          
+          // Cleanup
+          return () => {
+            channel.unsubscribe('quiz-started');
+          };
+        } catch (error) {
+          console.error('Ably connection error:', error);
+          // Fallback: Check test.isActive status via polling
+          const checkInterval = setInterval(async () => {
+            try {
+              const response = await fetch(`/api/quick-quiz/${testId}`);
+              const data = await response.json();
+              if (data.test.isActive) {
+                setWaitingForHost(false);
+                clearInterval(checkInterval);
+              }
+            } catch (err) {
+              console.error('Polling error:', err);
+            }
+          }, 3000); // Check every 3 seconds
+          
+          return () => clearInterval(checkInterval);
+        }
       } else {
         router.push('/quick-quiz/join');
       }
@@ -191,6 +226,73 @@ export default function QuickQuizTakePage() {
         percentage={percentage}
         onReturnHome={handleReturnHome}
       />
+    );
+  }
+
+  // Show waiting screen if host hasn't started the quiz yet
+  if (waitingForHost) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md w-full"
+        >
+          <Card className="text-center p-8">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+              className="mb-6"
+            >
+              <Users className="w-20 h-20 text-purple-600 mx-auto" />
+            </motion.div>
+            
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Waiting for Host...
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Hi {participantName}! You've joined successfully.
+            </p>
+            
+            <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4 mb-6">
+              <p className="text-sm text-purple-900 font-medium">
+                The quiz will start soon!
+              </p>
+              <p className="text-xs text-purple-700 mt-2">
+                The host will start the quiz when everyone is ready.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-2 text-gray-500">
+              <motion.div
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <div className="w-2 h-2 bg-purple-500 rounded-full" />
+              </motion.div>
+              <motion.div
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+              >
+                <div className="w-2 h-2 bg-purple-500 rounded-full" />
+              </motion.div>
+              <motion.div
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
+              >
+                <div className="w-2 h-2 bg-purple-500 rounded-full" />
+              </motion.div>
+            </div>
+          </Card>
+        </motion.div>
+      </div>
     );
   }
 

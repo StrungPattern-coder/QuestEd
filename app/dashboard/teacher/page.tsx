@@ -9,6 +9,7 @@ import { useAuthStore } from "@/lib/store";
 import { teacherApi } from "@/lib/api";
 import { Brain, Users, FileText, TrendingUp, Plus, LogOut, BookOpen, CheckCircle, Clock, Loader2, Bell, FolderOpen, HelpCircle, Library } from "lucide-react";
 import MobileNav from "@/components/MobileNav";
+import DashboardWalkthroughWrapper from "@/components/DashboardWalkthroughWrapper";
 
 interface Classroom {
   _id: string;
@@ -231,9 +232,10 @@ export default function TeacherDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Mobile Navigation */}
-      <MobileNav role="teacher" userName={user?.name} />
+    <DashboardWalkthroughWrapper>
+      <div className="min-h-screen bg-black">
+        {/* Mobile Navigation */}
+        <MobileNav role="teacher" userName={user?.name} />
       
       {/* Desktop Navigation */}
       <nav className="hidden lg:flex relative z-10 justify-center pt-6 pb-6">
@@ -486,5 +488,6 @@ export default function TeacherDashboard() {
         </motion.div>
       </main>
     </div>
+    </DashboardWalkthroughWrapper>
   );
 }

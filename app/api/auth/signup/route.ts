@@ -6,6 +6,7 @@ import User from '@/backend/models/User';
 import bcrypt from 'bcryptjs';
 import { generateToken } from '@/backend/middleware/auth';
 import { validateEmail } from '@/backend/utils/helpers';
+import { sendWelcomeEmail } from '@/backend/utils/email';
 import { Types } from 'mongoose';
 
 export async function POST(request: NextRequest) {
@@ -67,6 +68,18 @@ export async function POST(request: NextRequest) {
       userId,
       email: user.email,
       role: user.role,
+    });
+
+    // Send welcome email (don't await to avoid blocking the response)
+    const dashboardLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard`;
+    sendWelcomeEmail({
+      userName: user.name,
+      userEmail: user.email,
+      role: user.role as 'student' | 'teacher',
+      dashboardLink,
+    }).catch((error) => {
+      console.error('Failed to send welcome email:', error);
+      // Don't fail the signup if email fails
     });
 
     return NextResponse.json({

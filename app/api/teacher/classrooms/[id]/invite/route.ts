@@ -4,6 +4,7 @@ import Classroom from '@/backend/models/Classroom';
 import User from '@/backend/models/User';
 import jwt from 'jsonwebtoken';
 import { sendClassroomInvitation } from '@/backend/utils/email';
+import Ably from 'ably';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -96,6 +97,30 @@ export async function POST(
     } catch (emailError) {
       console.error('Email sending error:', emailError);
       // Don't fail the request if email fails - student is already added
+    }
+
+    // Send real-time notification via Ably
+    try {
+      const ablyKey = process.env.ABLY_API_KEY || process.env.NEXT_PUBLIC_ABLY_KEY;
+      if (ablyKey) {
+        const ably = new Ably.Rest({ key: ablyKey });
+        const channel = ably.channels.get(`user-${studentIdStr}`);
+        
+        await channel.publish('classroom-invitation', {
+          type: 'classroom_invitation',
+          classroomId: classroom._id,
+          classroomName: classroom.name,
+          teacherName,
+          teacherId: decoded.userId,
+          inviteLink,
+          timestamp: new Date(),
+        });
+        
+        console.log(`✅ Real-time notification sent to student ${studentIdStr}`);
+      }
+    } catch (ablyError) {
+      console.error('Ably notification error:', ablyError);
+      // Don't fail the request if Ably fails
     }
 
     return NextResponse.json({

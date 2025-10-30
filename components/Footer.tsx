@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Github, Mail, User } from "lucide-react";
+import { Github, Mail, User, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Footer() {
@@ -22,17 +22,29 @@ export default function Footer() {
             © {currentYear} QuestEd. All rights reserved.
           </p>
 
-          {/* Center Button */}
-          <Link href="/about-creator">
-            <Button
-              variant="outline"
-              size="sm"
-              className="bg-white/10 hover:bg-white/20 text-[#F5F5F5] border-[#FF991C]/30 backdrop-blur-sm"
-            >
-              <User className="mr-2 h-4 w-4" />
-              About the Creator
-            </Button>
-          </Link>
+          {/* Center Buttons */}
+          <div className="flex flex-wrap gap-2 justify-center">
+            <Link href="/how-to-use">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/10 hover:bg-white/20 text-[#F5F5F5] border-[#FF991C]/30 backdrop-blur-sm"
+              >
+                <BookOpen className="mr-2 h-4 w-4" />
+                How to Use
+              </Button>
+            </Link>
+            <Link href="/about-creator">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/10 hover:bg-white/20 text-[#F5F5F5] border-[#FF991C]/30 backdrop-blur-sm"
+              >
+                <User className="mr-2 h-4 w-4" />
+                About Creator
+              </Button>
+            </Link>
+          </div>
 
           {/* Links */}
           <div className="flex items-center gap-4">

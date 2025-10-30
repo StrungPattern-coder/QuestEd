@@ -36,24 +36,29 @@ export default function QuickQuizHost() {
     fetchTestDetails();
 
     // Subscribe to participant joins via Ably
-    const ably = getAblyClient();
-    const channel = ably.channels.get(`quick-quiz-${testId}`);
-    
-    channel.subscribe('participant-joined', (message: any) => {
-      const { participantName } = message.data;
-      setParticipants((prev) => {
-        // Avoid duplicates
-        if (prev.some(p => p.name === participantName)) {
-          return prev;
-        }
-        return [...prev, { name: participantName, joinedAt: new Date() }];
+    try {
+      const ably = getAblyClient();
+      const channel = ably.channels.get(`quick-quiz-${testId}`);
+      
+      channel.subscribe('participant-joined', (message: any) => {
+        const { participantName } = message.data;
+        setParticipants((prev) => {
+          // Avoid duplicates
+          if (prev.some(p => p.name === participantName)) {
+            return prev;
+          }
+          return [...prev, { name: participantName, joinedAt: new Date() }];
+        });
       });
-    });
 
-    // Cleanup
-    return () => {
-      channel.unsubscribe('participant-joined');
-    };
+      // Cleanup
+      return () => {
+        channel.unsubscribe('participant-joined');
+      };
+    } catch (error) {
+      console.error('Ably connection error:', error);
+      // App still works without real-time updates
+    }
   }, [testId]);
 
   const fetchTestDetails = async () => {

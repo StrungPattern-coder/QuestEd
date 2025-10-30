@@ -18,6 +18,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate timeLimitPerQuestion
+    const timeLimit = timeLimitPerQuestion || 30;
+    if (timeLimit < 5 || timeLimit > 300) {
+      return NextResponse.json(
+        { error: 'Time limit must be between 5 and 300 seconds' },
+        { status: 400 }
+      );
+    }
+
     // Validate each question has required fields
     for (const q of questions) {
       if (!q.questionText || !q.options || q.options.length !== 4 || q.correctAnswer === undefined) {
@@ -33,7 +42,10 @@ export async function POST(request: NextRequest) {
       questions.map((q: any) => ({
         questionText: q.questionText,
         options: q.options,
-        correctAnswer: q.correctAnswer,
+        // Convert correctAnswer index to actual answer text if needed
+        correctAnswer: typeof q.correctAnswer === 'number' 
+          ? q.options[q.correctAnswer] 
+          : q.correctAnswer,
         points: 10, // Default points for quick quiz
       }))
     );
@@ -47,9 +59,9 @@ export async function POST(request: NextRequest) {
       title,
       description: `Quick quiz hosted by ${hostName}`,
       mode: 'live',
-      timeLimitPerQuestion: timeLimitPerQuestion || 30,
+      timeLimitPerQuestion: timeLimit,
       questions: questionIds,
-      isActive: true,
+      isActive: false, // Changed: Not active until host starts it
       joinCode,
       hostName, // Store host name for display
     });

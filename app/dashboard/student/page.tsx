@@ -13,6 +13,7 @@ import { studentApi } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import MobileNav from "@/components/MobileNav";
+import DashboardWalkthroughWrapper from "@/components/DashboardWalkthroughWrapper";
 
 interface Test {
   _id: string;
@@ -137,9 +138,10 @@ export default function StudentDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Mobile Navigation */}
-      <MobileNav role="student" userName={user?.name} />
+    <DashboardWalkthroughWrapper>
+      <div className="min-h-screen bg-black">
+        {/* Mobile Navigation */}
+        <MobileNav role="student" userName={user?.name} />
       
       {/* Desktop Navigation */}
       <nav className="hidden lg:flex relative z-10 justify-center pt-6 pb-6">
@@ -513,5 +515,6 @@ export default function StudentDashboard() {
         </motion.div>
       </main>
     </div>
+    </DashboardWalkthroughWrapper>
   );
 }
