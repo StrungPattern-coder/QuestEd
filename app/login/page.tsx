@@ -57,13 +57,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-3 sm:p-4 lg:p-6 relative overflow-hidden">
       {/* Banner Image - Right Side */}
-      <div className="hidden lg:block absolute right-0 bottom-0 z-10 pointer-events-none">
+      <div className="absolute right-0 bottom-0 z-10 pointer-events-none">
         <Image
           src="/Banner_This_is_Fine.png"
           alt="Banner"
           width={600}
           height={800}
-          className="object-contain"
+          className="object-contain w-[200px] sm:w-[300px] md:w-[400px] lg:w-[500px] xl:w-[600px] h-auto opacity-50 sm:opacity-70 lg:opacity-100"
           priority
         />
       </div>

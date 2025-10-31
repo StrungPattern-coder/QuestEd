@@ -113,13 +113,13 @@ export default function SignupPage() {
       </div>
 
       {/* Banner Image - Left Side */}
-      <div className="hidden lg:block absolute left-0 bottom-0 z-10 pointer-events-none">
+      <div className="absolute left-0 bottom-0 z-10 pointer-events-none">
         <Image
           src="/Loong_Pose02_4k.png"
           alt="Dragon Banner"
           width={350}
           height={500}
-          className="object-contain"
+          className="object-contain w-[150px] sm:w-[200px] md:w-[250px] lg:w-[300px] xl:w-[350px] h-auto opacity-40 sm:opacity-60 lg:opacity-100"
           priority
         />
       </div>

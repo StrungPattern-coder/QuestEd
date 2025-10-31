@@ -574,10 +574,10 @@ export default function HowToUsePage() {
               📧 Contact Support
             </a>
             <a
-              href="/dashboard"
+              href="/"
               className="px-6 py-3 border border-[#FF991C] text-[#FF991C] rounded-lg font-semibold hover:bg-[#FF991C]/10 transition-all"
             >
-              🏠 Back to Dashboard
+              🏠 Back to Home
             </a>
           </div>
         </div>
