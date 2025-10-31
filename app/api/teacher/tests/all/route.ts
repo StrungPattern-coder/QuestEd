@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
             totalStudents,
             submittedCount,
             notSubmittedCount: totalStudents - submittedCount,
-            averageScore: Math.round(averageScore * 100) / 100,
+            averageScore: Math.round(averageScore * 100) / 100, // Round to 2 decimal places
             highestScore: Math.round(highestScore * 100) / 100,
             lowestScore: Math.round(lowestScore * 100) / 100,
             submissionRate: totalStudents > 0 
@@ -75,9 +75,9 @@ export async function GET(request: NextRequest) {
           submissions: submissions.map(sub => ({
             _id: sub._id,
             student: sub.studentId,
-            score: Math.round((sub.score / totalQuestions) * 100), // Convert to percentage
-            rawScore: sub.score,
+            score: sub.score, // Keep as raw score (number of correct answers)
             maxScore: totalQuestions,
+            percentage: Math.round((sub.score / totalQuestions) * 100 * 100) / 100, // Percentage with 2 decimals
             submittedAt: sub.submittedAt,
             submittedLate: sub.submittedLate,
           })),

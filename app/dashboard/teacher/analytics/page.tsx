@@ -51,11 +51,19 @@ export default function AnalyticsPage() {
         // Calculate submission statistics
         const allSubmissions = tests.flatMap((t: any) => t.submissions || []);
         const totalSubmissions = allSubmissions.length;
-        const averageScore =
-          allSubmissions.length > 0
-            ? allSubmissions.reduce((sum: number, s: any) => sum + s.score, 0) /
-              allSubmissions.length
-            : 0;
+        
+        // Calculate average score properly from percentages
+        let totalPercentage = 0;
+        allSubmissions.forEach((sub: any) => {
+          // sub.percentage should already be calculated in the API
+          // If not, calculate it: (score / maxScore) * 100
+          const percentage = sub.percentage || ((sub.score / sub.maxScore) * 100);
+          totalPercentage += percentage;
+        });
+        
+        const averageScore = totalSubmissions > 0 
+          ? totalPercentage / totalSubmissions 
+          : 0;
 
         // Test mode breakdown
         const liveTests = tests.filter((t: any) => t.mode === "live").length;
@@ -93,7 +101,9 @@ export default function AnalyticsPage() {
                 scores: [],
               };
             }
-            studentScores[studentId].scores.push(sub.score);
+            // Store percentage scores
+            const percentage = sub.percentage || ((sub.score / sub.maxScore) * 100);
+            studentScores[studentId].scores.push(percentage);
           }
         });
 

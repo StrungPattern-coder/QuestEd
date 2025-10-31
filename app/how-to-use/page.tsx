@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 import { 
   Book, Users, ClipboardList, Zap, Trophy, Bell, 
   ChevronDown, ChevronRight, GraduationCap, UserCheck,
-  FileText, BarChart3, Clock, Award, Target, Mail
+  FileText, BarChart3, Clock, Award, Target, Mail, ArrowLeft
 } from 'lucide-react';
 
 interface Section {
@@ -395,9 +397,22 @@ export default function HowToUsePage() {
   const [expandedContent, setExpandedContent] = useState<number>(0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-purple-950/20 to-black text-white">
+    <div className="min-h-screen bg-black text-white">
+      {/* Navigation */}
+      <nav className="relative z-10 flex justify-between items-center pt-6 pb-4 px-4 sm:px-6 lg:px-8">
+        <Link href="/">
+          <Button 
+            variant="ghost" 
+            className="text-[#F5F5F5] hover:bg-white/10 rounded-full"
+          >
+            <ArrowLeft className="mr-2 h-5 w-5" />
+            Back to Home
+          </Button>
+        </Link>
+      </nav>
+
       {/* Header */}
-      <div className="border-b border-purple-500/30 bg-black/50 backdrop-blur-md sticky top-0 z-10">
+      <div className="border-b border-[#FF991C]/20 bg-black backdrop-blur-md sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">
             📚 How to Use QuestEd
@@ -426,8 +441,8 @@ export default function HowToUsePage() {
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                     expandedSection === section.id
-                      ? 'bg-gradient-to-r from-orange-500/20 to-orange-600/20 text-orange-400 border border-orange-500/30'
-                      : 'text-gray-400 hover:bg-purple-900/20 hover:text-white'
+                      ? 'bg-[#FF991C]/10 text-[#FF991C] border border-[#FF991C]/30'
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -452,8 +467,8 @@ export default function HowToUsePage() {
                     >
                       {/* Section Header */}
                       <div className="flex items-center gap-4 mb-8">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center">
-                          <Icon className="w-6 h-6 text-white" />
+                        <div className="w-12 h-12 rounded-full bg-[#FF991C] flex items-center justify-center">
+                          <Icon className="w-6 h-6 text-black" />
                         </div>
                         <h2 className="text-3xl font-bold">{section.title}</h2>
                       </div>
@@ -463,17 +478,17 @@ export default function HowToUsePage() {
                         {section.content.map((item, index) => (
                           <div
                             key={index}
-                            className="border border-purple-500/30 rounded-xl overflow-hidden bg-black/30 backdrop-blur-sm"
+                            className="border border-[#FF991C]/20 rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm"
                           >
                             <button
                               onClick={() => setExpandedContent(index)}
-                              className="w-full flex items-center justify-between px-6 py-4 hover:bg-purple-900/20 transition-colors"
+                              className="w-full flex items-center justify-between px-6 py-4 hover:bg-white/5 transition-colors"
                             >
-                              <h3 className="text-xl font-semibold text-orange-400">
+                              <h3 className="text-xl font-semibold text-[#FF991C]">
                                 {item.subtitle}
                               </h3>
                               {expandedContent === index ? (
-                                <ChevronDown className="w-5 h-5 text-orange-400" />
+                                <ChevronDown className="w-5 h-5 text-[#FF991C]" />
                               ) : (
                                 <ChevronRight className="w-5 h-5 text-gray-400" />
                               )}
@@ -494,7 +509,7 @@ export default function HowToUsePage() {
 
                                   {item.steps && (
                                     <div className="mb-4">
-                                      <h4 className="text-sm font-semibold text-purple-400 mb-3 uppercase tracking-wide">
+                                      <h4 className="text-sm font-semibold text-[#FF991C] mb-3 uppercase tracking-wide">
                                         📝 Steps
                                       </h4>
                                       <ol className="space-y-2">
@@ -503,7 +518,7 @@ export default function HowToUsePage() {
                                             key={stepIndex}
                                             className="flex items-start gap-3 text-gray-300"
                                           >
-                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center text-xs font-bold text-white">
+                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[#FF991C] flex items-center justify-center text-xs font-bold text-black">
                                               {stepIndex + 1}
                                             </span>
                                             <span className="pt-0.5">{step}</span>
@@ -514,8 +529,8 @@ export default function HowToUsePage() {
                                   )}
 
                                   {item.tips && (
-                                    <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
-                                      <h4 className="text-sm font-semibold text-purple-400 mb-3 uppercase tracking-wide">
+                                    <div className="bg-white/5 border border-[#FF991C]/20 rounded-lg p-4">
+                                      <h4 className="text-sm font-semibold text-[#FF991C] mb-3 uppercase tracking-wide">
                                         💡 Tips
                                       </h4>
                                       <ul className="space-y-2">
@@ -524,7 +539,7 @@ export default function HowToUsePage() {
                                             key={tipIndex}
                                             className="flex items-start gap-2 text-gray-300"
                                           >
-                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span className="text-[#FF991C] mt-1">•</span>
                                             <span>{tip}</span>
                                           </li>
                                         ))}
@@ -546,7 +561,7 @@ export default function HowToUsePage() {
         </div>
 
         {/* Footer CTA */}
-        <div className="mt-16 bg-gradient-to-r from-orange-500/10 to-orange-600/10 border border-orange-500/30 rounded-2xl p-8 text-center">
+        <div className="mt-16 bg-[#FF991C]/10 border border-[#FF991C]/30 rounded-2xl p-8 text-center">
           <h3 className="text-2xl font-bold mb-4">Still Have Questions?</h3>
           <p className="text-gray-400 mb-6">
             Can't find what you're looking for? Reach out to our support team.
@@ -554,13 +569,13 @@ export default function HowToUsePage() {
           <div className="flex flex-wrap gap-4 justify-center">
             <a
               href="mailto:support@quested.com"
-              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg font-semibold hover:shadow-lg hover:shadow-orange-500/50 transition-all"
+              className="px-6 py-3 bg-[#FF991C] rounded-lg font-semibold hover:shadow-lg hover:shadow-[#FF991C]/50 transition-all text-black"
             >
               📧 Contact Support
             </a>
             <a
               href="/dashboard"
-              className="px-6 py-3 border border-orange-500 text-orange-400 rounded-lg font-semibold hover:bg-orange-500/10 transition-all"
+              className="px-6 py-3 border border-[#FF991C] text-[#FF991C] rounded-lg font-semibold hover:bg-[#FF991C]/10 transition-all"
             >
               🏠 Back to Dashboard
             </a>

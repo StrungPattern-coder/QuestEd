@@ -135,44 +135,76 @@ export default function AboutCreator() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start max-w-7xl mx-auto">
-          {/* Profile Card */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex justify-center relative"
-          >
-            <ProfileCard
-              name="Sriram Kommalapudi"
-              title="Full Stack Developer"
-              handle="sriram_kommalapudi"
-              status="Available for Projects"
-              contactText="Contact Me"
-              avatarUrl="/sriram-temporary-avatar.png"
-              showUserInfo={true}
-              enableTilt={true}
-              enableMobileTilt={true}
-              mobileTiltSensitivity={8}
-              onContactClick={handleContactClick}
-            />
-            
-            {/* Mobile Gyroscope Hint */}
-            {isMobile && showMobileHint && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 bg-[#FF991C] text-black px-4 py-2 rounded-full text-sm font-semibold shadow-lg flex items-center gap-2 whitespace-nowrap"
-              >
-                <Smartphone className="h-4 w-4" />
-                Tilt your device to move the card!
-              </motion.div>
-            )}
-          </motion.div>
+                <div className="grid lg:grid-cols-2 gap-12 items-start max-w-7xl mx-auto">
+          {/* Left Column - Profile Card + Connect Section */}
+          <div className="space-y-8">
+            {/* Profile Card */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex justify-center relative"
+            >
+              <ProfileCard
+                name="Sriram Kommalapudi"
+                title="Software Developer"
+                handle="sriram_kommalapudi"
+                status="Available for Projects"
+                contactText="Contact Me"
+                avatarUrl="/sriram-temporary-avatar.png"
+                showUserInfo={true}
+                enableTilt={true}
+                enableMobileTilt={true}
+                mobileTiltSensitivity={8}
+                onContactClick={handleContactClick}
+              />
+              
+              {/* Mobile Gyroscope Hint */}
+              {isMobile && showMobileHint && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 bg-[#FF991C] text-black px-4 py-2 rounded-full text-sm font-semibold shadow-lg flex items-center gap-2 whitespace-nowrap"
+                >
+                  <Smartphone className="h-4 w-4" />
+                  Tilt your device to move the card!
+                </motion.div>
+              )}
+            </motion.div>
 
-          {/* Projects & Info */}
+            {/* Connect Section */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <div className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-2xl p-6 sm:p-8">
+                <h2 className="text-2xl font-bold text-[#F5F5F5] mb-4">Let's Connect</h2>
+                <div className="flex flex-wrap gap-4">
+                  <a
+                    href="https://github.com/StrungPattern-coder"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-[#F5F5F5] rounded-full transition-colors"
+                  >
+                    <Github className="h-5 w-5" />
+                    GitHub
+                  </a>
+                  <a
+                    href="mailto:ksriram4584@gmail.com"
+                    className="flex items-center gap-2 px-4 py-2 bg-[#FF991C] hover:bg-[#FF8F4D] text-black rounded-full transition-colors font-semibold"
+                  >
+                    <Mail className="h-5 w-5" />
+                    Email Me
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Column - Projects & Info */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -182,10 +214,11 @@ export default function AboutCreator() {
             {/* About Section */}
             <div className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-2xl p-6 sm:p-8">
               <h2 className="text-2xl font-bold text-[#F5F5F5] mb-4">About Me</h2>
-              <p className="text-[#F5F5F5]/80 leading-relaxed mb-4">
-                I'm a software engineer with a passion for creating educational technology that empowers teachers and students. 
-                QuestEd is my vision of making interactive learning accessible to everyone, without paywalls or limitations.
-              </p>
+                <p className="text-[#F5F5F5]/80 leading-relaxed mb-4">
+                  I'm a Computer Engineering student who loves building things that solve real problems and make life a little easier. 
+                  For me, technology is more than just code — it's about creating something meaningful, something that people actually enjoy using. 
+                  QuestEd is one step in that journey, an open-source platform built with the idea of learning, collaboration, and impact.
+                </p>
               <p className="text-[#F5F5F5]/80 leading-relaxed">
                 I believe in open-source software and the power of community-driven development. When I'm not coding, 
                 you'll find me exploring new technologies and contributing to projects that make a difference.
@@ -291,29 +324,6 @@ export default function AboutCreator() {
                   <Github className="h-4 w-4 group-hover:scale-110 transition-transform" />
                   Visit my GitHub profile to explore more of my latest projects
                   <ExternalLink className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </div>
-            </div>
-
-            {/* Connect Section */}
-            <div className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-2xl p-6 sm:p-8">
-              <h2 className="text-2xl font-bold text-[#F5F5F5] mb-4">Let's Connect</h2>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://github.com/StrungPattern-coder"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-[#F5F5F5] rounded-full transition-colors"
-                >
-                  <Github className="h-5 w-5" />
-                  GitHub
-                </a>
-                <a
-                  href="mailto:ksriram4584@gmail.com"
-                  className="flex items-center gap-2 px-4 py-2 bg-[#FF991C] hover:bg-[#FF8F4D] text-black rounded-full transition-colors font-semibold"
-                >
-                  <Mail className="h-5 w-5" />
-                  Email Me
                 </a>
               </div>
             </div>

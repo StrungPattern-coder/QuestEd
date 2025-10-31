@@ -445,7 +445,7 @@ export default function AllTestsPage() {
                         </h4>
                         <div className="flex gap-2 flex-wrap">
                           {test.submissions
-                            .sort((a, b) => b.score - a.score)
+                            .sort((a, b) => (b.percentage || 0) - (a.percentage || 0))
                             .slice(0, 3)
                             .map((sub, idx) => (
                               <div
@@ -454,7 +454,7 @@ export default function AllTestsPage() {
                               >
                                 <span className="text-yellow-600">#{idx + 1}</span>
                                 <span className="text-black">{sub.student?.name}</span>
-                                <span className="text-[#FF991C] font-bold">{sub.score}%</span>
+                                <span className="text-[#FF991C] font-bold">{Math.round(sub.percentage || 0)}%</span>
                               </div>
                             ))}
                         </div>

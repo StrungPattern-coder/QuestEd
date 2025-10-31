@@ -79,9 +79,9 @@ export default function TeacherDashboard() {
         const testsData = (testsRes.data as any).tests || [];
         setTests(testsData);
         
-        // Calculate average score from all submissions
-        let totalScore = 0;
-        let totalMaxScore = 0;
+        // Calculate average score from all submissions (using percentages correctly)
+        let totalPercentage = 0;
+        let submissionCount = 0;
         
         // Fetch results for each test to calculate average
         const allResultsPromises = testsData.map(async (test: Test) => {
@@ -95,8 +95,11 @@ export default function TeacherDashboard() {
               const data = await response.json();
               if (data.submissions && data.submissions.length > 0) {
                 data.submissions.forEach((sub: any) => {
-                  totalScore += sub.score || 0;
-                  totalMaxScore += sub.maxScore || 0;
+                  // Calculate percentage for each submission
+                  const maxScore = test.questions?.length || 1;
+                  const percentage = (sub.score / maxScore) * 100;
+                  totalPercentage += percentage;
+                  submissionCount++;
                 });
               }
             }
@@ -107,7 +110,8 @@ export default function TeacherDashboard() {
         
         await Promise.all(allResultsPromises);
         
-        const averageScore = totalMaxScore > 0 ? Math.round((totalScore / totalMaxScore) * 100) : 0;
+        // Average is the mean of all percentages
+        const averageScore = submissionCount > 0 ? Math.round(totalPercentage / submissionCount) : 0;
         
         setStats(prev => ({
           ...prev,

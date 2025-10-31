@@ -246,33 +246,48 @@ export default function Home() {
         </div>
       </div>
 
-      {/* CTA Section */}
+      {/* Interested Section */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-20">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="bg-[#FF991C] rounded-3xl p-8 sm:p-12 md:p-16 text-center relative overflow-hidden shadow-2xl"
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-6xl"
         >
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSA2LTYgNi02LTIuNjktNi02IDIuNjktNiA2LTZ6TTI0IDZjMy4zMSAwIDYgMi42OSA2IDZzLTIuNjkgNi02IDYtNi0yLjY5LTYtNiAyLjY5LTYgNi02eiIgZmlsbD0iIzMyMzc0QSIgZmlsbC1vcGFjaXR5PSIuMSIvPjwvZz48L3N2Zz4=')] opacity-20"></div>
-          <div className="relative z-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-4">
-              {t.home.ctaTitle}
+          {/* Image on the left */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="flex justify-center lg:justify-start"
+          >
+            <img
+              src="/miniPekka.standing.webp"
+              alt="Mini Pekka"
+              className="w-full max-w-md h-auto object-contain"
+            />
+          </motion.div>
+
+          {/* Text on the right */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="flex flex-col justify-center"
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#F5F5F5] mb-6">
+              Want to learn more about QuestEd?
             </h2>
-            <p className="text-sm sm:text-base md:text-lg text-black/80 mb-8 max-w-2xl mx-auto px-2">
-              {t.home.ctaDescription}
-            </p>
-            <Link href="/signup" className="inline-block w-full sm:w-auto">
-              <Button 
-                size="lg" 
-                className="w-full sm:w-auto text-sm sm:text-base px-6 sm:px-10 py-5 sm:py-6 bg-black text-[#F5F5F5] hover:bg-black/90 shadow-2xl group whitespace-normal sm:whitespace-nowrap"
-              >
-                <span className="block sm:inline">{t.home.ctaButton}</span>
-                <Sparkles className="ml-2 h-5 w-5 inline-block group-hover:rotate-12 transition-transform" />
-              </Button>
+            <Link href="/about">
+              <span className="inline-flex items-center text-[#FF991C] hover:text-[#FF8F4D] text-lg sm:text-xl font-semibold transition-colors group cursor-pointer">
+                Click here
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </span>
             </Link>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 

@@ -56,6 +56,19 @@ interface Submission {
   submittedAt: string;
 }
 
+interface Classroom {
+  _id: string;
+  name: string;
+  description?: string;
+  teacherId: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  students: any[];
+  createdAt: string;
+}
+
 export default function StudentDashboard() {
   const router = useRouter();
   const { user, logout } = useAuthStore();
@@ -63,6 +76,7 @@ export default function StudentDashboard() {
   const [loading, setLoading] = useState(true);
   const [availableTests, setAvailableTests] = useState<Test[]>([]);
   const [completedSubmissions, setCompletedSubmissions] = useState<Submission[]>([]);
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [stats, setStats] = useState({
     testsCompleted: 0,
     averageScore: 0,
@@ -82,20 +96,39 @@ export default function StudentDashboard() {
     try {
       // Fetch available tests
       const testsResponse = await studentApi.getTests();
+      
       if (testsResponse.data) {
         const tests = (testsResponse.data as any).tests || [];
         setAvailableTests(tests);
         
         // Calculate stats based on test data
-        const completedTests = tests.filter((t: Test) => t.hasSubmitted);
-        const totalScore = completedTests.reduce((sum: number, t: Test) => sum + (t.submission?.score || 0), 0);
-        const maxPossibleScore = completedTests.reduce((sum: number, t: Test) => sum + (t.questions?.length || 0), 0);
+        const completedTests = tests.filter((t: Test) => t.hasSubmitted && t.submission);
+        
+        let totalScore = 0;
+        let maxPossibleScore = 0;
+        
+        completedTests.forEach((t: Test) => {
+          const score = t.submission?.score || 0;
+          // Get the max score - questions should be an array
+          const maxScore = Array.isArray(t.questions) ? t.questions.length : 0;
+          
+          totalScore += score;
+          maxPossibleScore += maxScore;
+        });
+        
+        const avgScore = maxPossibleScore > 0 ? Math.round((totalScore / maxPossibleScore) * 100) : 0;
         
         setStats({
           testsCompleted: completedTests.length,
-          averageScore: maxPossibleScore > 0 ? Math.round((totalScore / maxPossibleScore) * 100) : 0,
+          averageScore: avgScore,
           totalPoints: totalScore,
         });
+      }
+
+      // Fetch classrooms
+      const classroomsResponse = await studentApi.getClassrooms();
+      if (classroomsResponse.data) {
+        setClassrooms((classroomsResponse.data as any).classrooms || []);
       }
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
@@ -273,6 +306,84 @@ export default function StudentDashboard() {
               </motion.div>
             ))}
           </div>
+
+          {/* Classrooms Section */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mb-6"
+          >
+            <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20">
+              <CardHeader>
+                <CardTitle className="text-2xl text-black flex items-center gap-2">
+                  <FolderOpen className="h-6 w-6 text-[#FF991C]" />
+                  My Classrooms
+                </CardTitle>
+                <CardDescription className="text-black/60">
+                  All the classrooms you're enrolled in
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {classrooms.length === 0 ? (
+                  <div className="text-center py-12">
+                    <FolderOpen className="h-16 w-16 text-black/20 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-black mb-2">No Classrooms Yet</h3>
+                    <p className="text-sm text-black/60 mb-4">
+                      You're not enrolled in any classrooms yet. Ask your teacher for a classroom code!
+                    </p>
+                    <Button
+                      onClick={() => router.push('/join-classroom')}
+                      className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black"
+                    >
+                      Join Classroom
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {classrooms.map((classroom, index) => (
+                      <motion.div
+                        key={classroom._id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                      >
+                        <Card className="bg-gradient-to-br from-[#FF991C]/10 to-[#FF8F4D]/10 border-[#FF991C]/30 hover:border-[#FF991C]/50 transition-all duration-300 hover:shadow-lg cursor-pointer group">
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div className="bg-[#FF991C]/20 p-3 rounded-xl group-hover:scale-110 transition-transform">
+                                <FolderOpen className="h-6 w-6 text-[#FF991C]" />
+                              </div>
+                              <span className="px-2 py-1 bg-[#FF991C]/20 text-[#FF991C] text-xs font-medium rounded-full">
+                                {classroom.students.length} students
+                              </span>
+                            </div>
+                            <h3 className="text-lg font-bold text-black mb-2 group-hover:text-[#FF991C] transition-colors">
+                              {classroom.name}
+                            </h3>
+                            {classroom.description && (
+                              <p className="text-sm text-black/60 mb-3 line-clamp-2">
+                                {classroom.description}
+                              </p>
+                            )}
+                            <div className="pt-3 border-t border-[#FF991C]/20">
+                              <div className="flex items-center gap-2 text-xs text-black/70">
+                                <User className="h-3 w-3" />
+                                <span className="font-medium">{classroom.teacherId.name}</span>
+                              </div>
+                              <div className="text-xs text-black/50 mt-1">
+                                Joined {new Date(classroom.createdAt).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
 
           <div className="grid grid-cols-1 gap-6 mb-6">
             <motion.div
