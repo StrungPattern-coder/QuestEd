@@ -1,316 +1,189 @@
-# 🚀 PICT German Test Platform
+# 🎓 QuestEd
 
-A dynamic, full-stack web platform for German language testing at PICT College, inspired by Kahoot and Duolingo.
+**A completely free and open-source alternative to Kahoot** - Interactive quiz platform with gamification, real-time features, and zero paywalls.
 
-## ✨ Features
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)](https://www.typescriptlang.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-8.5-green)](https://www.mongodb.com/)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](CONTRIBUTING.md)
 
-### For Teachers 👨‍🏫
-- Create and manage classrooms
-- Add/remove students
-- Create tests in **Live Mode** (like Kahoot) or **Deadline Mode** (like Google Classroom)
-- Upload question banks (CSV, JSON, or manual input)
-- Start live quizzes with real-time participation
-- View comprehensive analytics:
-  - Who submitted / who didn't
-  - Scores & rankings
-  - Late submissions
-  - Class and overall leaderboards
-
-### For Students 👨‍🎓
-- View all enrolled classrooms
-- See assigned tests (live and scheduled)
-- Take tests with:
-  - Timer per question
-  - Real-time score updates (live mode)
-  - One attempt per test (unless reset by teacher)
-- View performance summaries and rankings
-
-### Real-time Features ⚡
-- Live quiz broadcasting
-- Real-time leaderboard updates
-- Connected students counter
-- Auto-advance questions
-- Teacher notifications
-
-## 🛠️ Tech Stack
-
-- **Frontend**: Next.js 14 (App Router), TypeScript, TailwindCSS, Framer Motion, Shadcn UI
-- **Backend**: Next.js API Routes, Express-style controllers
-- **Database**: MongoDB (with Mongoose)
-- **Real-time**: Ably
-- **Authentication**: JWT with HTTP-only cookies
-- **Deployment**: Vercel
-
-## 📁 Project Structure
-
-```
-PICT-German-Platform/
-├── app/
-│   ├── api/
-│   │   ├── auth/
-│   │   ├── teacher/
-│   │   └── student/
-│   ├── dashboard/
-│   │   ├── teacher/
-│   │   └── student/
-│   ├── login/
-│   ├── signup/
-│   ├── tests/
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-├── backend/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   └── server.ts
-├── components/
-│   └── ui/
-├── lib/
-│   ├── api.ts
-│   ├── store.ts
-│   └── utils.ts
-└── package.json
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18+ and npm
-- MongoDB Atlas account (or local MongoDB)
-- Ably account for real-time features
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd QuestEd
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   # MongoDB
-   MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/pict-german-platform?retryWrites=true&w=majority
-
-   # JWT
-   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-
-   # Ably
-   ABLY_API_KEY=your-ably-api-key
-   NEXT_PUBLIC_ABLY_CLIENT_KEY=your-ably-client-key
-
-   # Application
-   NEXT_PUBLIC_APP_URL=http://localhost:3000
-   NEXT_PUBLIC_API_URL=http://localhost:3000/api
-   ```
-
-4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-## 🗄️ Database Models
-
-### User
-- `name`, `email`, `role` (teacher/student)
-- `enrollmentNumber`, `rollNumber` (for students)
-- `password` (hashed)
-
-### Classroom
-- `teacherId`, `name`, `description`
-- `students[]` (array of User IDs)
-
-### Test
-- `classroomId`, `teacherId`, `title`, `description`
-- `mode` (live/deadline)
-- `questions[]`, `startTime`, `endTime`
-- `timeLimitPerQuestion`, `isActive`, `joinCode`
-
-### Question
-- `testId`, `questionText`, `options[]`, `correctAnswer`
-
-### Submission
-- `testId`, `studentId`, `answers[]`
-- `score`, `submittedAt`, `submittedLate`
-
-### Leaderboard
-- `classroomId`, `testId`
-- `rankings[]`, `overallRankings[]`
-
-## 🔐 Authentication
-
-### Email Format
-- **Teachers**: `name@pict.edu`
-- **Students**: `enrollment@ms.pict.edu`
-
-### Workflow
-1. User signs up with valid PICT email
-2. Role automatically determined from email domain
-3. Password hashed with bcrypt
-4. JWT token generated and stored
-5. Token sent with each request via Authorization header
-
-## 📡 API Routes
-
-### Authentication
-- `POST /api/auth/signup` - Create new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user
-
-### Teacher Routes
-- `POST /api/teacher/classrooms` - Create classroom
-- `GET /api/teacher/classrooms` - Get all classrooms
-- `PUT /api/teacher/classrooms/:id` - Update classroom
-- `DELETE /api/teacher/classrooms/:id` - Delete classroom
-- `POST /api/teacher/classrooms/:id/students` - Add student
-- `DELETE /api/teacher/classrooms/:id/students/:studentId` - Remove student
-- `POST /api/teacher/tests` - Create test
-- `GET /api/teacher/tests` - Get all tests
-- `POST /api/teacher/tests/:id/start` - Start live test
-- `POST /api/teacher/tests/:id/stop` - Stop live test
-- `POST /api/teacher/tests/:id/questions` - Upload questions
-- `GET /api/teacher/tests/:id/results` - Get test results
-- `GET /api/teacher/leaderboard/:classroomId` - Get leaderboard
-
-### Student Routes
-- `GET /api/student/classrooms` - Get enrolled classrooms
-- `GET /api/student/tests` - Get available tests
-- `GET /api/student/tests/:id` - Get test details
-- `POST /api/student/tests/join` - Join live test
-- `POST /api/student/tests/:id/submit` - Submit test
-- `GET /api/student/tests/:id/result` - Get test result
-
-## 🎨 UI/UX Features
-
-- **Duolingo-style progress bars** for test completion
-- **Kahoot-style countdown timers** with dynamic colors
-- **Confetti animations** for top scorers
-- **Vibrant gradient backgrounds**
-- **Smooth page transitions** with Framer Motion
-- **Responsive design** for all screen sizes
-
-## 🚢 Deployment
-
-### Deploy to Vercel
-
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
-
-2. **Import to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Click "Import Project"
-   - Select your repository
-   - Configure environment variables
-   - Deploy!
-
-3. **Set Environment Variables in Vercel**
-   - Go to Project Settings → Environment Variables
-   - Add all variables from your `.env` file
-   - Redeploy
-
-### MongoDB Atlas Setup
-
-1. Create cluster at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
-2. Create database user
-3. Whitelist all IP addresses (0.0.0.0/0) for Vercel
-4. Get connection string and add to `MONGO_URI`
-
-### Ably Setup
-
-1. Sign up at [ably.com](https://ably.com)
-2. Create new app
-3. Copy API key to `ABLY_API_KEY`
-4. Copy publishable key to `NEXT_PUBLIC_ABLY_CLIENT_KEY`
-
-## 📝 Question Upload Format
-
-### CSV Format
-```csv
-Question Text,Correct Answer,Option 1,Option 2,Option 3,Option 4
-Was ist das?,der Hund,der Hund,die Katze,das Haus,der Baum
-Wie heißt du?,Ich heiße...,Ich heiße...,Du heißt...,Er heißt...,Sie heißt...
-```
-
-### JSON Format
-```json
-[
-  {
-    "questionText": "Was ist das?",
-    "options": ["der Hund", "die Katze", "das Haus", "der Baum"],
-    "correctAnswer": "der Hund"
-  },
-  {
-    "questionText": "Wie heißt du?",
-    "options": ["Ich heiße...", "Du heißt...", "Er heißt...", "Sie heißt..."],
-    "correctAnswer": "Ich heiße..."
-  }
-]
-```
-
-## 🎯 Usage Examples
-
-### Teacher Flow
-1. Login → Create Classroom → Add Students
-2. Create Test → Upload Questions → Set Mode (Live/Deadline)
-3. Start Live Test → Monitor in Real-time → View Results
-
-### Student Flow
-1. Login → View Classrooms → See Assigned Tests
-2. Join Live Test (with code) OR Open Deadline Test
-3. Answer Questions → Submit → View Results & Rank
-
-## 🤝 Contributing
-
-This project was built for PICT College. For contributions:
-1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open pull request
-
-## 📄 License
-
-MIT License - See LICENSE file for details
-
-## � Documentation
-
-Comprehensive documentation is available in the [`/docs`](./docs) folder:
-
-### Quick Links
-- **[Getting Started](./docs/GETTING_STARTED.md)** - Quick start guide
-- **[Email Setup (5 min)](./docs/EMAIL_QUICKSTART.md)** - Configure email invitations
-- **[Classroom Management](./docs/CLASSROOM_INVITATION.md)** - Student invitation system
-- **[i18n Guide](./docs/I18N_GUIDE.md)** - Multiple language support
-- **[Project Summary](./docs/PROJECT_SUMMARY.md)** - Complete architecture overview
-
-**[View All Documentation →](./docs/README.md)**
-
-## �👥 Support
-
-For issues or questions:
-- Open an issue on GitHub
-- Contact: [Your Contact Info]
+> **Live Demo**: [quest-ed-phi.vercel.app](https://quest-ed-phi.vercel.app)  
+> **Security Audit**: [View Report](SECURITY_AUDIT_REPORT.md)
 
 ---
 
-**Built with ❤️ for PICT College**
+## 🚀 Why QuestEd?
 
-**Tech Stack**: Next.js 14 · TypeScript · MongoDB · Ably · TailwindCSS · Shadcn UI · Framer Motion
+Educators shouldn't pay for basic features when they're just trying to make learning engaging. QuestEd combines the best of **Kahoot's live interaction** with **Duolingo's gamification** - completely free, forever.
+
+### ⚡ Key Features
+
+**For Teachers** 👨‍🏫
+- ✅ **Live Quiz Sessions** (up to 200 concurrent participants on free tier)
+- ✅ **Question Bank Management** - 500+ pre-loaded questions, CSV/JSON import
+- ✅ **Classroom Management** - Email invitations, join codes, student tracking
+- ✅ **Multiple Quiz Modes** - Live (Kahoot-style) or Deadline (self-paced)
+- ✅ **Real-time Analytics** - Scores, rankings, submission tracking, late penalties
+- ✅ **Template System** - Pre-built quiz templates to get started fast
+
+**For Students** 👨‍🎓
+- ✅ **Daily Challenges** - Question of the Day with streaks
+- ✅ **Quick Quiz** - Practice mode with 500+ questions
+- ✅ **Gamification** - Streaks, badges, celebrations, podium animations
+- ✅ **Progress Tracking** - Personal stats, leaderboards, achievement system
+- ✅ **Mobile-First Design** - Works flawlessly on all devices
+- ✅ **Multi-language Support** - Built-in i18n (English, German, more coming)
+
+**Real-time Features** ⚡
+- Live quiz broadcasting with WebSocket (Ably)
+- Real-time leaderboard updates
+- Connected participants counter
+- Auto-advancing questions
+- Instant score calculations
+- Teacher controls (pause, skip, end)
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend**
+- Next.js 15 (App Router, React Server Components)
+- TypeScript 5.5
+- Tailwind CSS + Shadcn UI
+- Framer Motion (animations)
+- Canvas Confetti (celebrations)
+
+**Backend**
+- Next.js API Routes (serverless)
+- Express.js (middleware)
+- MongoDB + Mongoose
+- JWT Authentication (bcrypt)
+- Nodemailer (email system)
+
+**Real-time & Infrastructure**
+- Ably (WebSocket communication)
+- Vercel (deployment, CDN, serverless functions)
+- MongoDB Atlas (cloud database)
+
+**Security** 🔒
+- Rate limiting (brute-force protection)
+- Input sanitization (NoSQL injection prevention)
+- Security headers (XSS, clickjacking protection)
+- JWT with HTTP-only cookies
+- bcrypt password hashing (10 rounds)
+- HTTPS enforced in production
+
+---
+
+## 🚀 Quick Start
+
+Ready to get started? Check out our [**Getting Started Guide**](GETTING_STARTED.md) for complete setup instructions.
+
+**Quick overview:**
+1. Clone the repository
+2. Install dependencies (`npm install`)
+3. Set up environment variables (MongoDB, Ably, JWT)
+4. Run development server (`npm run dev`)
+
+**[📖 View Full Setup Guide →](GETTING_STARTED.md)**
+
+---
+
+## 📚 Documentation
+
+Comprehensive documentation is available in the [`/docs`](./docs) folder:
+
+### Essential Guides
+- **[Getting Started](GETTING_STARTED.md)** - Complete setup walkthrough
+- **[Security Audit Report](SECURITY_AUDIT_REPORT.md)** - Vulnerability analysis & fixes
+- **[Email Setup (5 min)](./docs/EMAIL_QUICKSTART.md)** - Configure email invitations
+- **[i18n Guide](./docs/I18N_GUIDE.md)** - Multiple language support
+- **[Project Summary](./docs/PROJECT_SUMMARY.md)** - Complete architecture overview
+
+**[📂 View All Documentation →](./docs/README.md)**
+
+---
+
+## 🤝 Contributing
+
+We actively welcome contributions! Whether you're fixing bugs, adding features, improving docs, or suggesting ideas - all contributions are valued.
+
+**How to Contribute:**
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
+2. Fork the repository
+3. Create feature branch (`git checkout -b feature/amazing-feature`)
+4. Commit changes (`git commit -m 'Add amazing feature'`)
+5. Push to branch (`git push origin feature/amazing-feature`)
+6. Open Pull Request
+
+**Good First Issues:**
+- 🟢 Add new language translations
+- 🟢 Improve mobile responsiveness
+- 🟢 Add more quiz templates
+- 🟢 Write unit tests
+
+**[👉 See Full Contribution Guidelines →](CONTRIBUTING.md)**
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file for details.
+
+**TL;DR:** You can use, modify, distribute this project for free, even commercially. Just keep the license notice.
+
+---
+
+## 📜 Attribution
+
+If you use QuestEd in your project, please:
+- ⭐ Star this repository
+- 🔗 Link back to https://github.com/StrungPattern-coder/QuestEd
+- 📝 Mention "Built with QuestEd by Sriram Kommalapudi" in your docs
+
+While not legally required, it helps the project grow!
+
+---
+
+## ⭐ Show Your Support
+
+If you find QuestEd useful, here's how you can help:
+
+- ⭐ **Star this repository** - It helps others discover the project
+- 🍴 **Fork and contribute** - See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
+- 📢 **Share with educators** - Spread the word about free ed-tech tools
+- 🐛 **Report bugs** - Help us improve by [opening issues](https://github.com/StrungPattern-coder/QuestEd/issues)
+- 💡 **Suggest features** - We're always looking for new ideas
+- 📝 **Write about it** - Blog posts, tutorials, or reviews are appreciated
+
+Every contribution, no matter how small, makes a difference! 🙏
+
+---
+
+## 💬 Support
+
+For issues or questions:
+- **GitHub Issues**: [Report bugs or request features](https://github.com/StrungPattern-coder/QuestEd/issues)
+- **Email**: connect.help83@gmail.com
+- **Documentation**: [Browse all docs](docs/)
+
+---
+
+## 💰 Pricing
+
+**Completely Free!** 🎉
+
+- ✅ Up to **200 concurrent users** at the same time (Ably free tier)
+- ✅ Unlimited total users
+- ✅ Unlimited quizzes and questions
+- ✅ All features included (no premium tiers)
+- ✅ Open-source (MIT License)
+
+**Note**: For more than 200 concurrent users, you'll need to upgrade to Ably's paid tier (~$29-299/month depending on scale). See [SECURITY_AUDIT_REPORT.md](SECURITY_AUDIT_REPORT.md) for scaling details.
+
+---
+
+**Built with ❤️ for educators worldwide**
+
+**Stack**: Next.js 15 · TypeScript · MongoDB · Ably · Tailwind CSS · Shadcn UI · Framer Motion
