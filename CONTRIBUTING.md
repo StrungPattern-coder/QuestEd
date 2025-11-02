@@ -545,17 +545,12 @@ Perfect for new contributors:
    - Implement image upload
    - Files: Question model, question bank API
 
-6. **Implement Dark Mode**
-   - Add dark mode toggle
-   - Use Tailwind dark: classes
+6. **Implement Light Mode**
+   - Add light mode toggle
+   - Use Tailwind light: classes
    - Persist preference in localStorage
 
-7. **Add Test Timer**
-   - Whole-test countdown timer
-   - Warning when time running out
-   - Auto-submit when time expires
-
-8. **Export Test Results to PDF**
+7. **Export Test Results to PDF**
    - Use library like jsPDF
    - Format results nicely
    - Add charts/graphs
