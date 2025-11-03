@@ -32,13 +32,17 @@ if [ ! -f .env ]; then
     cp .env.example .env
     echo "✅ .env file created. Please update it with your credentials."
     echo ""
-    echo "You need to configure:"
+    echo "Required configuration:"
     echo "  1. MONGO_URI - MongoDB Atlas connection string"
     echo "  2. JWT_SECRET - A secure random string"
-    echo "  3. ABLY_API_KEY - Ably API key"
-    echo "  4. NEXT_PUBLIC_ABLY_CLIENT_KEY - Ably client key"
     echo ""
-    echo "See SETUP.md for detailed instructions."
+    echo "Optional configuration:"
+    echo "  3. SMTP settings - For email invitations"
+    echo "  4. Microsoft Teams - For Teams integration"
+    echo "  5. Cloudinary - For image uploads"
+    echo ""
+    echo "Note: Socket.IO (real-time features) requires no configuration!"
+    echo "See README.md for detailed setup instructions."
 else
     echo "✅ .env file found"
 fi
