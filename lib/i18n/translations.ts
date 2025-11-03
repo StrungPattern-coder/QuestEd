@@ -11,8 +11,8 @@ export const translations = {
     
     // Home Page
     home: {
-      heroTitle: "Create Interactive Quizzes",
-      heroHighlight: " Like Kahoot, But Free & Open Source",
+      heroTitle: "An Open-Source Quiz Platform",
+      heroHighlight: " for Interactive Learning",
       heroDescription: "The complete quiz platform for educators and students. Live competitions, instant feedback, and powerful analytics. No subscriptions, no limits, forever free.",
       startLearning: "Start Creating Now",
       stats: {
@@ -280,8 +280,8 @@ export const translations = {
     
     // Home Page
     home: {
-      heroTitle: "Erstelle interaktive Quiz",
-      heroHighlight: " wie Kahoot, aber kostenlos & Open Source",
+      heroTitle: "Eine Open-Source-Quiz-Plattform",
+      heroHighlight: " für interaktives Lernen",
       heroDescription: "Die komplette Quiz-Plattform für Lehrer und Schüler. Live-Wettbewerbe, sofortiges Feedback und leistungsstarke Analysen. Keine Abonnements, keine Limits, für immer kostenlos.",
       startLearning: "Jetzt loslegen",
       stats: {

@@ -6,13 +6,21 @@ export async function GET() {
   try {
     await connectDB();
 
-    // Get today's date at midnight
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Get current date in IST (India Standard Time - UTC+5:30)
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in milliseconds
+    const istTime = new Date(now.getTime() + istOffset);
+    
+    // Get today's date at midnight IST
+    const todayIST = new Date(istTime);
+    todayIST.setUTCHours(0, 0, 0, 0);
+    
+    // Convert back to UTC for database query
+    const todayUTC = new Date(todayIST.getTime() - istOffset);
 
     // Find today's question
     let question = await QuestionOfTheDay.findOne({
-      date: today,
+      date: todayUTC,
       isActive: true,
     });
 
@@ -34,14 +42,73 @@ export async function GET() {
         { question: "Netflix or YouTube?", optionA: "Netflix", optionB: "YouTube", category: "Entertainment" },
         { question: "City or Countryside?", optionA: "🏙️ City", optionB: "🌾 Countryside", category: "General" },
         { question: "Sweet or Savory?", optionA: "🍰 Sweet", optionB: "🧀 Savory", category: "Food" },
-      ];
+        
+        // 🧠 General
+        { question: "Introvert or Extrovert?", optionA: "😌 Introvert", optionB: "😄 Extrovert", category: "General" },
+        { question: "Early bird or Night owl?", optionA: "🐦 Early Bird", optionB: "🦉 Night Owl", category: "General" },
+        { question: "Rain or Sunshine?", optionA: "🌧️ Rain", optionB: "☀️ Sunshine", category: "General" },
+        { question: "Train journey or Flight?", optionA: "🚆 Train", optionB: "✈️ Flight", category: "General" },
+        { question: "Texting or Calling?", optionA: "💬 Texting", optionB: "📞 Calling", category: "General" },
+        { question: "Save or Spend?", optionA: "💰 Save", optionB: "🛍️ Spend", category: "General" },
+        { question: "Adventure or Comfort?", optionA: "🧗 Adventure", optionB: "🛋️ Comfort", category: "General" },
+        { question: "Stay home or Go out?", optionA: "🏠 Stay home", optionB: "🚶 Go out", category: "General" },
+        { question: "Work from home or Office?", optionA: "🏡 Home", optionB: "🏢 Office", category: "General" },
+        { question: "Art or Science?", optionA: "🎨 Art", optionB: "🔬 Science", category: "General" },
+
+        // 🎮 Entertainment
+        { question: "Clash Royale or Brawl Stars?", optionA: "⚔️ Clash Royale", optionB: "💥 Brawl Stars", category: "Entertainment" },
+        { question: "Anime or Cartoons?", optionA: "🎌 Anime", optionB: "📺 Cartoons", category: "Entertainment" },
+        { question: "Marvel or Star Wars?", optionA: "🦸 Marvel", optionB: "🚀 Star Wars", category: "Entertainment" },
+        { question: "Comedy or Action movies?", optionA: "😂 Comedy", optionB: "💣 Action", category: "Entertainment" },
+        { question: "Music or Podcasts?", optionA: "🎶 Music", optionB: "🎙️ Podcasts", category: "Entertainment" },
+        { question: "Single-player or Multiplayer games?", optionA: "🎮 Single", optionB: "👾 Multi", category: "Entertainment" },
+        { question: "TikTok or Instagram Reels?", optionA: "🎵 TikTok", optionB: "📱 Reels", category: "Entertainment" },
+        { question: "Books or Audiobooks?", optionA: "📖 Books", optionB: "🎧 Audiobooks", category: "Entertainment" },
+
+        // 🍔 Food
+        { question: "Chocolate or Ice Cream?", optionA: "🍫 Chocolate", optionB: "🍦 Ice Cream", category: "Food" },
+        { question: "Fries or Nachos?", optionA: "🍟 Fries", optionB: "🌮 Nachos", category: "Food" },
+        { question: "Coke or Pepsi?", optionA: "🥤 Coke", optionB: "🥤 Pepsi", category: "Food" },
+        { question: "Veg or Non-Veg?", optionA: "🥗 Veg", optionB: "🍗 Non-Veg", category: "Food" },
+        { question: "Paneer or Mushroom?", optionA: "🧀 Paneer", optionB: "🍄 Mushroom", category: "Food" },
+        { question: "South Indian or North Indian cuisine?", optionA: "🍛 South", optionB: "🥘 North", category: "Food" },
+        { question: "Dessert first or Last?", optionA: "🍰 First!", optionB: "🍮 Last!", category: "Food" },
+        { question: "Home food or Restaurant?", optionA: "🏠 Home", optionB: "🍴 Restaurant", category: "Food" },
+
+        // ⚽ Sports
+        { question: "Cricket or Football?", optionA: "🏏 Cricket", optionB: "⚽ Football", category: "Sports" },
+        { question: "Messi or Ronaldo?", optionA: "🐐 Messi", optionB: "🔥 Ronaldo", category: "Sports" },
+        { question: "Gym or Yoga?", optionA: "🏋️ Gym", optionB: "🧘 Yoga", category: "Sports" },
+        { question: "Indoor or Outdoor sports?", optionA: "🏓 Indoor", optionB: "🏃 Outdoor", category: "Sports" },
+        { question: "Running or Cycling?", optionA: "🏃 Running", optionB: "🚴 Cycling", category: "Sports" },
+        { question: "Team sports or Solo sports?", optionA: "👥 Team", optionB: "🧍 Solo", category: "Sports" },
+
+        // 💻 Tech
+        { question: "Mac or Windows?", optionA: "🍎 Mac", optionB: "🪟 Windows", category: "Tech" },
+        { question: "Laptop or Desktop?", optionA: "💻 Laptop", optionB: "🖥️ Desktop", category: "Tech" },
+        { question: "ChatGPT or Gemini?", optionA: "🧠 ChatGPT", optionB: "🌐 Gemini", category: "Tech" },
+        { question: "Front-end or Back-end?", optionA: "🎨 Front-end", optionB: "⚙️ Back-end", category: "Tech" },
+        { question: "Python or JavaScript?", optionA: "🐍 Python", optionB: "🟨 JS", category: "Tech" },
+        { question: "Android or iOS?", optionA: "🤖 Android", optionB: "🍏 iOS", category: "Tech" },
+        { question: "AI or Blockchain?", optionA: "🤖 AI", optionB: "⛓️ Blockchain", category: "Tech" },
+        { question: "Gaming PC or Console?", optionA: "🖥️ PC", optionB: "🎮 Console", category: "Tech" },
+
+        // 🌍 Lifestyle / Travel
+        { question: "Travel solo or with friends?", optionA: "🧳 Solo", optionB: "👯 With Friends", category: "Lifestyle" },
+        { question: "Mountains or Beaches?", optionA: "⛰️ Mountains", optionB: "🏖️ Beaches", category: "Lifestyle" },
+        { question: "Car or Bike?", optionA: "🚗 Car", optionB: "🏍️ Bike", category: "Lifestyle" },
+        { question: "City life or Village life?", optionA: "🏙️ City", optionB: "🌾 Village", category: "Lifestyle" },
+        { question: "Minimalist or Maximalist?", optionA: "🌿 Minimalist", optionB: "💎 Maximalist", category: "Lifestyle" },
+        { question: "Summer or Winter vacation?", optionA: "☀️ Summer", optionB: "❄️ Winter", category: "Lifestyle" },
+        { question: "Camping or Luxury hotel?", optionA: "🏕️ Camping", optionB: "🏨 Luxury", category: "Lifestyle" },
+];
 
       // Pick a random question
       const randomQ = questionPool[Math.floor(Math.random() * questionPool.length)];
 
       question = await QuestionOfTheDay.create({
         ...randomQ,
-        date: today,
+        date: todayUTC,
         isActive: true,
       });
     }

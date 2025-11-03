@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
-import { Brain, Mail, Lock, ArrowLeft, Sparkles } from "lucide-react";
+import { Mail, Lock, ArrowLeft, Sparkles } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
@@ -91,9 +91,6 @@ export default function LoginPage() {
       >
         <Card className="backdrop-blur-xl bg-[#F5F5F5]/95 border-[#FF991C]/20 shadow-2xl">
           <CardHeader className="space-y-2 sm:space-y-3 text-center pb-6 sm:pb-8 px-4 sm:px-6">
-            <div className="mx-auto bg-[#FF991C] p-2.5 sm:p-3 rounded-2xl w-fit">
-              <Brain className="h-7 w-7 sm:h-8 sm:w-8 text-black" />
-            </div>
             <CardTitle className="text-3xl sm:text-4xl font-bold text-black">
               {t.auth.loginTitle}
             </CardTitle>

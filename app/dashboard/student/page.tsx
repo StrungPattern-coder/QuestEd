@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useAuthStore } from "@/lib/store";
-import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap, XCircle, Award, User, Bell, FolderOpen } from "lucide-react";
+import { Brain, Trophy, Target, TrendingUp, LogOut, Play, CheckCircle, Clock, BookOpen, AlertCircle, Loader2, Calendar, Zap, XCircle, Award, User, Bell, FolderOpen, Settings } from "lucide-react";
 import { studentApi } from "@/lib/api";
 import { useLanguage } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -203,12 +203,28 @@ export default function StudentDashboard() {
                 Materials
               </Button>
               <Button 
+                onClick={() => router.push("/quick-quiz")}
+                variant="ghost"
+                className="bg-transparent border border-cyan-500/30 hover:border-cyan-500 hover:bg-cyan-500/10 text-[#F5F5F5] rounded-full"
+              >
+                <Zap className="h-4 w-4 mr-2" />
+                Quick Quiz
+              </Button>
+              <Button 
                 onClick={() => router.push("/dashboard/student/announcements")}
                 variant="ghost"
                 className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
               >
                 <Bell className="h-4 w-4 mr-2" />
                 Announcements
+              </Button>
+              <Button 
+                onClick={() => router.push("/dashboard/student/settings")}
+                variant="ghost"
+                className="bg-transparent border border-purple-500/30 hover:border-purple-500 hover:bg-purple-500/10 text-[#F5F5F5] rounded-full"
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                Settings
               </Button>
             </div>
 
@@ -252,18 +268,37 @@ export default function StudentDashboard() {
 
       {/* Mobile Header */}
       <div className="lg:hidden px-4 pt-20 pb-4">
-        <div className="bg-white/5 backdrop-blur-xl border border-[#FF991C]/20 rounded-2xl p-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-[#F5F5F5]">{t.brandName}</h1>
-            <p className="text-sm text-[#F5F5F5]/70">{t.student.portal}</p>
+        <div className="bg-white/5 backdrop-blur-xl border border-[#FF991C]/20 rounded-2xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <h1 className="text-xl font-bold text-[#F5F5F5]">{t.brandName}</h1>
+              <p className="text-sm text-[#F5F5F5]/70">{t.student.portal}</p>
+            </div>
+            <Button 
+              onClick={() => router.push("/dashboard/student/live")}
+              className="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full px-4 h-9 text-sm"
+            >
+              <Zap className="h-4 w-4 mr-1" />
+              Live
+            </Button>
           </div>
-          <Button 
-            onClick={() => router.push("/dashboard/student/live")}
-            className="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full px-4 h-9 text-sm"
-          >
-            <Zap className="h-4 w-4 mr-1" />
-            Live
-          </Button>
+          <div className="space-y-2">
+            <Button 
+              onClick={() => router.push("/quick-quiz")}
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-full h-9 text-sm"
+            >
+              <Zap className="h-4 w-4 mr-2" />
+              Quick Quiz
+            </Button>
+            <Button 
+              onClick={() => router.push("/dashboard/student/settings")}
+              variant="outline"
+              className="w-full border-purple-500/50 hover:bg-purple-500/10 text-[#F5F5F5] rounded-full h-9 text-sm"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </Button>
+          </div>
         </div>
       </div>
 

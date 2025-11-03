@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Zap, Plus, Trash2, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useAuthStore } from "@/lib/store";
 
 interface Question {
   questionText: string;
@@ -17,6 +18,7 @@ interface Question {
 
 export default function QuickQuizPage() {
   const router = useRouter();
+  const { user } = useAuthStore();
   const [mode, setMode] = useState<'select' | 'create' | 'join'>('select'); // Add mode selection
   const [joinCode, setJoinCode] = useState("");
   const [joiningName, setJoiningName] = useState("");
@@ -29,6 +31,14 @@ export default function QuickQuizPage() {
   ]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Auto-fill user name if logged in
+  useEffect(() => {
+    if (user?.name) {
+      setJoiningName(user.name);
+      setHostName(user.name);
+    }
+  }, [user]);
 
   const handleJoinQuiz = () => {
     if (!joinCode.trim() || !joiningName.trim()) {
@@ -128,7 +138,6 @@ export default function QuickQuizPage() {
             Back to Home
           </Link>
           <h1 className="text-4xl font-bold text-[#F5F5F5] mb-2">
-            <Zap className="inline h-10 w-10 text-[#FF991C] mr-2" />
             Quick Quiz
           </h1>
           <p className="text-[#F5F5F5]/70">

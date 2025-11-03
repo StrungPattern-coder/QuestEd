@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HelpCircle, X, TrendingUp } from 'lucide-react';
+import { HelpCircle, X, TrendingUp, Clock } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 interface QOTDData {
@@ -32,22 +32,78 @@ export default function QuestionOfTheDay() {
   const [selectedOption, setSelectedOption] = useState<'A' | 'B' | null>(null);
   const [results, setResults] = useState<VoteResults | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<string>('');
+
+  // Get next midnight in IST
+  const getNextMidnightIST = () => {
+    // Create date in IST timezone
+    const nowUTC = new Date();
+    
+    // Get IST time by adding 5 hours 30 minutes
+    const istDate = new Date(nowUTC.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+    
+    // Set to next midnight IST
+    const nextMidnightIST = new Date(istDate);
+    nextMidnightIST.setHours(24, 0, 0, 0);
+    
+    // Return the Date object for next midnight
+    return nextMidnightIST;
+  };
+
+  // Format time remaining
+  const formatTimeRemaining = (ms: number) => {
+    if (ms <= 0) return '0h 0m 0s';
+    
+    const hours = Math.floor(ms / (1000 * 60 * 60));
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+    
+    return `${hours}h ${minutes}m ${seconds}s`;
+  };
+
+  // Update countdown timer
+  useEffect(() => {
+    const updateTimer = () => {
+      const nextMidnight = getNextMidnightIST();
+      const nowIST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+      const diff = nextMidnight.getTime() - nowIST.getTime();
+      
+      if (diff <= 0) {
+        // Time to refresh! Clear voted status and fetch new question
+        localStorage.removeItem('qotd_voted_date');
+        localStorage.removeItem('qotd_dismissed_date');
+        setHasVoted(false);
+        setSelectedOption(null);
+        setResults(null);
+        fetchQuestion();
+        setTimeRemaining('Refreshing...');
+      } else {
+        setTimeRemaining(formatTimeRemaining(diff));
+      }
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
-    // Check if user has already voted today
-    const votedToday = localStorage.getItem('qotd_voted_date');
-    const today = new Date().toDateString();
+    // Check if user has already voted today (IST timezone)
+    const votedDate = localStorage.getItem('qotd_voted_date');
+    const nowIST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+    const todayIST = nowIST.toISOString().split('T')[0]; // YYYY-MM-DD in IST
     
-    if (votedToday === today) {
+    if (votedDate === todayIST) {
       setHasVoted(true);
     }
 
     // Check if user dismissed prompt today
-    const dismissedToday = localStorage.getItem('qotd_dismissed_date');
-    if (dismissedToday !== today) {
+    const dismissedDate = localStorage.getItem('qotd_dismissed_date');
+    if (dismissedDate !== todayIST) {
       // Show prompt after 3 seconds
       setTimeout(() => {
-        if (!isOpen && votedToday !== today) {
+        if (!isOpen && votedDate !== todayIST) {
           setShowPrompt(true);
         }
       }, 3000);
@@ -90,9 +146,10 @@ export default function QuestionOfTheDay() {
         setResults(data.results);
         setHasVoted(true);
         
-        // Store vote in localStorage
-        const today = new Date().toDateString();
-        localStorage.setItem('qotd_voted_date', today);
+        // Store vote with IST date
+        const nowIST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+        const todayIST = nowIST.toISOString().split('T')[0];
+        localStorage.setItem('qotd_voted_date', todayIST);
       }
     } catch (error) {
       console.error('Failed to vote:', error);
@@ -103,8 +160,9 @@ export default function QuestionOfTheDay() {
 
   const dismissPrompt = () => {
     setShowPrompt(false);
-    const today = new Date().toDateString();
-    localStorage.setItem('qotd_dismissed_date', today);
+    const nowIST = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+    const todayIST = nowIST.toISOString().split('T')[0];
+    localStorage.setItem('qotd_dismissed_date', todayIST);
   };
 
   const openModal = () => {
@@ -121,18 +179,26 @@ export default function QuestionOfTheDay() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={openModal}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center group hover:shadow-purple-500/50 transition-all duration-300"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center group hover:shadow-[#FF991C]/50 transition-all duration-300 bg-gradient-to-br from-[#FF991C] via-[#FF8F4D] to-[#FFB84D]"
         title={t.qotd?.title || "Question of the Day"}
       >
         <HelpCircle className="w-7 h-7 text-white group-hover:rotate-12 transition-transform" />
         
         {/* Pulse animation ring */}
-        <span className="absolute inset-0 rounded-full bg-purple-500 animate-ping opacity-20"></span>
+        <span className="absolute inset-0 rounded-full bg-[#FF991C] animate-ping opacity-20"></span>
         
         {/* New badge if not voted */}
         {!hasVoted && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-white flex items-center justify-center animate-bounce">
             <span className="text-white text-xs font-bold">!</span>
+          </span>
+        )}
+        
+        {/* Timer badge */}
+        {timeRemaining && timeRemaining !== 'Refreshing...' && (
+          <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white text-[#FF991C] text-[10px] font-bold px-2 py-0.5 rounded-full shadow-lg whitespace-nowrap">
+            <Clock className="w-2.5 h-2.5 inline mr-0.5" />
+            {timeRemaining.split(' ')[0]} {/* Show only hours */}
           </span>
         )}
       </motion.button>
@@ -144,7 +210,7 @@ export default function QuestionOfTheDay() {
             initial={{ opacity: 0, y: 50, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.8 }}
-            className="fixed bottom-24 right-6 z-40 w-72 bg-white rounded-2xl shadow-2xl p-4 border-2 border-purple-200"
+            className="fixed bottom-24 right-6 z-40 w-72 bg-white rounded-2xl shadow-2xl p-4 border-2 border-[#FF991C]/30"
           >
             <button
               onClick={dismissPrompt}
@@ -154,7 +220,7 @@ export default function QuestionOfTheDay() {
             </button>
             
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#FF991C] to-[#FF8F4D] rounded-full flex items-center justify-center flex-shrink-0">
                 <HelpCircle className="w-5 h-5 text-white" />
               </div>
               
@@ -167,7 +233,7 @@ export default function QuestionOfTheDay() {
                 </p>
                 <button
                   onClick={openModal}
-                  className="w-full bg-black hover:bg-gray-900 text-white py-2 rounded-lg font-semibold text-sm transition-all"
+                  className="w-full bg-gradient-to-r from-[#FF991C] to-[#FF8F4D] hover:from-[#FF8F4D] hover:to-[#FF991C] text-white py-2 rounded-lg font-semibold text-sm transition-all"
                 >
                   {t.qotd?.answerNow || "Answer Now!"}
                 </button>
@@ -198,8 +264,8 @@ export default function QuestionOfTheDay() {
               className="fixed inset-0 z-50 flex items-center justify-center p-4"
             >
               <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 p-6 text-white relative">
+                {/* Header with Orange Theme */}
+                <div className="bg-gradient-to-r from-[#FF991C] via-[#FF8F4D] to-[#FFB84D] p-6 text-white relative">
                   <button
                     onClick={() => setIsOpen(false)}
                     className="absolute top-4 right-4 text-white/80 hover:text-white"
@@ -207,18 +273,46 @@ export default function QuestionOfTheDay() {
                     <X className="w-6 h-6" />
                   </button>
                   
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center gap-3 mb-4">
                     <HelpCircle className="w-8 h-8" />
-                    <h2 className="text-2xl font-bold">
-                      {t.qotd?.title || "Question of the Day"}
-                    </h2>
+                    <div className="flex-1">
+                      <h2 className="text-2xl font-bold">
+                        {t.qotd?.title || "Question of the Day"}
+                      </h2>
+                      {question && (
+                        <span className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium mt-1">
+                          {question.category}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   
-                  {question && (
-                    <span className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
-                      {question.category}
-                    </span>
-                  )}
+                  {/* Single Amazing Countdown Timer */}
+                  <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-4 border border-white/30">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-5 h-5" />
+                        <span className="text-sm font-semibold">Next Question In:</span>
+                      </div>
+                      <span className="text-2xl font-black tracking-wider">
+                        {timeRemaining}
+                      </span>
+                    </div>
+                    
+                    {/* Visual Progress Bar */}
+                    <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
+                      <motion.div
+                        className="h-full bg-white shadow-lg"
+                        style={{
+                          width: `${Math.max(0, Math.min(100, ((24 * 60 * 60 * 1000 - (getNextMidnightIST().getTime() - new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })).getTime())) / (24 * 60 * 60 * 1000)) * 100))}%`
+                        }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    </div>
+                    <p className="text-xs text-white/80 mt-2 text-center">
+                      Resets daily at 12:00 AM IST
+                    </p>
+                  </div>
                 </div>
 
                 {/* Question & Voting */}
@@ -237,7 +331,7 @@ export default function QuestionOfTheDay() {
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleVote('A')}
                             disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                            className="w-full bg-gradient-to-r from-[#FF991C] to-[#FF8F4D] hover:from-[#FF8F4D] hover:to-[#FFB84D] text-white py-4 rounded-xl font-semibold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                           >
                             {question.optionA}
                           </motion.button>
@@ -247,7 +341,7 @@ export default function QuestionOfTheDay() {
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleVote('B')}
                             disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                            className="w-full bg-gradient-to-r from-[#FFB84D] to-[#FF991C] hover:from-[#FF991C] hover:to-[#FF8F4D] text-white py-4 rounded-xl font-semibold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                           >
                             {question.optionB}
                           </motion.button>
@@ -256,7 +350,7 @@ export default function QuestionOfTheDay() {
                         // Results
                         <div className="space-y-6">
                           <div className="text-center mb-4">
-                            <TrendingUp className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                            <TrendingUp className="w-8 h-8 text-[#FF991C] mx-auto mb-2" />
                             <p className="text-gray-600">
                               {t.qotd?.resultsText || "Here's what the community thinks!"}
                             </p>
@@ -268,7 +362,7 @@ export default function QuestionOfTheDay() {
                               <span className="font-semibold text-gray-900">
                                 {question.optionA}
                               </span>
-                              <span className="text-2xl font-bold text-blue-600">
+                              <span className="text-2xl font-bold text-[#FF991C]">
                                 {results?.percentageA || 0}%
                               </span>
                             </div>
@@ -279,13 +373,13 @@ export default function QuestionOfTheDay() {
                                 transition={{ duration: 1, ease: "easeOut" }}
                                 className={`h-full rounded-full ${
                                   selectedOption === 'A' 
-                                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
+                                    ? 'bg-gradient-to-r from-[#FF991C] to-[#FF8F4D]' 
                                     : 'bg-gray-400'
                                 }`}
                               />
                             </div>
                             {selectedOption === 'A' && (
-                              <p className="text-sm text-blue-600 font-semibold mt-1">
+                              <p className="text-sm text-[#FF991C] font-semibold mt-1">
                                 ← {t.qotd?.yourChoice || "Your choice"}
                               </p>
                             )}
@@ -297,7 +391,7 @@ export default function QuestionOfTheDay() {
                               <span className="font-semibold text-gray-900">
                                 {question.optionB}
                               </span>
-                              <span className="text-2xl font-bold text-pink-600">
+                              <span className="text-2xl font-bold text-[#FFB84D]">
                                 {results?.percentageB || 0}%
                               </span>
                             </div>
@@ -308,13 +402,13 @@ export default function QuestionOfTheDay() {
                                 transition={{ duration: 1, ease: "easeOut" }}
                                 className={`h-full rounded-full ${
                                   selectedOption === 'B' 
-                                    ? 'bg-gradient-to-r from-pink-500 to-rose-500' 
+                                    ? 'bg-gradient-to-r from-[#FFB84D] to-[#FF991C]' 
                                     : 'bg-gray-400'
                                 }`}
                               />
                             </div>
                             {selectedOption === 'B' && (
-                              <p className="text-sm text-pink-600 font-semibold mt-1">
+                              <p className="text-sm text-[#FFB84D] font-semibold mt-1">
                                 ← {t.qotd?.yourChoice || "Your choice"}
                               </p>
                             )}
@@ -331,7 +425,7 @@ export default function QuestionOfTheDay() {
                     </>
                   ) : (
                     <div className="text-center py-8">
-                      <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                      <div className="w-12 h-12 border-4 border-[#FF991C] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                       <p className="text-gray-600">
                         {t.qotd?.loading || "Loading question..."}
                       </p>
@@ -339,10 +433,10 @@ export default function QuestionOfTheDay() {
                   )}
                 </div>
 
-                {/* Footer */}
-                <div className="bg-gray-50 px-6 py-4 text-center">
-                  <p className="text-xs text-gray-500">
-                    {t.qotd?.newDaily || "New question every day! Come back tomorrow."}
+                {/* Footer - Simple and Clean */}
+                <div className="bg-gradient-to-r from-[#FF991C]/10 to-[#FFB84D]/10 px-6 py-4 text-center border-t border-[#FF991C]/20">
+                  <p className="text-sm text-gray-600 font-medium">
+                    ✨ {t.qotd?.newDaily || "Come back tomorrow for a new question!"}
                   </p>
                 </div>
               </div>
