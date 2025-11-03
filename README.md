@@ -199,8 +199,6 @@ For issues or questions:
 
 ## 💰 Pricing
 
-**Completely Free!** 🎉
-
 - ✅ Up to **200 concurrent users** at the same time (Ably free tier)
 - ✅ Unlimited total users
 - ✅ Unlimited quizzes and questions
