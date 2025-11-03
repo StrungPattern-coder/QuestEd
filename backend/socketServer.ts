@@ -1,7 +1,12 @@
 import { Server as SocketIOServer } from 'socket.io';
 import { Server as HTTPServer } from 'http';
 
-let io: SocketIOServer | null = null;
+// Use global to persist Socket.IO instance across hot reloads in development
+declare global {
+  var io: SocketIOServer | undefined;
+}
+
+let io: SocketIOServer | null = global.io || null;
 
 export const initializeSocketIO = (httpServer: HTTPServer) => {
   io = new SocketIOServer(httpServer, {
@@ -131,10 +136,19 @@ export const initializeSocketIO = (httpServer: HTTPServer) => {
   });
 
   console.log('🔌 Socket.IO server initialized');
+  
+  // Store in global for hot reload persistence in development
+  global.io = io;
+  
   return io;
 };
 
 export const getIO = (): SocketIOServer => {
+  // Try to get from module variable first, then from global
+  if (!io && global.io) {
+    io = global.io;
+  }
+  
   if (!io) {
     throw new Error('Socket.IO not initialized! Call initializeSocketIO first.');
   }
