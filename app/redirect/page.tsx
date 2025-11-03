@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 export default function RedirectPage() {
   const [countdown, setCountdown] = useState(5);
   
-  // 🎯 UPDATE THIS URL after deploying to Render!
-  const NEW_URL = 'https://quested.onrender.com'; 
-  // Or use your custom domain: 'https://app.quested.com'
+    // 🎯 Render deployment URL (UPDATED!)
+  const NEW_URL = 'https://quested-p4cm.onrender.com'; 
+  // Or use your custom domain when ready: 'https://app.quested.com'
 
   useEffect(() => {
     // Countdown timer
