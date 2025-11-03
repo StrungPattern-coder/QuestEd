@@ -58,6 +58,7 @@ export default function TeamsIntegration({ onSuccess }: TeamsIntegrationProps) {
   const [syncing, setSyncing] = useState(false);
   const [syncResults, setSyncResults] = useState<any>(null);
   const [error, setError] = useState("");
+  const [showAdminHelp, setShowAdminHelp] = useState(false);
 
   useEffect(() => {
     checkConnection();
@@ -541,6 +542,58 @@ export default function TeamsIntegration({ onSuccess }: TeamsIntegrationProps) {
             )}
           </div>
         )}
+
+        {/* Admin Approval Help Section */}
+        <div className="border-t pt-4 mt-6">
+          <button
+            onClick={() => setShowAdminHelp(!showAdminHelp)}
+            className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <AlertCircle className="w-4 h-4" />
+            Getting "Admin approval required" error?
+          </button>
+          
+          {showAdminHelp && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="mt-3 bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm"
+            >
+              <h4 className="font-semibold text-yellow-900 mb-2">Why am I seeing this error?</h4>
+              <p className="text-yellow-800 mb-3">
+                Your organization requires admin consent before third-party apps can access Microsoft Teams data. This is a common security policy.
+              </p>
+              
+              <h4 className="font-semibold text-yellow-900 mb-2">Solutions:</h4>
+              <ul className="space-y-2 text-yellow-800">
+                <li className="flex gap-2">
+                  <span className="font-bold">1.</span>
+                  <span>
+                    <strong>Use a Personal Microsoft Account:</strong> If you have a personal Microsoft account (e.g., yourname@outlook.com, @hotmail.com), click the "Personal" button instead.
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-bold">2.</span>
+                  <span>
+                    <strong>Request Admin Consent:</strong> Contact your IT administrator and share this Azure AD App ID: <code className="bg-yellow-100 px-1 py-0.5 rounded">0b9142a9-fcdd-45dc-8a42-6618065dc0de</code>
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="font-bold">3.</span>
+                  <span>
+                    <strong>Test Without Teams:</strong> You can still use all QuestEd features without Teams integration. Create classrooms manually instead.
+                  </span>
+                </li>
+              </ul>
+
+              <div className="mt-3 pt-3 border-t border-yellow-300">
+                <p className="text-xs text-yellow-700">
+                  <strong>Note for Students:</strong> If you're testing with a student account, you'll need teacher/administrator privileges to connect Teams. Try using a personal account or manual classroom creation instead.
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

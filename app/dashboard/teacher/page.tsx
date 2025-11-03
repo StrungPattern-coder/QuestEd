@@ -177,6 +177,10 @@ export default function TeacherDashboard() {
 
               {/* Navigation Items */}
               <div className="flex items-center gap-4">
+                <Button onClick={() => router.push("/dashboard/teacher/settings")} variant="ghost" className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full">
+                  <Users className="h-4 w-4 mr-2" />
+                  Settings
+                </Button>
                 <div className="text-right">
                   <p className="text-sm font-medium text-[#F5F5F5]">{user?.name}</p>
                   <p className="text-xs text-[#F5F5F5]/60">{user?.email}</p>
@@ -291,6 +295,10 @@ export default function TeacherDashboard() {
 
             {/* Navigation Items */}
             <div className="flex items-center gap-4">
+              <Button onClick={() => router.push("/dashboard/teacher/settings")} variant="ghost" className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full">
+                <Users className="h-4 w-4 mr-2" />
+                Settings
+              </Button>
               <div className="text-right">
                 <p className="text-sm font-medium text-[#F5F5F5]">{user?.name}</p>
                 <p className="text-xs text-[#F5F5F5]/60">{user?.email}</p>
@@ -490,7 +498,7 @@ export default function TeacherDashboard() {
                     { label: "Browse Templates", icon: Library, description: "Clone ready-made quizzes", onClick: () => router.push("/templates") },
                     { label: "View All Tests", icon: TrendingUp, description: "See all tests & results", onClick: () => router.push("/dashboard/teacher/tests/all") },
                     { label: "View Analytics", icon: TrendingUp, description: "Check performance", onClick: () => router.push("/dashboard/teacher/analytics") },
-                    { label: "Question Bank", icon: HelpCircle, description: "Manage your questions", onClick: () => router.push("/dashboard/teacher/question-bank") },
+                    { label: "Settings & Integrations", icon: HelpCircle, description: "Configure Teams, profile, etc.", onClick: () => router.push("/dashboard/teacher/settings") },
                   ].map((action, index) => (
                     <motion.button
                       key={action.label}
