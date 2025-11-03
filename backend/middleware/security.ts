@@ -17,15 +17,15 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   // Control referrer information
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   
-  // Content Security Policy (adjust based on your needs)
+  // Content Security Policy (adjusted for Socket.IO)
   res.setHeader(
     'Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.ably.io; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com; " +
     "img-src 'self' data: https:; " +
-    "connect-src 'self' https://realtime.ably.io wss://realtime.ably.io; " +
+    "connect-src 'self' ws: wss:; " +
     "frame-ancestors 'none';"
   );
   
