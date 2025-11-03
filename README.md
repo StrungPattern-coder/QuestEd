@@ -1,4 +1,4 @@
-# 🎓 QuestEd
+# QuestEd
 
 **A completely free and open-source alternative to Kahoot** - Interactive quiz platform with gamification, real-time features, and zero paywalls.
 
@@ -13,13 +13,13 @@
 
 ---
 
-## 🚀 Why QuestEd?
+## Why QuestEd?
 
 Educators shouldn't pay for basic features when they're just trying to make learning engaging. QuestEd combines the best of **Kahoot's live interaction** with **Duolingo's gamification** - completely free, forever.
 
 ### ⚡ Key Features
 
-**For Teachers** 👨‍🏫
+**For Teachers** 
 - ✅ **Live Quiz Sessions** (up to 200 concurrent participants on free tier)
 - ✅ **Question Bank Management** - 500+ pre-loaded questions, CSV/JSON import
 - ✅ **Classroom Management** - Email invitations, join codes, student tracking
@@ -28,7 +28,7 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 - ✅ **Template System** - Pre-built quiz templates to get started fast
 - ✅ **Microsoft Teams Integration** - **NEW!** Import Teams classrooms & students automatically
 
-**For Students** 👨‍🎓
+**For Students**
 - ✅ **Daily Challenges** - Question of the Day with streaks
 - ✅ **Quick Quiz** - Practice mode with 500+ questions
 - ✅ **Gamification** - Streaks, badges, celebrations, podium animations
@@ -46,7 +46,7 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Frontend**
 - Next.js 15 (App Router, React Server Components)
@@ -92,7 +92,7 @@ Ready to get started? Check out our [**Getting Started Guide**](GETTING_STARTED.
 
 ---
 
-## 📚 Documentation
+## Documentation
 
 Comprehensive documentation is available in the [`/docs`](./docs) folder:
 

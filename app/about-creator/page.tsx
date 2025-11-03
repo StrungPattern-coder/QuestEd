@@ -91,7 +91,7 @@ export default function AboutCreator() {
 ];
 
   const handleContactClick = () => {
-    window.location.href = "ksriram4584@gmail.com"; // Replace with your actual email
+    window.location.href = "mailto:ksriram4584@gmail.com"; // Opens default email client
   };
 
   return (

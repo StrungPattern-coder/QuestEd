@@ -154,95 +154,141 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Features Section */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-20 sm:pb-32">
+      {/* Features Section - Infinite Carousel */}
+      <div className="relative z-10 pb-20 sm:pb-32 overflow-hidden">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-12 sm:mb-16"
+          className="text-center mb-12 sm:mb-16 px-4"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#F5F5F5] mb-3 sm:mb-4 px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#F5F5F5] mb-3 sm:mb-4">
             {t.home.whyTitle}
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-[#F5F5F5]/70 px-4">
+          <p className="text-sm sm:text-base md:text-lg text-[#F5F5F5]/70">
             {t.home.whySubtitle}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {[
-            {
-              icon: Zap,
-              title: t.home.features.liveQuizzes.title,
-              description: t.home.features.liveQuizzes.description,
-              delay: 0
-            },
-            {
-              icon: Users,
-              title: t.home.features.classroom.title,
-              description: t.home.features.classroom.description,
-              delay: 0.1
-            },
-            {
-              icon: Trophy,
-              title: t.home.features.gamified.title,
-              description: t.home.features.gamified.description,
-              delay: 0.2
-            },
-            {
-              icon: TrendingUp,
-              title: t.home.features.analytics.title,
-              description: t.home.features.analytics.description,
-              delay: 0.3
-            },
-            {
-              icon: Brain,
-              title: t.home.features.adaptive.title,
-              description: t.home.features.adaptive.description,
-              delay: 0.4
-            },
-            {
-              icon: Sparkles,
-              title: t.home.features.feedback.title,
-              description: t.home.features.feedback.description,
-              delay: 0.5
+        {/* Infinite Scrolling Carousel */}
+        <div className="relative">
+          {/* Gradient Overlays */}
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black to-transparent z-10" />
+          
+          <style jsx>{`
+            @keyframes scroll {
+              0% {
+                transform: translateX(0);
+              }
+              100% {
+                transform: translateX(-50%);
+              }
             }
-          ].map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: feature.delay }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.05 }}
-              className="group"
-            >
-              <div 
-                className="relative overflow-hidden rounded-2xl p-6 sm:p-8 border-2 border-[#FF991C]/40 backdrop-blur-sm transition-all duration-300 h-full shadow-xl hover:shadow-2xl hover:shadow-[#FF991C]/30"
-                style={{
-                  background: 'radial-gradient(circle at 50% 0%, rgba(255, 153, 28, 0.35) 0%, rgba(255, 143, 77, 0.15) 50%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(135deg, rgba(255, 153, 28, 0.25) 0%, rgba(255, 184, 77, 0.2) 100%)',
-                }}
+            .animate-scroll {
+              animation: scroll 30s linear infinite;
+            }
+            .animate-scroll:hover {
+              animation-play-state: paused;
+            }
+          `}</style>
+
+          <div className="flex animate-scroll">
+            {/* First set of features */}
+            {[
+              {
+                icon: Zap,
+                title: t.home.features.liveQuizzes.title,
+                description: t.home.features.liveQuizzes.description,
+              },
+              {
+                icon: Users,
+                title: t.home.features.classroom.title,
+                description: t.home.features.classroom.description,
+              },
+              {
+                icon: Trophy,
+                title: t.home.features.gamified.title,
+                description: t.home.features.gamified.description,
+              },
+              {
+                icon: TrendingUp,
+                title: t.home.features.analytics.title,
+                description: t.home.features.analytics.description,
+              },
+              {
+                icon: Brain,
+                title: t.home.features.adaptive.title,
+                description: t.home.features.adaptive.description,
+              },
+              {
+                icon: Sparkles,
+                title: t.home.features.feedback.title,
+                description: t.home.features.feedback.description,
+              }
+            ].concat([
+              // Duplicate for infinite effect
+              {
+                icon: Zap,
+                title: t.home.features.liveQuizzes.title,
+                description: t.home.features.liveQuizzes.description,
+              },
+              {
+                icon: Users,
+                title: t.home.features.classroom.title,
+                description: t.home.features.classroom.description,
+              },
+              {
+                icon: Trophy,
+                title: t.home.features.gamified.title,
+                description: t.home.features.gamified.description,
+              },
+              {
+                icon: TrendingUp,
+                title: t.home.features.analytics.title,
+                description: t.home.features.analytics.description,
+              },
+              {
+                icon: Brain,
+                title: t.home.features.adaptive.title,
+                description: t.home.features.adaptive.description,
+              },
+              {
+                icon: Sparkles,
+                title: t.home.features.feedback.title,
+                description: t.home.features.feedback.description,
+              }
+            ]).map((feature, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 w-80 sm:w-96 mx-4 group"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C]/15 via-transparent to-[#FFB84D]/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative z-10">
-                  <div className="relative w-16 h-16 mb-4 sm:mb-6">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C] via-[#FFB84D] to-[#FF8F4D] rounded-xl blur-md opacity-70" />
-                    <div className="relative bg-gradient-to-br from-[#FF991C] to-[#FF8F4D] w-full h-full rounded-xl flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
-                      <feature.icon className="h-6 w-6 sm:h-8 sm:w-8 text-black drop-shadow-lg" strokeWidth={2.5} />
+                <div 
+                  className="relative overflow-hidden rounded-2xl p-6 sm:p-8 border-2 border-[#FF991C]/40 backdrop-blur-sm transition-all duration-300 h-full shadow-xl hover:shadow-2xl hover:shadow-[#FF991C]/30 hover:scale-105"
+                  style={{
+                    background: 'radial-gradient(circle at 50% 0%, rgba(255, 153, 28, 0.35) 0%, rgba(255, 143, 77, 0.15) 50%, rgba(0, 0, 0, 0.2) 100%), linear-gradient(135deg, rgba(255, 153, 28, 0.25) 0%, rgba(255, 184, 77, 0.2) 100%)',
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C]/15 via-transparent to-[#FFB84D]/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative z-10">
+                    <div className="relative w-16 h-16 mb-6">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#FF991C] via-[#FFB84D] to-[#FF8F4D] rounded-xl blur-md opacity-70" />
+                      <div className="relative bg-gradient-to-br from-[#FF991C] to-[#FF8F4D] w-full h-full rounded-xl flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110">
+                        <feature.icon className="h-8 w-8 text-black drop-shadow-lg" strokeWidth={2.5} />
+                      </div>
                     </div>
+                    <h3 className="text-xl font-semibold text-[#F5F5F5] mb-3 drop-shadow-lg">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-[#F5F5F5]/90 leading-relaxed">
+                      {feature.description}
+                    </p>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-[#F5F5F5] mb-2 sm:mb-3 drop-shadow-lg">
-                    {feature.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-[#F5F5F5]/90 leading-relaxed">
-                    {feature.description}
-                  </p>
                 </div>
               </div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
