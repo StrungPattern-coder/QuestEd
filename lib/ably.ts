@@ -146,3 +146,51 @@ export const publishAnnouncementDeleted = (classroomId: string, announcementId: 
   
   channel.publish('announcement-deleted', { announcementId });
 };
+
+// Test completion events (for notifying students when teacher ends test)
+export const subscribeToTestEnded = (
+  testId: string,
+  onTestEnded: (data: { message: string; redirectUrl?: string }) => void
+) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`live-test-${testId}`);
+  
+  channel.subscribe('test-ended', (message) => {
+    onTestEnded(message.data);
+  });
+  
+  return () => {
+    channel.unsubscribe('test-ended');
+  };
+};
+
+export const publishTestEnded = (testId: string, message: string, redirectUrl?: string) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`live-test-${testId}`);
+  
+  channel.publish('test-ended', { message, redirectUrl });
+};
+
+// Quick Quiz completion events
+export const subscribeToQuizEnded = (
+  quizId: string,
+  onQuizEnded: (data: { message: string }) => void
+) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`quick-quiz-${quizId}`);
+  
+  channel.subscribe('quiz-ended', (message) => {
+    onQuizEnded(message.data);
+  });
+  
+  return () => {
+    channel.unsubscribe('quiz-ended');
+  };
+};
+
+export const publishQuizEnded = (quizId: string, message: string) => {
+  const ably = getAblyClient();
+  const channel = ably.channels.get(`quick-quiz-${quizId}`);
+  
+  channel.publish('quiz-ended', { message });
+};

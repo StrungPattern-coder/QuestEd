@@ -15,7 +15,9 @@ import { celebrateAllWinners } from "@/lib/podiumCelebrations";
 import { playSoundEffect } from "@/lib/sounds";
 import TrophyReveal from "@/components/TrophyReveal";
 import Podium from "@/components/Podium";
-import { getAblyClient } from "@/lib/ably";
+import { getAblyClient, subscribeToQuizEnded } from "@/lib/ably";
+import TestTimer from "@/components/TestTimer";
+import TestCompletionModal from "@/components/TestCompletionModal";
 
 interface Question {
   _id: string;
@@ -51,6 +53,10 @@ export default function QuickQuizTakePage() {
   const [currentScore, setCurrentScore] = useState(0);
   const [quizStarted, setQuizStarted] = useState(false);
   const [waitingForHost, setWaitingForHost] = useState(true);
+  const [quizEndedByHost, setQuizEndedByHost] = useState(false);
+  const [endMessage, setEndMessage] = useState('');
+  const [totalTestTime, setTotalTestTime] = useState(0);
+  const [testTimerPaused, setTestTimerPaused] = useState(false);
 
   useEffect(() => {
     // Get participant info from sessionStorage
@@ -119,6 +125,32 @@ export default function QuickQuizTakePage() {
       handleAnswerSubmit();
     }
   }, [timeLeft, showFeedback, test, quizStarted]);
+
+  // Subscribe to quiz-ended events
+  useEffect(() => {
+    if (!testId) return;
+
+    const unsubscribe = subscribeToQuizEnded(testId, (data: any) => {
+      setEndMessage(data.message);
+      setQuizEndedByHost(true);
+      setTestTimerPaused(true);
+      
+      // Redirect after 3 seconds
+      setTimeout(() => {
+        router.push(`/quick-quiz/${testId}/results?participant=${encodeURIComponent(participantName)}`);
+      }, 3000);
+    });
+
+    return unsubscribe;
+  }, [testId, participantName, router]);
+
+  // Initialize total test time
+  useEffect(() => {
+    if (test && quizStarted && totalTestTime === 0) {
+      const total = test.questions.length * test.timeLimitPerQuestion;
+      setTotalTestTime(total);
+    }
+  }, [test, quizStarted, totalTestTime]);
 
   const fetchTest = async () => {
     setLoading(true);
@@ -210,6 +242,22 @@ export default function QuickQuizTakePage() {
     }
   };
 
+  const handleTestTimeUp = async () => {
+    // Auto-submit when whole test time expires
+    playSoundEffect.timerWarning();
+    alert("Time's up! Your quiz will be completed automatically.");
+    
+    // If there's a current question with selected answer, submit it first
+    if (selectedAnswer !== null && !showFeedback) {
+      await handleAnswerSubmit();
+    }
+    
+    // Then mark test as complete
+    setTimeout(() => {
+      setTestComplete(true);
+    }, 500);
+  };
+
   const handleReturnHome = () => {
     sessionStorage.removeItem('quickQuizParticipant');
     router.push('/quick-quiz');
@@ -221,6 +269,11 @@ export default function QuickQuizTakePage() {
         <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
       </div>
     );
+  }
+
+  // Show completion modal when host ends the quiz
+  if (quizEndedByHost) {
+    return <TestCompletionModal message={endMessage} redirectCountdown={3} />;
   }
 
   if (!test) {
@@ -420,6 +473,15 @@ export default function QuickQuizTakePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 p-4">
+      {/* Whole Test Timer */}
+      {totalTestTime > 0 && quizStarted && (
+        <TestTimer
+          totalTimeInSeconds={totalTestTime}
+          onTimeUp={handleTestTimeUp}
+          paused={testTimerPaused || showFeedback}
+        />
+      )}
+
       {/* Sound Toggle */}
       <div className="fixed top-4 right-4 z-50">
         <SoundToggle />

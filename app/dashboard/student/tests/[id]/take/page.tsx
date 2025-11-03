@@ -7,12 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { studentApi } from "@/lib/api";
-import { publishLeaderboardUpdate, subscribeToLeaderboard } from "@/lib/ably";
+import { publishLeaderboardUpdate, subscribeToLeaderboard, subscribeToTestEnded } from "@/lib/ably";
 import { Brain, Clock, CheckCircle, XCircle, Loader2, ArrowRight, Trophy, Users } from "lucide-react";
 import { triggerRandomCelebration } from "@/lib/celebrations";
 import { playSoundEffect } from "@/lib/sounds";
 import SoundToggle from "@/components/SoundToggle";
 import confetti from "canvas-confetti";
+import TestTimer from "@/components/TestTimer";
+import TestCompletionModal from "@/components/TestCompletionModal";
 
 interface LeaderboardEntry {
   studentId: string;
@@ -61,6 +63,10 @@ export default function TakeTestPage() {
   const [currentScore, setCurrentScore] = useState(0);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [testStarted, setTestStarted] = useState(false);
+  const [testEndedByTeacher, setTestEndedByTeacher] = useState(false);
+  const [endMessage, setEndMessage] = useState('');
+  const [totalTestTime, setTotalTestTime] = useState(0);
+  const [testTimerPaused, setTestTimerPaused] = useState(false);
 
   useEffect(() => {
     fetchTest();
@@ -97,6 +103,32 @@ export default function TakeTestPage() {
       handleAnswerSubmit();
     }
   }, [timeLeft, showFeedback, test, testStarted]);
+
+  // Subscribe to test-ended events for live tests
+  useEffect(() => {
+    if (!testId || !isLiveTest) return;
+
+    const unsubscribe = subscribeToTestEnded(testId, (data: any) => {
+      setEndMessage(data.message);
+      setTestEndedByTeacher(true);
+      setTestTimerPaused(true);
+      
+      // Redirect after 3 seconds
+      setTimeout(() => {
+        router.push(data.redirectUrl || `/dashboard/student/tests/${testId}/result`);
+      }, 3000);
+    });
+
+    return unsubscribe;
+  }, [testId, isLiveTest, router]);
+
+  // Initialize total test time
+  useEffect(() => {
+    if (test && testStarted && totalTestTime === 0) {
+      const total = test.questions.length * test.timeLimitPerQuestion;
+      setTotalTestTime(total);
+    }
+  }, [test, testStarted, totalTestTime]);
 
   const fetchTest = async () => {
     setLoading(true);
@@ -247,6 +279,22 @@ export default function TakeTestPage() {
     setSubmitting(false);
   };
 
+  const handleTestTimeUp = async () => {
+    // Auto-submit all remaining answers when whole test time expires
+    playSoundEffect.timerWarning();
+    alert("Time's up! Your test will be submitted automatically.");
+    
+    // If there's a current question with selected answer, submit it first
+    if (selectedAnswer !== null && !showFeedback) {
+      await handleAnswerSubmit();
+    }
+    
+    // Then submit the entire test
+    setTimeout(() => {
+      submitTest();
+    }, 500);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -256,6 +304,11 @@ export default function TakeTestPage() {
         </div>
       </div>
     );
+  }
+
+  // Show completion modal when teacher ends the test
+  if (testEndedByTeacher) {
+    return <TestCompletionModal message={endMessage} redirectCountdown={3} />;
   }
 
   if (!test) {
@@ -393,6 +446,15 @@ export default function TakeTestPage() {
 
   return (
     <div className="min-h-screen bg-black">
+      {/* Whole Test Timer */}
+      {totalTestTime > 0 && (
+        <TestTimer
+          totalTimeInSeconds={totalTestTime}
+          onTimeUp={handleTestTimeUp}
+          paused={testTimerPaused || showFeedback}
+        />
+      )}
+
       {/* Sound Toggle */}
       <div className="fixed top-4 right-4 z-50">
         <SoundToggle />

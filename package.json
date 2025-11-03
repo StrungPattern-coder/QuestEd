@@ -1,7 +1,7 @@
 {
-  "name": "pict-german-platform",
+  "name": "quested",
   "version": "1.0.0",
-  "description": "PICT German Test Platform - Kahoot + Duolingo Inspired",
+  "description": "QuestEd - Kahoot + Duolingo Inspired",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

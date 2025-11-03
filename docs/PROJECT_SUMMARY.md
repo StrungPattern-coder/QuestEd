@@ -1,4 +1,4 @@
-# 🎯 Project Summary: PICT German Test Platform
+# 🎯 Project Summary: QuestEd
 
 ## ✅ What Has Been Built
 

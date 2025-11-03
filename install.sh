@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🚀 PICT German Test Platform - Installation Script"
+echo "🚀 QuestEd - Installation Script"
 echo "=================================================="
 echo ""
 

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { teacherApi } from "@/lib/api";
-import { subscribeToLeaderboard, publishLeaderboardUpdate } from "@/lib/ably";
+import { subscribeToLeaderboard, publishLeaderboardUpdate, publishTestEnded } from "@/lib/ably";
 import { 
   Brain, 
   Play, 
@@ -128,6 +128,14 @@ export default function LiveTestControlPage() {
     if (response.data) {
       setIsLive(false);
       setTest((response.data as any).test);
+      
+      // Notify all students that the test has ended
+      publishTestEnded(
+        testId, 
+        'The teacher has ended this test.', 
+        `/dashboard/student/tests/${testId}/result`
+      );
+      
       alert("Test ended successfully! Final results are now available.");
       // Optionally refresh to show final state
       await fetchTest();

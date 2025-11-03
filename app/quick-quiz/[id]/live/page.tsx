@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Users, Clock, Target, ArrowRight, CheckCircle, Zap } from 'lucide-react';
-import { getAblyClient } from '@/lib/ably';
+import { getAblyClient, publishQuizEnded } from '@/lib/ably';
 import Podium from '@/components/Podium';
 
 interface Question {
@@ -163,6 +163,9 @@ export default function QuickQuizLive() {
 
   const completeQuiz = async () => {
     setIsQuizComplete(true);
+
+    // Notify all participants that the quiz has ended
+    publishQuizEnded(testId, 'The host has completed this quiz.');
 
     try {
       await fetch(`/api/quick-quiz/${testId}/complete`, {

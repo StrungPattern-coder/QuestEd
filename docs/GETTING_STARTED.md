@@ -1,4 +1,4 @@
-# 🎓 PICT German Test Platform - Complete Implementation
+# 🎓 QuestEd - Complete Implementation
 
 ## ✅ What Has Been Created
 
@@ -396,7 +396,7 @@ Everything is set up and ready to use. Just:
 3. Run: `npm run dev`
 4. Visit: http://localhost:3000
 
-**Your PICT German Test Platform is ready to go! 🚀**
+**Your QuestEd is ready to go! 🚀**
 
 ---
 

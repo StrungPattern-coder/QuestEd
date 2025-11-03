@@ -11,8 +11,8 @@ const audiowide = Audiowide({
 });
 
 export const metadata: Metadata = {
-  title: "PICT German Test Platform",
-  description: "Interactive German language testing platform for PICT students and teachers",
+  title: "QuestEd",
+  description: "An open-source platform for interactive quizzes and tests.",
 };
 
 export default function RootLayout({
