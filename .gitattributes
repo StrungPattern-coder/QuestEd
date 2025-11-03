@@ -1,0 +1,5 @@
+# Mark environment files as binary to prevent accidental diffs
+.env binary
+.env.* binary
+*.pem binary
+*.key binary
