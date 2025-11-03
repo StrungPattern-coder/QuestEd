@@ -26,6 +26,7 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 - ✅ **Multiple Quiz Modes** - Live (Kahoot-style) or Deadline (self-paced)
 - ✅ **Real-time Analytics** - Scores, rankings, submission tracking, late penalties
 - ✅ **Template System** - Pre-built quiz templates to get started fast
+- ✅ **Microsoft Teams Integration** - **NEW!** Import Teams classrooms & students automatically
 
 **For Students** 👨‍🎓
 - ✅ **Daily Challenges** - Question of the Day with streaks
@@ -60,6 +61,7 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 - MongoDB + Mongoose
 - JWT Authentication (bcrypt)
 - Nodemailer (email system)
+- Microsoft Graph API (Teams integration)
 
 **Real-time & Infrastructure**
 - Ably (WebSocket communication)
@@ -98,6 +100,9 @@ Comprehensive documentation is available in the [`/docs`](./docs) folder:
 - **[Getting Started](GETTING_STARTED.md)** - Complete setup walkthrough
 - **[Security Audit Report](SECURITY_AUDIT_REPORT.md)** - Vulnerability analysis & fixes
 - **[Email Setup (5 min)](./docs/EMAIL_QUICKSTART.md)** - Configure email invitations
+- **[Azure AD Setup (NEW!)](./docs/AZURE_AD_SETUP_GUIDE.md)** - Visual guide for Microsoft Teams registration
+- **[Microsoft Teams Sync (NEW!)](./docs/TEAMS_SYNC_QUICKSTART.md)** - Import classrooms & students automatically
+- **[Microsoft Teams Integration](./docs/TEAMS_INTEGRATION.md)** - Full Teams integration guide
 - **[i18n Guide](./docs/I18N_GUIDE.md)** - Multiple language support
 - **[Project Summary](./docs/PROJECT_SUMMARY.md)** - Complete architecture overview
 

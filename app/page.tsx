@@ -119,7 +119,7 @@ export default function Home() {
                 className="w-full cursor-pointer"
               >
                 <div className="flex items-center justify-center text-sm sm:text-base font-semibold">
-                  Create Quick Quiz
+                  Create/Join Quick Quiz
                 </div>
               </StarBorder>
             </Link>

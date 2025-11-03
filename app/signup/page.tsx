@@ -13,6 +13,9 @@ import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
 import { Brain, Mail, Lock, User, Hash, ArrowLeft, ArrowRight, Sparkles, UserCheck, GraduationCap, CheckCircle } from "lucide-react";
 import ColorBends from "@/components/ColorBends";
+import confetti from "canvas-confetti";
+import { triggerRandomCelebration } from "@/lib/celebrations";
+import { playSoundEffect } from "@/lib/sounds";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -80,11 +83,26 @@ export default function SignupPage() {
         const data = response.data as any;
         login(data.user, data.token);
 
-        if (data.user.role === "teacher") {
-          router.push("/dashboard/teacher");
-        } else {
-          router.push("/dashboard/student");
-        }
+        // 🎉 Trigger celebration for new user signup!
+        playSoundEffect.achievement();
+        triggerRandomCelebration();
+        
+        // Extra confetti burst for new users
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#FF991C', '#7c3aed', '#06b6d4', '#f59e0b']
+        });
+
+        // Redirect after celebration
+        setTimeout(() => {
+          if (data.user.role === "teacher") {
+            router.push("/dashboard/teacher");
+          } else {
+            router.push("/dashboard/student");
+          }
+        }, 1500); // Give time for celebration before redirect
       }
     } catch (err) {
       setError("An unexpected error occurred");

@@ -10,6 +10,8 @@ export interface IUser extends Document {
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
   walkthroughCompleted?: boolean;
+  microsoftUserId?: string;
+  needsPasswordReset?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -64,6 +66,15 @@ const UserSchema: Schema<IUser> = new Schema(
       select: false,
     },
     walkthroughCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    microsoftUserId: {
+      type: String,
+      sparse: true,
+      unique: true,
+    },
+    needsPasswordReset: {
       type: Boolean,
       default: false,
     },
