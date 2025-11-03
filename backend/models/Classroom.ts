@@ -74,7 +74,7 @@ const ClassroomSchema: Schema<IClassroom> = new Schema(
 // Index for efficient queries
 ClassroomSchema.index({ teacherId: 1 });
 ClassroomSchema.index({ students: 1 });
-ClassroomSchema.index({ microsoftTeamsId: 1 });
+// microsoftTeamsId index removed - already has unique: true in schema
 
 const Classroom: Model<IClassroom> =
   mongoose.models.Classroom || mongoose.model<IClassroom>('Classroom', ClassroomSchema);
