@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Copy, Users, Play, Trophy, X } from 'lucide-react';
-import { getAblyClient } from '@/lib/ably';
+import { subscribeToQuickQuizParticipants } from '@/lib/socket';
 
 interface Participant {
   name: string;
@@ -35,13 +35,10 @@ export default function QuickQuizHost() {
     // Fetch test details
     fetchTestDetails();
 
-    // Subscribe to participant joins via Ably
+    // Subscribe to participant joins via Socket.IO
     try {
-      const ably = getAblyClient();
-      const channel = ably.channels.get(`quick-quiz-${testId}`);
-      
-      channel.subscribe('participant-joined', (message: any) => {
-        const { participantName } = message.data;
+      const unsubscribe = subscribeToQuickQuizParticipants(testId, (data: any) => {
+        const { participantName } = data;
         setParticipants((prev) => {
           // Avoid duplicates
           if (prev.some(p => p.name === participantName)) {
@@ -52,11 +49,9 @@ export default function QuickQuizHost() {
       });
 
       // Cleanup
-      return () => {
-        channel.unsubscribe('participant-joined');
-      };
+      return unsubscribe;
     } catch (error) {
-      console.error('Ably connection error:', error);
+      console.error('Socket.IO connection error:', error);
       // App still works without real-time updates
     }
   }, [testId]);

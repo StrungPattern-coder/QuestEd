@@ -3,7 +3,7 @@ import connectDB from '@/backend/utils/db';
 import Material from '@/backend/models/Material';
 import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
-import { publishMaterialDeleted } from '@/backend/utils/ably-server';
+import { publishMaterialDeleted } from '@/backend/utils/socket-server';
 
 export const dynamic = 'force-dynamic';
 

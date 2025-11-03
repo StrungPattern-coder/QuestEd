@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Users, Clock, Target, ArrowRight, CheckCircle, Zap } from 'lucide-react';
-import { getAblyClient, publishQuizEnded } from '@/lib/ably';
+import { getSocketClient, publishQuizEnded } from '@/lib/socket';
 import Podium from '@/components/Podium';
 
 interface Question {
@@ -47,7 +47,7 @@ export default function QuickQuizLive() {
 
   useEffect(() => {
     fetchQuizData();
-    setupAblyListeners();
+    // Note: Real-time answer tracking can be added back when needed
   }, [testId]);
 
   useEffect(() => {
@@ -84,71 +84,8 @@ export default function QuickQuizLive() {
     }
   };
 
-  const setupAblyListeners = () => {
-    try {
-      const ably = getAblyClient();
-      const channel = ably.channels.get(`quick-quiz-${testId}`);
-
-      // Listen for answer submissions
-      channel.subscribe('answer-submitted', (message: any) => {
-        const { participantName, questionIndex, isCorrect, score, timeToAnswer } = message.data;
-
-        // Update participant scores
-        setParticipants((prev) => {
-          const updated = [...prev];
-          const existingIndex = updated.findIndex((p) => p.name === participantName);
-
-          if (existingIndex >= 0) {
-            // Calculate position change
-            const oldPosition = existingIndex + 1;
-            updated[existingIndex].score = score;
-            updated[existingIndex].lastAnswerTime = timeToAnswer;
-            
-            // Sort by score
-            updated.sort((a, b) => b.score - a.score);
-            
-            const newPosition = updated.findIndex((p) => p.name === participantName) + 1;
-            updated[newPosition - 1].positionChange = oldPosition - newPosition;
-          } else {
-            updated.push({
-              name: participantName,
-              score: score,
-              lastAnswerTime: timeToAnswer,
-              positionChange: 0,
-            });
-            updated.sort((a, b) => b.score - a.score);
-          }
-
-          // Update positions
-          return updated.map((p, index) => ({ ...p, position: index + 1 }));
-        });
-
-        // Add to recent answers
-        setRecentAnswers((prev) => [
-          { participantName, questionIndex, isCorrect, timeToAnswer },
-          ...prev.slice(0, 9), // Keep last 10
-        ]);
-      });
-
-      // Listen for participants joining during quiz
-      channel.subscribe('participant-joined', (message: any) => {
-        const { participantName } = message.data;
-        setParticipants((prev) => {
-          if (prev.some((p) => p.name === participantName)) return prev;
-          return [
-            ...prev,
-            { name: participantName, score: 0, position: prev.length + 1 },
-          ];
-        });
-      });
-
-      return () => {
-        channel.unsubscribe();
-      };
-    } catch (error) {
-      console.error('Ably setup error:', error);
-    }
-  };
+  // Note: Real-time answer submission tracking can be added back when needed
+  // const setupSocketListeners = () => { ... }
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {

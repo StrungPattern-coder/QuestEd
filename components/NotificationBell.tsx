@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bell, X, Users, Check } from "lucide-react";
-import { getAblyClient } from "@/lib/ably";
+import { subscribeToUserNotifications } from "@/lib/socket";
 import { useRouter } from "next/navigation";
 
 interface Notification {
@@ -34,20 +34,17 @@ export default function NotificationBell({ userId }: { userId: string }) {
       setUnreadCount(parsed.filter((n: Notification) => !n.read).length);
     }
 
-    // Subscribe to real-time notifications via Ably
+    // Subscribe to real-time notifications via Socket.IO
     try {
-      const ably = getAblyClient();
-      const channel = ably.channels.get(`user-${userId}`);
-
-      channel.subscribe('classroom-invitation', (message: any) => {
+      const unsubscribe = subscribeToUserNotifications(userId, (data: any) => {
         const notification: Notification = {
           id: `${Date.now()}-${Math.random()}`,
-          type: message.data.type,
-          classroomId: message.data.classroomId,
-          classroomName: message.data.classroomName,
-          teacherName: message.data.teacherName,
-          inviteLink: message.data.inviteLink,
-          timestamp: new Date(message.data.timestamp),
+          type: data.type,
+          classroomId: data.classroomId,
+          classroomName: data.classroomName,
+          teacherName: data.teacherName,
+          inviteLink: data.inviteLink,
+          timestamp: new Date(data.timestamp),
           read: false,
         };
 
@@ -62,18 +59,16 @@ export default function NotificationBell({ userId }: { userId: string }) {
         // Show browser notification if permitted
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification('New Classroom Invitation', {
-            body: `${message.data.teacherName} invited you to join ${message.data.classroomName}`,
+            body: `${data.teacherName} invited you to join ${data.classroomName}`,
             icon: '/logo.png',
           });
         }
       });
 
       // Cleanup
-      return () => {
-        channel.unsubscribe('classroom-invitation');
-      };
+      return unsubscribe;
     } catch (error) {
-      console.error('Ably subscription error:', error);
+      console.error('Socket.IO subscription error:', error);
     }
   }, [userId]);
 

@@ -15,7 +15,7 @@ import { celebrateAllWinners } from "@/lib/podiumCelebrations";
 import { playSoundEffect } from "@/lib/sounds";
 import TrophyReveal from "@/components/TrophyReveal";
 import Podium from "@/components/Podium";
-import { getAblyClient, subscribeToQuizEnded } from "@/lib/ably";
+import { subscribeToQuickQuizStart, subscribeToQuizEnded } from "@/lib/socket";
 import TestTimer from "@/components/TestTimer";
 import TestCompletionModal from "@/components/TestCompletionModal";
 
@@ -69,20 +69,15 @@ export default function QuickQuizTakePage() {
         
         // Subscribe to quiz start event
         try {
-          const ably = getAblyClient();
-          const channel = ably.channels.get(`quick-quiz-${testId}`);
-          
-          channel.subscribe('quiz-started', (message: any) => {
+          const unsubscribe = subscribeToQuickQuizStart(testId, (data: any) => {
             setWaitingForHost(false);
             setQuizStarted(false); // Reset to show "Start Quiz" button
           });
           
           // Cleanup
-          return () => {
-            channel.unsubscribe('quiz-started');
-          };
+          return unsubscribe;
         } catch (error) {
-          console.error('Ably connection error:', error);
+          console.error('Socket.IO connection error:', error);
           // Fallback: Check test.isActive status via polling
           const checkInterval = setInterval(async () => {
             try {
@@ -208,24 +203,7 @@ export default function QuickQuizTakePage() {
       playSoundEffect.wrongAnswer();
     }
 
-    // Publish answer to Ably for real-time leaderboard updates
-    try {
-      const ably = getAblyClient();
-      const channel = ably.channels.get(`quick-quiz-${testId}`);
-      
-      await channel.publish('answer-submitted', {
-        participantName,
-        questionIndex: currentQuestionIndex,
-        selectedAnswer: selectedAnswer ?? -1,
-        isCorrect: correct,
-        score: newScore,
-        timeToAnswer: answerTime,
-        timestamp: Date.now()
-      });
-    } catch (error) {
-      console.error('Error publishing answer to Ably:', error);
-      // Continue anyway - don't block the user
-    }
+    // Note: Real-time answer publishing could be added here if needed for live leaderboards
   };
 
   const handleNext = () => {

@@ -22,7 +22,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import Link from "next/link";
-import { subscribeToClassroomMaterials } from "@/lib/ably";
+import { subscribeToClassroomMaterials } from "@/lib/socket";
 
 interface Material {
   _id: string;

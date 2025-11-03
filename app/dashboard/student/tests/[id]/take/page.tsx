@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { studentApi } from "@/lib/api";
-import { publishLeaderboardUpdate, subscribeToLeaderboard, subscribeToTestEnded } from "@/lib/ably";
+import { publishLeaderboardUpdate, subscribeToLeaderboard, subscribeToTestEnded } from "@/lib/socket";
 import { Brain, Clock, CheckCircle, XCircle, Loader2, ArrowRight, Trophy, Users } from "lucide-react";
 import { triggerRandomCelebration } from "@/lib/celebrations";
 import { playSoundEffect } from "@/lib/sounds";

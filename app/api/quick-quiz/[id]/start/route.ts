@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
-import Ably from 'ably';
+import { publishQuickQuizStarted } from '@/backend/utils/socket-server';
 
 export async function POST(
   request: NextRequest,
@@ -27,17 +27,8 @@ export async function POST(
     test.startTime = new Date();
     await test.save();
 
-    // Publish quiz start event via Ably to notify all participants
-    const ablyKey = process.env.ABLY_API_KEY || process.env.NEXT_PUBLIC_ABLY_KEY;
-    if (ablyKey) {
-      const ably = new Ably.Rest({ key: ablyKey });
-      const channel = ably.channels.get(`quick-quiz-${testId}`);
-      
-      await channel.publish('quiz-started', {
-        testId,
-        startTime: new Date(),
-      });
-    }
+    // Publish quiz start event via Socket.IO to notify all participants
+    await publishQuickQuizStarted(testId);
 
     return NextResponse.json({
       message: 'Quiz started successfully',

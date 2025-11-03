@@ -17,7 +17,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import Link from "next/link";
-import { subscribeToClassroomAnnouncements } from "@/lib/ably";
+import { subscribeToClassroomAnnouncements } from "@/lib/socket";
 
 interface Announcement {
   _id: string;

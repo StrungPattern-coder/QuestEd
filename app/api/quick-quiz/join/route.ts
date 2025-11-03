@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
-import Ably from 'ably';
+import { publishQuickQuizParticipantJoined } from '@/backend/utils/socket-server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,17 +29,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Publish participant join event via Ably
-    const ablyKey = process.env.ABLY_API_KEY || process.env.NEXT_PUBLIC_ABLY_KEY;
-    if (ablyKey) {
-      const ably = new Ably.Rest({ key: ablyKey });
-      const channel = ably.channels.get(`quick-quiz-${test._id}`);
-      
-      await channel.publish('participant-joined', {
-        participantName,
-        joinedAt: new Date(),
-      });
-    }
+    // Publish participant join event via Socket.IO
+    await publishQuickQuizParticipantJoined(String(test._id), {
+      participantName,
+      joinedAt: new Date(),
+    });
 
     // For quick quizzes, we don't create user accounts
     // Just verify the quiz exists and is joinable

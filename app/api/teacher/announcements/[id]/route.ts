@@ -3,7 +3,7 @@ import connectDB from '@/backend/utils/db';
 import Announcement from '@/backend/models/Announcement';
 import Classroom from '@/backend/models/Classroom';
 import jwt from 'jsonwebtoken';
-import { publishAnnouncementUpdated, publishAnnouncementDeleted } from '@/backend/utils/ably-server';
+import { publishAnnouncementUpdated, publishAnnouncementDeleted } from '@/backend/utils/socket-server';
 
 export const dynamic = 'force-dynamic';
 
