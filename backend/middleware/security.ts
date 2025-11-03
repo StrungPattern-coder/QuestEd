@@ -17,15 +17,34 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   // Control referrer information
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   
-  // Content Security Policy (adjust based on your needs)
+  // Content Security Policy (adjusted for Socket.IO)
+  // Note: Socket.IO connects to same origin by default
+  // For production with separate API server, set NEXT_PUBLIC_SOCKET_URL
+  let wsUrls = "'self'";
+  
+  try {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || appUrl;
+    
+    // Parse and validate URL
+    const url = new URL(socketUrl);
+    const wsProtocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${wsProtocol}//${url.host}`;
+    const httpsUrl = socketUrl.startsWith('http://') ? socketUrl : socketUrl;
+    
+    wsUrls = `'self' ${wsUrl} ${httpsUrl}`;
+  } catch (error) {
+    console.warn('CSP: Invalid socket URL, using self only:', error);
+  }
+  
   res.setHeader(
     'Content-Security-Policy',
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.ably.io; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com; " +
     "img-src 'self' data: https:; " +
-    "connect-src 'self' https://realtime.ably.io wss://realtime.ably.io; " +
+    `connect-src ${wsUrls}; ` +
     "frame-ancestors 'none';"
   );
   
