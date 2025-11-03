@@ -18,14 +18,24 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   
   // Content Security Policy (adjusted for Socket.IO)
-  // Note: Socket.IO connects to same origin, so 'self' is sufficient
-  // For production, consider adding specific domains if using separate API server
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || appUrl;
+  // Note: Socket.IO connects to same origin by default
+  // For production with separate API server, set NEXT_PUBLIC_SOCKET_URL
+  let wsUrls = "'self'";
   
-  // Extract WebSocket URLs from HTTP URLs
-  const wsUrl = socketUrl.replace('http://', 'ws://').replace('https://', 'wss://');
-  const httpsUrl = socketUrl.replace('http://', 'https://');
+  try {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || appUrl;
+    
+    // Parse and validate URL
+    const url = new URL(socketUrl);
+    const wsProtocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${wsProtocol}//${url.host}`;
+    const httpsUrl = socketUrl.startsWith('http://') ? socketUrl : socketUrl;
+    
+    wsUrls = `'self' ${wsUrl} ${httpsUrl}`;
+  } catch (error) {
+    console.warn('CSP: Invalid socket URL, using self only:', error);
+  }
   
   res.setHeader(
     'Content-Security-Policy',
@@ -34,7 +44,7 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com; " +
     "img-src 'self' data: https:; " +
-    `connect-src 'self' ${wsUrl} ${httpsUrl}; ` +
+    `connect-src ${wsUrls}; ` +
     "frame-ancestors 'none';"
   );
   
