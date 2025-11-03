@@ -18,6 +18,15 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   
   // Content Security Policy (adjusted for Socket.IO)
+  // Note: Socket.IO connects to same origin, so 'self' is sufficient
+  // For production, consider adding specific domains if using separate API server
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || appUrl;
+  
+  // Extract WebSocket URLs from HTTP URLs
+  const wsUrl = socketUrl.replace('http://', 'ws://').replace('https://', 'wss://');
+  const httpsUrl = socketUrl.replace('http://', 'https://');
+  
   res.setHeader(
     'Content-Security-Policy',
     "default-src 'self'; " +
@@ -25,7 +34,7 @@ export const securityHeaders = (req: Request, res: Response, next: NextFunction)
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com; " +
     "img-src 'self' data: https:; " +
-    "connect-src 'self' ws: wss:; " +
+    `connect-src 'self' ${wsUrl} ${httpsUrl}; ` +
     "frame-ancestors 'none';"
   );
   

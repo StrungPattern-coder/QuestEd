@@ -159,7 +159,7 @@ GET  /api/student/classrooms  → Instance 1, 2, 3...
 - MongoDB: M30 cluster ($270/month)
 - Socket.IO: $0 (self-hosted with Redis adapter)
 - Vercel: Pro plan ($20/month)
-- **Total**: ~$589/month
+- **Total**: ~$290/month (was $589/month with Ably)
 
 ---
 
