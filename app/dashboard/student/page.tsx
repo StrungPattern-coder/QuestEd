@@ -178,88 +178,103 @@ export default function StudentDashboard() {
         <MobileNav role="student" userName={user?.name} />
       
       {/* Desktop Navigation */}
-      <nav className="hidden lg:flex relative z-10 justify-center pt-6 pb-6">
-        <div className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-full px-8 py-4 shadow-2xl">
-          <div className="flex items-center gap-8">
-            {/* Brand */}
-            <Link href="/dashboard/student">
-              <div className="cursor-pointer">
-                <h1 className="text-xl font-bold text-[#F5F5F5] hover:text-[#FF991C] transition-colors">{t.brandName}</h1>
-                <p className="text-xs text-[#F5F5F5]/60">{t.student.portal}</p>
+      <nav className="hidden lg:block relative z-10 pt-4 pb-4">
+        <div className="container mx-auto px-6">
+          {/* Top Bar - Brand and Actions */}
+          <div className="bg-white/10 backdrop-blur-xl border border-[#FF991C]/30 rounded-2xl px-6 py-3 shadow-2xl mb-3">
+            <div className="flex items-center justify-between">
+              {/* Left: Brand */}
+              <Link href="/dashboard/student">
+                <div className="cursor-pointer flex items-center gap-3">
+                  <div className="bg-[#FF991C]/20 p-2 rounded-lg">
+                    <Brain className="h-5 w-5 text-[#FF991C]" />
+                  </div>
+                  <div>
+                    <h1 className="text-lg font-bold text-[#F5F5F5] hover:text-[#FF991C] transition-colors">{t.brandName}</h1>
+                    <p className="text-xs text-[#F5F5F5]/60">{t.student.portal}</p>
+                  </div>
+                </div>
+              </Link>
+
+              {/* Center: Quick Actions */}
+              <div className="flex items-center gap-2">
+                <Button 
+                  onClick={() => router.push("/dashboard/student/live")}
+                  size="sm"
+                  className="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full px-4 h-9"
+                >
+                  <Zap className="h-4 w-4 mr-1.5" />
+                  {t.student.joinLive}
+                </Button>
+                <Button 
+                  onClick={() => router.push("/quick-quiz")}
+                  size="sm"
+                  className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-full px-4 h-9"
+                >
+                  <Zap className="h-4 w-4 mr-1.5" />
+                  Quick Quiz
+                </Button>
               </div>
-            </Link>
 
-            {/* Divider */}
-            <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
+              {/* Right: User Info and Logout */}
+              <div className="flex items-center gap-3">
+                <NotificationBell userId={user?.id || ''} />
+                <LanguageSwitcher />
+                <div className="h-8 w-px bg-[#F5F5F5]/20"></div>
+                <div className="flex items-center gap-3">
+                  <Button
+                    onClick={() => router.push("/dashboard/student/profile")}
+                    variant="ghost"
+                    size="sm"
+                    className="bg-[#FF991C]/10 hover:bg-[#FF991C]/20 text-[#F5F5F5] rounded-full px-3 h-9"
+                  >
+                    <User className="h-4 w-4 mr-1.5" />
+                    <span className="max-w-[100px] truncate">{user?.name?.split(" ")[0]}</span>
+                  </Button>
+                  <Button 
+                    onClick={handleLogout}
+                    variant="ghost"
+                    size="sm"
+                    className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full px-3 h-9"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            {/* Quick Navigation */}
-            <div className="flex items-center gap-2">
+          {/* Bottom Bar - Navigation Links */}
+          <div className="bg-white/5 backdrop-blur-xl border border-[#FF991C]/20 rounded-2xl px-4 py-2 shadow-xl">
+            <div className="flex items-center justify-center gap-1">
               <Button 
                 onClick={() => router.push("/dashboard/student/materials")}
                 variant="ghost"
-                className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
+                size="sm"
+                className="text-[#F5F5F5] hover:bg-[#FF991C]/10 hover:text-[#FF991C] rounded-lg px-3 h-8 transition-all"
               >
-                <FolderOpen className="h-4 w-4 mr-2" />
-                Materials
+                <FolderOpen className="h-3.5 w-3.5 mr-1.5" />
+                <span className="text-sm">Materials</span>
               </Button>
-              <Button 
-                onClick={() => router.push("/quick-quiz")}
-                variant="ghost"
-                className="bg-transparent border border-cyan-500/30 hover:border-cyan-500 hover:bg-cyan-500/10 text-[#F5F5F5] rounded-full"
-              >
-                <Zap className="h-4 w-4 mr-2" />
-                Quick Quiz
-              </Button>
+              <div className="h-6 w-px bg-[#F5F5F5]/10"></div>
               <Button 
                 onClick={() => router.push("/dashboard/student/announcements")}
                 variant="ghost"
-                className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
+                size="sm"
+                className="text-[#F5F5F5] hover:bg-[#FF991C]/10 hover:text-[#FF991C] rounded-lg px-3 h-8 transition-all"
               >
-                <Bell className="h-4 w-4 mr-2" />
-                Announcements
+                <Bell className="h-3.5 w-3.5 mr-1.5" />
+                <span className="text-sm">Announcements</span>
               </Button>
+              <div className="h-6 w-px bg-[#F5F5F5]/10"></div>
               <Button 
                 onClick={() => router.push("/dashboard/student/settings")}
                 variant="ghost"
-                className="bg-transparent border border-purple-500/30 hover:border-purple-500 hover:bg-purple-500/10 text-[#F5F5F5] rounded-full"
+                size="sm"
+                className="text-[#F5F5F5] hover:bg-purple-500/10 hover:text-purple-400 rounded-lg px-3 h-8 transition-all"
               >
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
-              </Button>
-            </div>
-
-            {/* Divider */}
-            <div className="h-10 w-px bg-[#F5F5F5]/20"></div>
-
-            {/* Navigation Items */}
-            <div className="flex items-center gap-4">
-              <NotificationBell userId={user?.id || ''} />
-              <LanguageSwitcher />
-              <Button 
-                onClick={() => router.push("/dashboard/student/live")}
-                className="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full"
-              >
-                <Zap className="h-4 w-4 mr-2" />
-                {t.student.joinLive}
-              </Button>
-              <Button 
-                onClick={() => router.push("/dashboard/student/profile")}
-                className="bg-[#FF991C] hover:bg-[#FF8F4D] text-black font-semibold rounded-full"
-              >
-                <User className="h-4 w-4 mr-2" />
-                My Profile
-              </Button>
-              <div className="text-right">
-                <p className="text-sm font-medium text-[#F5F5F5]">{user?.name}</p>
-                <p className="text-xs text-[#F5F5F5]/60">{user?.email}</p>
-              </div>
-              <Button 
-                onClick={handleLogout}
-                variant="ghost" 
-                className="bg-transparent border border-[#FF991C]/30 hover:border-[#FF991C] hover:bg-[#FF991C]/10 text-[#F5F5F5] rounded-full"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                {t.logout}
+                <Settings className="h-3.5 w-3.5 mr-1.5" />
+                <span className="text-sm">Settings</span>
               </Button>
             </div>
           </div>
