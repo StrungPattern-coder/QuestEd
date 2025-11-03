@@ -6,6 +6,9 @@ import {
   MicrosoftGraphClient,
 } from '@/backend/utils/microsoftGraph';
 
+// Force dynamic rendering (required for Next.js 14+)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/teams/auth/callback
  * Handle OAuth callback from Microsoft

@@ -7,6 +7,9 @@ import Classroom from '@/backend/models/Classroom';
 import User from '@/backend/models/User';
 import { MicrosoftGraphClient, refreshAccessToken } from '@/backend/utils/microsoftGraph';
 
+// Force dynamic rendering (required for Next.js 14+)
+export const dynamic = 'force-dynamic';
+
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 /**

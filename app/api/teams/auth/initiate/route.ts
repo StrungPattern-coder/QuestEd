@@ -3,6 +3,9 @@ import connectDB from '@/backend/utils/db';
 import { getAuthorizationUrl } from '@/backend/utils/microsoftGraph';
 import jwt from 'jsonwebtoken';
 
+// Force dynamic rendering (required for Next.js 14+)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/teams/auth/initiate
  * Initiate Microsoft Teams OAuth flow

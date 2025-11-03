@@ -4,6 +4,9 @@ import TeamsIntegration from '@/backend/models/TeamsIntegration';
 import jwt from 'jsonwebtoken';
 import { MicrosoftGraphClient, refreshAccessToken } from '@/backend/utils/microsoftGraph';
 
+// Force dynamic rendering (required for Next.js 14+)
+export const dynamic = 'force-dynamic';
+
 /**
  * POST /api/teams/integration/post-message
  * Post a message to a Teams channel

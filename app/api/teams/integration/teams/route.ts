@@ -4,6 +4,9 @@ import TeamsIntegration from '@/backend/models/TeamsIntegration';
 import jwt from 'jsonwebtoken';
 import { MicrosoftGraphClient, refreshAccessToken } from '@/backend/utils/microsoftGraph';
 
+// Force dynamic rendering (required for Next.js 14+)
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/teams/integration/teams
  * Get all Teams the user is a member of
