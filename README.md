@@ -20,7 +20,7 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 ### ⚡ Key Features
 
 **For Teachers** 
-- ✅ **Live Quiz Sessions** (up to 200 concurrent participants on free tier)
+- ✅ **Live Quiz Sessions** (unlimited concurrent participants with Socket.IO!)
 - ✅ **Question Bank Management** - 500+ pre-loaded questions, CSV/JSON import
 - ✅ **Classroom Management** - Email invitations, join codes, student tracking
 - ✅ **Multiple Quiz Modes** - Live (Kahoot-style) or Deadline (self-paced)
@@ -39,18 +39,20 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 - ✅ **Multi-language Support** - Built-in i18n (English, German, more coming)
 
 **Real-time Features** ⚡
-- Live quiz broadcasting with WebSocket (Ably)
+- Live quiz broadcasting with WebSocket (Socket.IO)
 - Real-time leaderboard updates
 - Connected participants counter
 - Auto-advancing questions
 - Instant score calculations
 - Teacher controls (pause, skip, end)
+- **✨ Unlimited concurrent users** (migrated from Ably)
 
 ---
 
 ## 🆕 Recent Updates (November 2025)
 
 **New Features:**
+- 🔌 **Socket.IO Migration** - Switched from Ably to Socket.IO for **unlimited concurrent users** (previously 200 limit)
 - 🎨 **Redesigned Student Dashboard** - Space-efficient two-row navbar with better organization
 - ⚙️ **Student Settings Hub** - Comprehensive settings page with 4 tabs:
   - Profile management (with enrollment/roll number fields)
@@ -82,7 +84,7 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 - Microsoft Graph API (Teams integration)
 
 **Real-time & Infrastructure**
-- Ably (WebSocket communication)
+- Socket.IO (WebSocket communication - unlimited users!)
 - Vercel (deployment, CDN, serverless functions)
 - MongoDB Atlas (cloud database)
 
@@ -105,7 +107,7 @@ Ready to get started? Check out our [**Getting Started Guide**](GETTING_STARTED.
 **Quick overview:**
 1. Clone the repository
 2. Install dependencies (`npm install`)
-3. Set up environment variables (MongoDB, Ably, JWT)
+3. Set up environment variables (MongoDB, JWT)
 4. Run development server (`npm run dev`)
 
 **[📖 View Full Setup Guide →](GETTING_STARTED.md)**
@@ -118,6 +120,7 @@ Comprehensive documentation is available in the [`/docs`](./docs) folder:
 
 ### Essential Guides
 - **[Getting Started](GETTING_STARTED.md)** - Complete setup walkthrough
+- **[Socket.IO Migration (NEW!)](./docs/SOCKET_IO_MIGRATION.md)** - Migrated from Ably to Socket.IO for unlimited users
 - **[Security Audit Report](SECURITY_AUDIT_REPORT.md)** - Vulnerability analysis & fixes
 - **[Email Setup (5 min)](./docs/EMAIL_QUICKSTART.md)** - Configure email invitations
 - **[Azure AD Setup (NEW!)](./docs/AZURE_AD_SETUP_GUIDE.md)** - Visual guide for Microsoft Teams registration
@@ -201,16 +204,17 @@ For issues or questions:
 
 **Completely Free!** 🎉
 
-- ✅ Up to **200 concurrent users** at the same time (Ably free tier)
+- ✅ **Unlimited concurrent users** (migrated to Socket.IO!)
 - ✅ Unlimited total users
 - ✅ Unlimited quizzes and questions
 - ✅ All features included (no premium tiers)
 - ✅ Open-source (MIT License)
+- ✅ Self-hosted - full control, zero dependencies
 
-**Note**: For more than 200 concurrent users, you'll need to upgrade to Ably's paid tier (~$29-299/month depending on scale). See [SECURITY_AUDIT_REPORT.md](SECURITY_AUDIT_REPORT.md) for scaling details.
+**Migration Complete**: Switched from Ably (200 user limit) to Socket.IO for unlimited users. See [Socket.IO Migration Guide](./docs/SOCKET_IO_MIGRATION.md) for details.
 
 ---
 
 **Built with ❤️ for educators worldwide**
 
-**Stack**: Next.js 15 · TypeScript · MongoDB · Ably · Tailwind CSS · Shadcn UI · Framer Motion
+**Stack**: Next.js 15 · TypeScript · MongoDB · Socket.IO · Tailwind CSS · Shadcn UI · Framer Motion
