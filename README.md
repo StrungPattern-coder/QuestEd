@@ -1,6 +1,6 @@
 # QuestEd
 
-**A completely free and open-source alternative to Kahoot** - Interactive quiz platform with gamification, real-time features, and zero paywalls.
+**An Open-Source Quiz Platform for Interactive Learning** - Create engaging quizzes with gamification, real-time features, and zero paywalls.
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
@@ -29,8 +29,10 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 - ✅ **Microsoft Teams Integration** - **NEW!** Import Teams classrooms & students automatically
 
 **For Students**
-- ✅ **Daily Challenges** - Question of the Day with streaks
-- ✅ **Quick Quiz** - Practice mode with 500+ questions
+- ✅ **Daily Challenges** - Question of the Day with streaks & countdown timer
+- ✅ **Quick Quiz** - Practice mode with no sign-up required (auto-fill for logged-in users)
+- ✅ **Student Settings** - Comprehensive settings hub with profile, notifications, security & integrations
+- ✅ **Third-Party Integrations** - Microsoft Teams, Google Classroom (coming soon), and more
 - ✅ **Gamification** - Streaks, badges, celebrations, podium animations
 - ✅ **Progress Tracking** - Personal stats, leaderboards, achievement system
 - ✅ **Mobile-First Design** - Works flawlessly on all devices
@@ -43,6 +45,22 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 - Auto-advancing questions
 - Instant score calculations
 - Teacher controls (pause, skip, end)
+
+---
+
+## 🆕 Recent Updates (November 2025)
+
+**New Features:**
+- 🎨 **Redesigned Student Dashboard** - Space-efficient two-row navbar with better organization
+- ⚙️ **Student Settings Hub** - Comprehensive settings page with 4 tabs:
+  - Profile management (with enrollment/roll number fields)
+  - Notification preferences (test assignments, grades, live quiz reminders)
+  - Security settings (password change, 2FA coming soon)
+  - Third-party integrations (Microsoft Teams, Google Classroom, and more)
+- ⏰ **Enhanced Question of the Day** - Accurate IST timezone, countdown timer, orange theme consistency
+- 🎯 **Quick Quiz Auto-fill** - Automatically fills your name when logged in
+- 🔐 **Improved Security** - `.gitattributes` added to prevent accidental credential exposure
+- 📱 **Better Mobile Experience** - Updated mobile navigation with settings access
 
 ---
 
@@ -75,6 +93,8 @@ Educators shouldn't pay for basic features when they're just trying to make lear
 - JWT with HTTP-only cookies
 - bcrypt password hashing (10 rounds)
 - HTTPS enforced in production
+- Git security (.gitignore, .gitattributes for sensitive files)
+- Credential rotation procedures documented
 
 ---
 
@@ -103,6 +123,8 @@ Comprehensive documentation is available in the [`/docs`](./docs) folder:
 - **[Azure AD Setup (NEW!)](./docs/AZURE_AD_SETUP_GUIDE.md)** - Visual guide for Microsoft Teams registration
 - **[Microsoft Teams Sync (NEW!)](./docs/TEAMS_SYNC_QUICKSTART.md)** - Import classrooms & students automatically
 - **[Microsoft Teams Integration](./docs/TEAMS_INTEGRATION.md)** - Full Teams integration guide
+- **[Student Settings Feature (NEW!)](./docs/STUDENT_SETTINGS_FEATURE.md)** - Comprehensive settings page implementation
+- **[Question of the Day](./docs/QOTD_IMPLEMENTATION_SUMMARY.md)** - Daily challenge feature with IST timezone
 - **[i18n Guide](./docs/I18N_GUIDE.md)** - Multiple language support
 - **[Project Summary](./docs/PROJECT_SUMMARY.md)** - Complete architecture overview
 
