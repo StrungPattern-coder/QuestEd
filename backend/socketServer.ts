@@ -83,6 +83,42 @@ export const initializeSocketIO = (httpServer: HTTPServer) => {
       console.log(`🚪 Socket ${socket.id} unsubscribed from announcements: ${classroomId}`);
     });
 
+    // Handle client-initiated leaderboard updates (relay to all participants)
+    socket.on('leaderboard-update', (data: { testId: string; leaderboard: any[] }) => {
+      const { testId, leaderboard } = data;
+      if (io) {
+        io.to(`leaderboard-${testId}`).emit('update', leaderboard);
+        console.log(`📊 Relayed leaderboard update for test: ${testId}`);
+      }
+    });
+
+    // Handle client-initiated live test updates (relay to all participants)
+    socket.on('live-test-update', (data: { testId: string; data: any }) => {
+      const { testId, data: updateData } = data;
+      if (io) {
+        io.to(`live-test-${testId}`).emit('update', updateData);
+        console.log(`🔴 Relayed live test update for test: ${testId}`);
+      }
+    });
+
+    // Handle quick quiz answer submissions (relay to host)
+    socket.on('answer-submitted', (data: {
+      testId: string;
+      participantName: string;
+      questionIndex: number;
+      selectedAnswer: number;
+      isCorrect: boolean;
+      score: number;
+      timeToAnswer: number;
+      timestamp: number;
+    }) => {
+      const { testId, ...answerData } = data;
+      if (io) {
+        io.to(`quick-quiz-${testId}`).emit('answer-submitted', answerData);
+        console.log(`✅ Relayed answer submission for quiz ${testId} from ${answerData.participantName}`);
+      }
+    });
+
     // Handle disconnection
     socket.on('disconnect', (reason) => {
       console.log(`❌ Socket.IO client disconnected: ${socket.id}, reason: ${reason}`);

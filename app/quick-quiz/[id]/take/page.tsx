@@ -15,7 +15,7 @@ import { celebrateAllWinners } from "@/lib/podiumCelebrations";
 import { playSoundEffect } from "@/lib/sounds";
 import TrophyReveal from "@/components/TrophyReveal";
 import Podium from "@/components/Podium";
-import { subscribeToQuickQuizStart, subscribeToQuizEnded } from "@/lib/socket";
+import { subscribeToQuickQuizStart, subscribeToQuizEnded, publishQuickQuizAnswer } from "@/lib/socket";
 import TestTimer from "@/components/TestTimer";
 import TestCompletionModal from "@/components/TestCompletionModal";
 
@@ -203,7 +203,21 @@ export default function QuickQuizTakePage() {
       playSoundEffect.wrongAnswer();
     }
 
-    // Note: Real-time answer publishing could be added here if needed for live leaderboards
+    // Publish answer to Socket.IO for real-time leaderboard updates
+    try {
+      publishQuickQuizAnswer(testId, {
+        participantName,
+        questionIndex: currentQuestionIndex,
+        selectedAnswer: selectedAnswer ?? -1,
+        isCorrect: correct,
+        score: newScore,
+        timeToAnswer: answerTime,
+        timestamp: Date.now()
+      });
+    } catch (error) {
+      console.error('Error publishing answer to Socket.IO:', error);
+      // Continue anyway - don't block the user
+    }
   };
 
   const handleNext = () => {

@@ -224,6 +224,46 @@ export const subscribeToQuickQuizStart = (
   };
 };
 
+// Quick Quiz Answer Submission
+export const subscribeToQuickQuizAnswers = (
+  quizId: string,
+  onAnswerSubmitted: (data: {
+    participantName: string;
+    questionIndex: number;
+    selectedAnswer: number;
+    isCorrect: boolean;
+    score: number;
+    timeToAnswer: number;
+    timestamp: number;
+  }) => void
+) => {
+  const socket = getSocketClient();
+  socket.emit('join-quick-quiz', quizId);
+  
+  socket.on('answer-submitted', onAnswerSubmitted);
+  
+  return () => {
+    socket.off('answer-submitted', onAnswerSubmitted);
+    socket.emit('leave-quick-quiz', quizId);
+  };
+};
+
+export const publishQuickQuizAnswer = (
+  quizId: string,
+  answerData: {
+    participantName: string;
+    questionIndex: number;
+    selectedAnswer: number;
+    isCorrect: boolean;
+    score: number;
+    timeToAnswer: number;
+    timestamp: number;
+  }
+) => {
+  const socket = getSocketClient();
+  socket.emit('answer-submitted', { testId: quizId, ...answerData });
+};
+
 // User Notifications
 export const subscribeToUserNotifications = (
   userId: string,
