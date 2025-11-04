@@ -6,6 +6,7 @@ import Classroom from '@/backend/models/Classroom';
 import User from '@/backend/models/User';
 import jwt from 'jsonwebtoken';
 import { generateJoinCode } from '@/backend/utils/helpers';
+import { sendTestNotification } from '@/backend/utils/email';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,6 +75,35 @@ export async function POST(request: NextRequest) {
     }
 
     const populatedTest = await Test.findById(test._id).populate('questions');
+
+    // Send notification emails to all students in the classroom (async, don't block response)
+    if (classroom.students && classroom.students.length > 0) {
+      // Don't await - send emails in background
+      (async () => {
+        try {
+          const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://quest-ed-phi.vercel.app';
+          const testLink = `${appUrl}/dashboard`;
+          
+          // Fetch all student details
+          const students = await User.find({ _id: { $in: classroom.students } });
+          
+          // Send email to each student
+          for (const student of students) {
+            await sendTestNotification({
+              studentEmail: student.email,
+              studentName: student.name,
+              classroomName: classroom.name,
+              testTitle: test.title,
+              testDescription: test.description,
+              testLink,
+            });
+          }
+          console.log(`Sent test notification emails to ${students.length} students`);
+        } catch (emailError) {
+          console.error('Failed to send test notification emails:', emailError);
+        }
+      })();
+    }
 
     return NextResponse.json({
       message: 'Test created successfully',

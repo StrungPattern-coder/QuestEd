@@ -5,7 +5,10 @@ import connectDB from '@/backend/utils/db';
 import Test from '@/backend/models/Test';
 import Question from '@/backend/models/Question';
 import Submission from '@/backend/models/Submission';
+import Classroom from '@/backend/models/Classroom';
+import User from '@/backend/models/User';
 import jwt from 'jsonwebtoken';
+import { sendTestResultEmail } from '@/backend/utils/email';
 
 export async function POST(
   request: NextRequest,
@@ -82,6 +85,33 @@ export async function POST(
       submittedAt,
       submittedLate,
     });
+
+    // Send result email to student (async, don't block response)
+    (async () => {
+      try {
+        const student = await User.findById(decoded.userId);
+        const classroom = await Classroom.findById(test.classroomId);
+        
+        if (student && classroom) {
+          const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://quest-ed-phi.vercel.app';
+          const resultLink = `${appUrl}/dashboard`;
+          const percentage = ((score / maxScore) * 100).toFixed(1);
+
+          await sendTestResultEmail({
+            studentEmail: student.email,
+            studentName: student.name,
+            testTitle: test.title,
+            classroomName: classroom.name,
+            score: `${score}`,
+            maxScore: `${maxScore}`,
+            resultLink,
+          });
+          console.log(`Sent test result email to ${student.email}`);
+        }
+      } catch (emailError) {
+        console.error('Failed to send test result email:', emailError);
+      }
+    })();
 
     return NextResponse.json({
       message: 'Test submitted successfully',
