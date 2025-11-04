@@ -9,6 +9,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import Aurora from "@/components/Aurora";
 import QuestionOfTheDay from "@/components/QuestionOfTheDay";
 import StarBorder from "@/components/StarBorder";
+import VisitorCounter from "@/components/VisitorCounter";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -335,6 +336,11 @@ export default function Home() {
             </Link>
           </motion.div>
         </motion.div>
+      </div>
+
+      {/* Visitor Counter */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-12 flex justify-center">
+        <VisitorCounter />
       </div>
 
       {/* Question of the Day Component */}
